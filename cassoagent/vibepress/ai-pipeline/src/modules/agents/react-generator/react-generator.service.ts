@@ -1,0 +1,683 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { appendFile } from 'fs/promises';
+import { LlmFactoryService } from '../../../common/llm/llm-factory.service.js';
+import { TokenTracker } from '../../../common/utils/token-tracker.js';
+import { DbContentResult } from '../db-content/db-content.service.js';
+import { PhpParseResult } from '../php-parser/php-parser.service.js';
+import { BlockParseResult } from '../block-parser/block-parser.service.js';
+import {
+  buildComponentPrompt,
+  buildSectionPrompt,
+} from './prompts/component.prompt.js';
+import { buildPlanPrompt } from './prompts/plan.prompt.js';
+import {
+  buildVisualPlanPrompt,
+  parseVisualPlan,
+} from './prompts/visual-plan.prompt.js';
+import { CodeGeneratorService } from './code-generator.service.js';
+import type { PlanResult } from '../planner/planner.service.js';
+import {
+  wpBlocksToJson,
+  wpJsonToString,
+} from '../../../common/utils/wp-block-to-json.js';
+import type { WpNode } from '../../../common/utils/wp-block-to-json.js';
+import { StyleResolverService } from '../style-resolver/style-resolver.service.js';
+import { ValidatorService } from '../validator/validator.service.js';
+import type { ThemeTokens } from '../block-parser/block-parser.service.js';
+
+// Templates larger than this threshold are split into section sub-components (FSE only)
+const CHUNK_THRESHOLD_CHARS = 40_000;
+// Target size per section chunk
+const CHUNK_TARGET_CHARS = 15_000;
+// Component names matching these patterns are placed in src/components (partials), not src/pages
+const PARTIAL_PATTERNS =
+  /^(Header|Footer|Sidebar|Nav|Breadcrumb|Widget|Part[A-Z])/i;
+
+export interface GeneratedComponent {
+  name: string;
+  filePath: string;
+  code: string;
+  // When true, preview-builder must NOT create a route for this component.
+  // Sub-components are assembled into their parent; they are not standalone pages.
+  isSubComponent?: boolean;
+}
+
+export interface ReactGenerateResult {
+  jobId?: string;
+  components: GeneratedComponent[];
+  outDir: string;
+}
+
+@Injectable()
+export class ReactGeneratorService {
+  private readonly logger = new Logger(ReactGeneratorService.name);
+  private readonly tokenTracker = new TokenTracker();
+
+  constructor(
+    private readonly llmFactory: LlmFactoryService,
+    private readonly configService: ConfigService,
+    private readonly styleResolver: StyleResolverService,
+    private readonly validator: ValidatorService,
+    private readonly codeGenerator: CodeGeneratorService,
+  ) {}
+
+  // ── Public entry point ─────────────────────────────────────────────────────
+
+  async generate(input: {
+    theme: PhpParseResult | BlockParseResult;
+    content: DbContentResult;
+    plan?: PlanResult;
+    jobId?: string;
+    logPath?: string;
+  }): Promise<ReactGenerateResult> {
+    const { theme, content, plan, jobId = 'unknown', logPath } = input;
+
+    this.logger.log(`Generating React components for job: ${jobId}`);
+
+    if (logPath) {
+      const tokenLogPath = logPath.replace(/\.log$/, '.tokens.log');
+      await this.tokenTracker.init(tokenLogPath);
+    }
+
+    const modelName = this.llmFactory.getModel();
+
+    const systemPrompt = buildPlanPrompt(theme, content);
+    const tokens = 'tokens' in theme ? theme.tokens : undefined;
+
+    const pagesCount = theme.templates.length;
+    const partialsCount = theme.type === 'fse' ? theme.parts.length : 0;
+
+    const templates =
+      theme.type === 'classic'
+        ? theme.templates
+        : [...theme.templates, ...theme.parts];
+
+    const total = templates.length;
+    const components: GeneratedComponent[] = [];
+
+    for (let i = 0; i < templates.length; i++) {
+      const tpl = templates[i];
+      const componentName = this.toComponentName(tpl.name);
+      const rawSource = 'markup' in tpl ? tpl.markup : tpl.html;
+      const counter = `[${i + 1}/${total}]`;
+      const componentPlan = plan?.find(
+        (p) => p.templateName === tpl.name || p.componentName === componentName,
+      );
+      const folder =
+        componentPlan?.type === 'partial'
+          ? 'src/components'
+          : componentPlan?.type === 'page'
+            ? 'src/pages'
+            : PARTIAL_PATTERNS.test(componentName)
+              ? 'src/components'
+              : 'src/pages';
+
+      this.logger.log(
+        `${counter} Generating "${componentName}.tsx" → ${folder}/`,
+      );
+      await this.logToFile(
+        logPath,
+        `${counter} Generating "${componentName}.tsx" → ${folder}/`,
+      );
+
+      const t0 = Date.now();
+      const produced = await this.generateForTemplate({
+        componentName,
+        rawSource,
+        modelName,
+        systemPrompt,
+        content,
+        tokens,
+        themeType: theme.type,
+        componentPlan,
+        logPath,
+      });
+      const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+      const codeChars = produced.reduce((s, c) => s + c.code.length, 0);
+
+      this.logger.log(
+        `${counter} Done "${componentName}.tsx" — ${codeChars} chars, ${elapsed}s`,
+      );
+      await this.logToFile(
+        logPath,
+        `${counter} Done "${componentName}.tsx" — ${codeChars} chars, ${elapsed}s`,
+      );
+
+      components.push(...produced);
+
+      if (i < templates.length - 1) {
+        const delay =
+          this.configService.get<number>(
+            'reactGenerator.delayBetweenComponents',
+          ) ?? 5000;
+        await this.logToFile(logPath, `Rate-limit delay: ${delay / 1000}s`);
+        await new Promise((res) => setTimeout(res, delay));
+      }
+    }
+
+    const breakdown =
+      partialsCount > 0
+        ? `${pagesCount} pages, ${partialsCount} partials`
+        : `${pagesCount} templates`;
+    const summary = `All ${total} done — ${components.length} components (${breakdown})`;
+    this.logger.log(summary);
+    await this.logToFile(logPath, summary);
+
+    await this.tokenTracker.writeSummary();
+
+    return { jobId, components, outDir: '' };
+  }
+
+  // ── Per-template routing: single vs chunked ────────────────────────────────
+
+  private async generateForTemplate(input: {
+    componentName: string;
+    rawSource: string;
+    modelName: string;
+    systemPrompt: string;
+    content: DbContentResult;
+    tokens?: ThemeTokens;
+    themeType: 'classic' | 'fse';
+    componentPlan?: PlanResult[number];
+    logPath?: string;
+  }): Promise<GeneratedComponent[]> {
+    const {
+      componentName,
+      rawSource,
+      modelName,
+      systemPrompt,
+      content,
+      tokens,
+      themeType,
+      componentPlan,
+      logPath,
+    } = input;
+
+    const templateSource = rawSource;
+    const templateNodes =
+      themeType === 'fse'
+        ? this.styleResolver.resolve(wpBlocksToJson(templateSource), tokens)
+        : undefined;
+    const promptTemplateSource = templateNodes
+      ? wpJsonToString(templateNodes)
+      : templateSource;
+    const promptSourceLength = promptTemplateSource.length;
+
+    if (
+      themeType === 'classic' ||
+      promptSourceLength <= CHUNK_THRESHOLD_CHARS
+    ) {
+      const comp = await this.generateSingle({
+        componentName,
+        templateSource: promptTemplateSource,
+        modelName,
+        systemPrompt,
+        content,
+        tokens,
+        componentPlan,
+        logPath,
+      });
+      return [comp];
+    }
+
+    // Too large → split into sections (FSE only)
+    this.logger.warn(
+      `Template ${componentName}: ${promptSourceLength} chars > ${CHUNK_THRESHOLD_CHARS} → splitting into sections`,
+    );
+    const resolvedNodes = templateNodes ?? [];
+    const chunks = this.splitTemplateSections(
+      resolvedNodes,
+      CHUNK_TARGET_CHARS,
+    );
+    await this.logToFile(
+      logPath,
+      `WARN "${componentName}" too large (${promptSourceLength} chars) → splitting into ${chunks.length} sections`,
+    );
+
+    this.logger.log(`Template ${componentName}: ${chunks.length} sections`);
+
+    const subComponents: GeneratedComponent[] = [];
+    const delay =
+      this.configService.get<number>('reactGenerator.delayBetweenComponents') ??
+      5000;
+
+    for (let i = 0; i < chunks.length; i++) {
+      const sectionName = `${componentName}Section${i + 1}`;
+      const nodesJson = wpJsonToString(chunks[i]);
+
+      const section = await this.generateSection({
+        sectionName,
+        parentName: componentName,
+        sectionIndex: i,
+        totalSections: chunks.length,
+        nodesJson,
+        modelName,
+        systemPrompt,
+        siteInfo: content.siteInfo,
+        menus: content.menus,
+        tokens,
+        content,
+        componentPlan,
+        logPath,
+      });
+
+      subComponents.push(section);
+
+      if (i < chunks.length - 1) {
+        await new Promise((res) => setTimeout(res, delay));
+      }
+    }
+
+    const assemblyCode = this.buildAssemblyCode(componentName, subComponents);
+    return [
+      { name: componentName, filePath: '', code: assemblyCode },
+      ...subComponents,
+    ];
+  }
+
+  // ── Single-component generation ────────────────────────────────────────────
+
+  private async generateSingle(input: {
+    componentName: string;
+    templateSource: string;
+    modelName: string;
+    systemPrompt: string;
+    content: DbContentResult;
+    tokens?: ThemeTokens;
+    componentPlan?: PlanResult[number];
+    logPath?: string;
+  }): Promise<GeneratedComponent> {
+    const {
+      componentName,
+      templateSource,
+      modelName,
+      systemPrompt,
+      content,
+      tokens,
+      componentPlan,
+      logPath,
+    } = input;
+
+    // ── Stage 1: AI → JSON visual plan ──────────────────────────────────────
+    await this.logToFile(logPath, `[two-stage] Stage 1: requesting visual plan for "${componentName}"`);
+    const { systemPrompt: s1System, userPrompt: s1User } = buildVisualPlanPrompt({
+      componentName,
+      templateSource,
+      content,
+      tokens,
+    });
+
+    let code = '';
+
+    try {
+      const s1Raw = await this.generateWithRetry(
+        modelName,
+        s1System,
+        s1User,
+        3,
+        logPath,
+        `${componentName}:plan`,
+      );
+
+      const visualPlan = parseVisualPlan(s1Raw, componentName);
+
+      if (visualPlan) {
+        // ── Stage 2: deterministic TSX from plan ───────────────────────────
+        await this.logToFile(logPath, `[two-stage] Stage 2: generating TSX from plan (${visualPlan.sections.length} sections)`);
+        code = this.codeGenerator.generate(visualPlan);
+
+        const check = this.validator.checkCodeStructure(code);
+        if (check.isValid) {
+          this.logger.log(`[two-stage] "${componentName}" generated via visual plan ✓`);
+          return { name: componentName, filePath: '', code };
+        }
+
+        this.logger.warn(
+          `[two-stage] "${componentName}" generated code failed validation: ${check.error} — falling back to direct AI`,
+        );
+        await this.logToFile(logPath, `WARN [two-stage] "${componentName}" code-gen failed: ${check.error} — fallback`);
+      } else {
+        this.logger.warn(`[two-stage] "${componentName}" visual plan parse failed — falling back to direct AI`);
+        await this.logToFile(logPath, `WARN [two-stage] "${componentName}" plan parse failed — fallback`);
+      }
+    } catch (err: any) {
+      this.logger.warn(`[two-stage] "${componentName}" Stage 1 error: ${err?.message} — falling back to direct AI`);
+      await this.logToFile(logPath, `WARN [two-stage] "${componentName}" Stage 1 error — fallback`);
+    }
+
+    // ── Fallback: direct AI TSX generation (original behaviour) ─────────────
+    await this.logToFile(logPath, `[two-stage] Fallback: direct AI generation for "${componentName}"`);
+    let lastValidationError: string | undefined;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const raw = await this.generateWithRetry(
+        modelName,
+        systemPrompt,
+        buildComponentPrompt(
+          componentName,
+          templateSource,
+          content.siteInfo,
+          content,
+          tokens,
+          componentPlan,
+          attempt > 1
+            ? `Previous attempt failed structural validation: ${lastValidationError}`
+            : undefined,
+        ),
+        5,
+        logPath,
+        componentName,
+      );
+      code = this.stripMarkdownFences(raw);
+      code = this.mergeClassNames(code);
+
+      const check = this.validator.checkCodeStructure(code);
+      if (check.isValid) break;
+
+      lastValidationError = check.error;
+      this.logger.warn(
+        `Component ${componentName} failed validation (attempt ${attempt}/3): ${lastValidationError}, retrying...`,
+      );
+      await this.logToFile(
+        logPath,
+        `WARN "${componentName}" failed validation: ${lastValidationError} — retry ${attempt}/3`,
+      );
+    }
+
+    return { name: componentName, filePath: '', code };
+  }
+
+  private mergeClassNames(code: string): string {
+    // Simple regex-based approach to merge duplicate className attributes
+    // e.g. <div className="a" className="b"> -> <div className="a b">
+    return code.replace(
+      /(<[a-zA-Z0-9]+[^>]*?)\s+className=["']([^"']*)["']([^>]*?)\s+className=["']([^"']*)["']([^>]*>)/g,
+      (match, tagStart, class1, mid, class2, tagEnd) => {
+        return `${tagStart} className="${class1} ${class2}"${mid}${tagEnd}`;
+      },
+    );
+  }
+
+  // ── Section generation — one AI call per chunk ────────────────────────────
+
+  private async generateSection(input: {
+    sectionName: string;
+    parentName: string;
+    sectionIndex: number;
+    totalSections: number;
+    nodesJson: string;
+    modelName: string;
+    systemPrompt?: string;
+    siteInfo: DbContentResult['siteInfo'];
+    menus: DbContentResult['menus'];
+    tokens?: ThemeTokens;
+    content?: DbContentResult;
+    componentPlan?: PlanResult[number];
+    logPath?: string;
+  }): Promise<GeneratedComponent> {
+    const {
+      sectionName,
+      parentName,
+      sectionIndex,
+      totalSections,
+      nodesJson,
+      modelName,
+      systemPrompt = '',
+      siteInfo,
+      menus,
+      tokens,
+      content,
+      componentPlan,
+      logPath,
+    } = input;
+
+    const userPrompt = buildSectionPrompt({
+      sectionName,
+      parentName,
+      sectionIndex,
+      totalSections,
+      nodesJson,
+      siteInfo,
+      menus,
+      tokens,
+      content,
+      componentPlan,
+    });
+
+    let code = '';
+    let lastValidationError: string | undefined;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const raw = await this.generateWithRetry(
+        modelName,
+        systemPrompt,
+        userPrompt,
+        5,
+        logPath,
+        sectionName,
+      );
+      code = this.stripMarkdownFences(raw);
+      code = this.mergeClassNames(code);
+
+      const check = this.validator.checkCodeStructure(code);
+      if (check.isValid) break;
+
+      lastValidationError = check.error;
+      this.logger.warn(
+        `Section ${sectionName} failed validation (attempt ${attempt}/3): ${lastValidationError}, retrying...`,
+      );
+      await this.logToFile(
+        logPath,
+        `WARN "${sectionName}" failed validation: ${lastValidationError} — retry ${attempt}/3`,
+      );
+    }
+
+    return { name: sectionName, filePath: '', code, isSubComponent: true };
+  }
+
+  // ── Section splitting ──────────────────────────────────────────────────────
+
+  /**
+   * Split top-level WpNode[] into chunks of approximately targetChars each.
+   * Splits only at top-level node boundaries — never mid-node.
+   */
+  private splitTemplateSections(
+    nodes: WpNode[],
+    targetChars: number,
+  ): WpNode[][] {
+    const chunks: WpNode[][] = [];
+    let current: WpNode[] = [];
+    let currentLen = 0;
+
+    for (const node of nodes) {
+      const nodeLen = JSON.stringify(node).length;
+
+      if (current.length > 0 && currentLen + nodeLen > targetChars) {
+        chunks.push(current);
+        current = [];
+        currentLen = 0;
+      }
+
+      current.push(node);
+      currentLen += nodeLen;
+    }
+
+    if (current.length > 0) chunks.push(current);
+
+    // Defensive: if everything fits in one chunk, force split in half
+    if (chunks.length === 1) {
+      const half = Math.ceil(nodes.length / 2);
+      return [nodes.slice(0, half), nodes.slice(half)];
+    }
+
+    return chunks;
+  }
+
+  // ── Assembly code builder (pure, no AI) ────────────────────────────────────
+
+  private buildAssemblyCode(
+    componentName: string,
+    subComponents: GeneratedComponent[],
+  ): string {
+    const imports = subComponents
+      .map((s) => `import ${s.name} from './${s.name}';`)
+      .join('\n');
+
+    const renders = subComponents
+      .map((s) => `        <${s.name} />`)
+      .join('\n');
+
+    return `import React from 'react';
+${imports}
+
+export default function ${componentName}() {
+  return (
+    <>
+${renders}
+    </>
+  );
+}
+`;
+  }
+
+  // ── File logger ────────────────────────────────────────────────────────────
+
+  private async logToFile(
+    logPath: string | undefined,
+    message: string,
+  ): Promise<void> {
+    if (!logPath) return;
+    try {
+      await appendFile(logPath, `${new Date().toISOString()} ${message}\n`);
+    } catch {
+      // don't crash pipeline if logging fails
+    }
+  }
+
+  // ── Shared helpers ─────────────────────────────────────────────────────────
+
+  private async generateWithRetry(
+    model: string,
+    systemPrompt: string,
+    userPrompt: string,
+    maxRetries = 5,
+    logPath?: string,
+    label?: string,
+  ): Promise<string> {
+    let delay = 30000;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const result = await this.llmFactory.chat({
+          model,
+          systemPrompt,
+          userPrompt,
+        });
+
+        await this.tokenTracker.track(
+          model,
+          result.inputTokens,
+          result.outputTokens,
+          label,
+        );
+
+        return result.text;
+      } catch (err: any) {
+        const isRateLimit = err?.status === 429;
+        const isServerError = err?.status === 500 || err?.status === 529;
+        const isTimeout =
+          err?.name === 'APIConnectionTimeoutError' ||
+          err?.name === 'APIConnectionError';
+        if (
+          (isRateLimit || isTimeout || isServerError) &&
+          attempt < maxRetries
+        ) {
+          const reason = isTimeout
+            ? 'Timeout'
+            : isServerError
+              ? 'Server error'
+              : 'Rate limit';
+          const msg = `${reason}, retrying in ${delay / 1000}s (attempt ${attempt}/${maxRetries})`;
+          this.logger.warn(msg);
+          await this.logToFile(logPath, `WARN ${msg}`);
+          await new Promise((res) => setTimeout(res, delay));
+          delay = Math.min(delay * 2, 120000);
+        } else {
+          throw err;
+        }
+      }
+    }
+    return '';
+  }
+
+  private isBraceBalanced(code: string): boolean {
+    let depth = 0;
+    for (const ch of code) {
+      if (ch === '{') depth++;
+      else if (ch === '}') depth--;
+    }
+    return depth === 0;
+  }
+
+  private stripMarkdownFences(code: string): string {
+    let result = code
+      .replace(/^```[\w]*\n?/gm, '')
+      .replace(/^```$/gm, '')
+      .trim();
+
+    // Strip preamble: everything before the first real code line
+    const codeStart = result.search(
+      /^(import |export |const |function |\/\/|\/\*)/m,
+    );
+    if (codeStart > 0) {
+      result = result.slice(codeStart).trim();
+    }
+
+    // Strip postamble: use brace depth to find the real end of the component.
+    // Walk from the last `export default` forward, track { } depth.
+    // Everything after the closing `}` (depth back to 0) is explanation text.
+    const lastExportIdx = result.lastIndexOf('\nexport default ');
+    if (lastExportIdx !== -1) {
+      const exportSlice = result.slice(lastExportIdx);
+
+      const exportFirstLine = exportSlice.split('\n')[0];
+      if (/function|=>|\{/.test(exportFirstLine)) {
+        // Function/arrow component: find closing brace via depth tracking
+        let depth = 0;
+        let opened = false;
+        let endIdx = result.length;
+
+        for (let i = lastExportIdx; i < result.length; i++) {
+          const ch = result[i];
+          if (ch === '{') {
+            depth++;
+            opened = true;
+          } else if (ch === '}') {
+            depth--;
+            if (opened && depth === 0) {
+              endIdx = i + 1;
+              break;
+            }
+          }
+        }
+
+        result = result.slice(0, endIdx).trimEnd();
+      } else {
+        // Simple identifier re-export: cut at semicolon
+        const semiIdx = result.indexOf(';', lastExportIdx);
+        if (semiIdx !== -1) {
+          result = result.slice(0, semiIdx + 1).trimEnd();
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private toComponentName(templateName: string): string {
+    const name = templateName
+      .replace(/\.(php|html)$/, '')
+      .split(/[-_]/)
+      .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+      .join('');
+    return /^\d/.test(name) ? `Page${name}` : name;
+  }
+}
