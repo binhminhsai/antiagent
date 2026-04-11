@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-slate-base: #FFFFFF;
+  --color-slate-panel: #F8FAFC; 
+  --color-slate-border: #E2E8F0; 
+  --color-acid-green: #33B864; 
+  --color-acid-glow: rgba(51, 184, 100, 0.15);
+  
+  --color-pure-white: #0F172A; 
+  --color-muted-text: #64748B;
+  
+  --color-casso-primary: #33B864;
+  --color-casso-dark: #0F172A;
+  
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-slate-base);
+  color: var(--color-casso-dark);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-slate-panel);
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-acid-green);
+}
+
+@layer utilities {
+  .border-raw {
+    border: 1px solid var(--color-slate-border);
+  }
+  .border-acid {
+    border: 1px solid var(--color-acid-green);
+    box-shadow: 0 4px 20px var(--color-acid-glow);
+  }
+}

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-press AI - Deploy &amp; Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,700;1,400;1,700&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "secondary-fixed": "#f0e8db",
+                "on-surface": "#2e3230",
+                "surface": "#faf6f0",
+                "on-error-container": "#690005",
+                "inverse-surface": "#2e3230",
+                "surface-container": "#f0ece4",
+                "tertiary": "#705c30",
+                "surface-container-low": "#f5f1ea",
+                "secondary-fixed-dim": "#d4ccbf",
+                "on-tertiary-container": "#554020",
+                "secondary-container": "#f0e8db",
+                "on-secondary-fixed": "#1e1a13",
+                "on-primary-fixed": "#002110",
+                "surface-dim": "#dbd7cf",
+                "on-error": "#ffffff",
+                "error": "#b83230",
+                "surface-bright": "#faf6f0",
+                "on-tertiary-fixed-variant": "#554020",
+                "primary-container": "#78a886",
+                "on-surface-variant": "#4a4e4a",
+                "error-container": "#ffdad8",
+                "background": "#faf6f0",
+                "primary-fixed": "#c8e8d0",
+                "primary-fixed-dim": "#8ecf9e",
+                "on-secondary-container": "#5e5548",
+                "tertiary-fixed": "#f8e0a8",
+                "surface-container-lowest": "#ffffff",
+                "outline": "#74796e",
+                "on-primary-fixed-variant": "#2a6038",
+                "surface-container-high": "#eae6de",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#8ecf9e",
+                "on-primary-container": "#d8f0de",
+                "outline-variant": "#c4c8bc",
+                "tertiary-container": "#c4a66a",
+                "surface-tint": "#4a7c59",
+                "surface-container-highest": "#e4e0d8",
+                "inverse-on-surface": "#f5f0e8",
+                "on-background": "#2e3230",
+                "on-secondary": "#ffffff",
+                "primary": "#4a7c59",
+                "on-tertiary-fixed": "#221a05",
+                "surface-variant": "#e4e0d8",
+                "secondary": "#6b6358",
+                "on-secondary-fixed-variant": "#4a4538",
+                "tertiary-fixed-dim": "#dcc48e",
+                "on-primary": "#ffffff"
+              },
+              fontFamily: {
+                "headline": ["Literata"],
+                "body": ["Nunito Sans"],
+                "label": ["Nunito Sans"]
+              },
+              borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"}
+            }
+          }
+        }
+    </script>
+    <style>
+        body { font-family: 'Nunito Sans', sans-serif; background-color: #faf6f0; color: #2e3230; }
+        h1, h2, h3, h4 { font-family: 'Literata', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle;}
+        .tonal-shift-bg { background-color: #f5f1ea; }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+    <!-- TopNavBar Implementation -->
+    <header class="fixed top-0 w-full flex justify-between items-center px-6 py-3 bg-stone-50/90 backdrop-blur-md border-b border-stone-200 shadow-sm z-50">
+        <div class="flex items-center gap-8">
+            <span class="text-xl font-bold text-emerald-800 font-serif italic">X-press AI</span>
+            <nav class="hidden md:flex gap-6">
+                <a class="text-stone-600 hover:text-emerald-600 transition-colors" href="#">Projects</a>
+                <a class="text-stone-600 hover:text-emerald-600 transition-colors" href="#">Cloud</a>
+                <a class="text-stone-600 hover:text-emerald-600 transition-colors" href="#">Analytics</a>
+                <a class="text-stone-600 hover:text-emerald-600 transition-colors" href="#">Support</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="p-2 hover:bg-stone-100 rounded-lg transition-all active:scale-95 duration-150">
+                <span class="material-symbols-outlined text-stone-600">notifications</span>
+            </button>
+            <button class="p-2 hover:bg-stone-100 rounded-lg transition-all active:scale-95 duration-150">
+                <span class="material-symbols-outlined text-stone-600">settings</span>
+            </button>
+            <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-SoOvYlHdrh17C8zW52pjAQPHFVH7ATAFEApt6tK6fnMfbbVlTD0fc0xCUxi2GaAsF2POkmERhFIDg0fqR551tqCnKUCSDYdc8IpDIbQFMoZ5UMh5Y8qn44JQr2jiZa1w6tyB1fC-eTqN-gEyVT_R3FBufcUqezoB87Ml9hmJU4DJRVsOqrXlVMcygOsi0W7N0_el8K0-Q0bm6BPXAtcakqdHXEi9FN-Q9ibAnrBt8Ho1XkePTnJ8DioRJ6sErQF5zGBEbEbYkfk" alt="User profile" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </header>
+
+    <!-- SideNavBar Implementation -->
+    <aside class="fixed left-0 top-0 h-full flex flex-col pt-16 pb-6 bg-stone-50 w-64 border-r border-stone-200 tonal-shift-bg z-40">
+        <div class="px-6 py-6 flex items-center gap-3">
+            <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-800">
+                <span class="material-symbols-outlined">rocket_launch</span>
+            </div>
+            <div>
+                <h3 class="text-sm font-bold leading-tight font-headline">Project X</h3>
+                <p class="text-[11px] text-stone-500 font-label">v1.0.4-stable</p>
+            </div>
+        </div>
+        <nav class="flex-1 px-3 space-y-1">
+            <a href="1-onboarding.html" class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:bg-stone-100 hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">power</span>
+                <span class="text-[13px] font-medium">Onboarding</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:bg-stone-100 hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">terminal</span>
+                <span class="text-[13px] font-medium">Source</span>
+            </a>
+            <a href="2-ai-editor.html" class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:bg-stone-100 hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+                <span class="text-[13px] font-medium">AI Editor</span>
+            </a>
+            <a href="3-visual-edit.html" class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:bg-stone-100 hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">layers</span>
+                <span class="text-[13px] font-medium">Visual Edit</span>
+            </a>
+            <!-- ACTIVE DEPLOY -->
+            <a href="4-deploy-dashboard.html" class="flex items-center gap-3 px-3 py-2 bg-emerald-50 text-emerald-800 font-bold border-r-4 border-[#4a7c59] hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+                <span class="text-[13px]">Deploy</span>
+            </a>
+            <a href="5-dashboard.html" class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:bg-stone-100 hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <span class="text-[13px] font-medium">Dashboard</span>
+            </a>
+        </nav>
+        <div class="px-6 mt-4">
+            <button class="w-full py-2 bg-[#4a7c59] text-white rounded-lg text-sm font-bold shadow-sm hover:shadow-md transition-shadow active:scale-95 duration-150">
+                New Project
+            </button>
+        </div>
+        <div class="mt-auto px-3 border-t border-stone-200 pt-4 space-y-1">
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:bg-stone-100 hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">menu_book</span>
+                <span class="text-[13px] font-medium">Docs</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:bg-stone-100 hover:pl-2 transition-all duration-200 rounded-lg group">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+                <span class="text-[13px] font-medium">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Canvas -->
+    <main class="ml-64 pt-20 pb-12 px-8 min-h-screen">
+        <!-- Notification Alert -->
+        <div class="mb-8 flex items-center justify-between p-4 bg-primary-fixed border border-primary-container rounded-xl shadow-sm">
+            <div class="flex items-center gap-3 text-on-primary-fixed-variant">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sync_saved_locally</span>
+                <p class="font-body text-sm font-medium">Success: Sync to WordPress completed 2 minutes ago. 14 items updated.</p>
+            </div>
+            <button class="text-on-primary-fixed-variant hover:opacity-70">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Top Section: Deployment & Domains -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            <!-- Deployment Actions -->
+            <div class="lg:col-span-2 bg-surface-container-low p-6 rounded-xl border border-outline-variant/30">
+                <h2 class="text-2xl font-headline mb-6">Deployment</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="flex flex-col items-start p-5 bg-surface-container-highest rounded-lg border border-outline-variant group hover:border-[#4a7c59] transition-all active:scale-[0.98]">
+                        <div class="p-2 bg-white rounded-md mb-4 text-[#4a7c59]">
+                            <span class="material-symbols-outlined">cloud_sync</span>
+                        </div>
+                        <span class="font-headline text-lg font-bold">Sync to WordPress</span>
+                        <p class="text-xs text-on-surface-variant mt-1 text-left">Automatic sync of content and styles to your WP site.</p>
+                    </button>
+                    <button class="flex flex-col items-start p-5 bg-primary text-white rounded-lg border border-transparent shadow-sm hover:shadow-lg transition-all active:scale-[0.98]">
+                        <div class="p-2 bg-primary-container rounded-md mb-4 text-on-primary-container">
+                            <span class="material-symbols-outlined">rocket_launch</span>
+                        </div>
+                        <span class="font-headline text-lg font-bold text-on-primary">Deploy to X-press Cloud</span>
+                        <p class="text-xs text-on-primary-container mt-1 text-left">Global edge delivery with 99.9% uptime guarantee.</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Domain Settings -->
+            <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30">
+                <h2 class="text-2xl font-headline mb-6">Domain Settings</h2>
+                <div class="space-y-4">
+                    <div class="p-3 bg-white rounded-lg border border-outline-variant/50">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Primary Domain</label>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="font-body text-sm font-semibold">project-x-live.com</span>
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">ACTIVE</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white/50 rounded-lg border border-dashed border-outline-variant flex items-center justify-center cursor-pointer hover:bg-white transition-colors">
+                        <span class="material-symbols-outlined text-sm mr-2">add</span>
+                        <span class="font-label text-sm">Connect Custom Domain</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Section: Management Dashboard (Bento Grid) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Site Analytics Chart -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] border border-outline-variant/20">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-headline">Site Analytics</h3>
+                    <select class="bg-surface-container-low border-none text-xs rounded-full px-3 py-1 font-label">
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                    </select>
+                </div>
+                <div class="relative h-48 w-full bg-surface-container-lowest rounded-lg p-4 flex items-end justify-between gap-2 overflow-hidden">
+                    <div class="w-full bg-primary-container rounded-t-sm" style="height: 40%"></div>
+                    <div class="w-full bg-primary-container rounded-t-sm" style="height: 60%"></div>
+                    <div class="w-full bg-primary rounded-t-sm" style="height: 85%"></div>
+                    <div class="w-full bg-primary-container rounded-t-sm" style="height: 45%"></div>
+                    <div class="w-full bg-primary-container rounded-t-sm" style="height: 55%"></div>
+                    <div class="w-full bg-primary-container rounded-t-sm" style="height: 70%"></div>
+                    <div class="w-full bg-primary-container rounded-t-sm" style="height: 30%"></div>
+                    <!-- Grid Overlay -->
+                    <div class="absolute inset-0 border-b border-outline-variant/30 flex flex-col justify-between p-4 pointer-events-none">
+                        <div class="w-full border-t border-outline-variant/10"></div>
+                        <div class="w-full border-t border-outline-variant/10"></div>
+                        <div class="w-full border-t border-outline-variant/10"></div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-4 text-[11px] text-on-surface-variant font-medium">
+                    <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+                </div>
+            </div>
+
+            <!-- Product Management -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-[0_4px_20px_rgba(46,50,48,0.06)] border border-outline-variant/20">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-headline">Product Management</h3>
+                    <button class="text-primary hover:underline text-sm font-label">View Store</button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+                        <div class="w-12 h-12 rounded bg-stone-200 overflow-hidden">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0lIu6SqUfo_u43ijB3TbLg5WL9XNCAkFeCYw5f5v6o2LL0wRMaUesNnyI-xQkPa1I0XbABmZ_UqdPJVrr_BZQYr_t_uUa8Rv8pElSex_P_2bm1z4m2LBFDq1QdjfrxOG2HUNaWVRjGFUUOVdsLGgo4K8jBq6SLowSsEaqO_IBH3_5wyOrox8FeyYpwrlArDfob_99FZUSdV9oqAKUmZVxZK3f07SZA_W6ucGTtMCQtADpRBqbP1ovxJrAaY9nv5oHckgON86MrXY" alt="Product" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold">Classic Timber Watch</h4>
+                            <p class="text-xs text-on-surface-variant">24 in stock • $129.00</p>
+                        </div>
+                        <button class="opacity-0 group-hover:opacity-100 p-2 hover:bg-white rounded transition-opacity">
+                            <span class="material-symbols-outlined text-sm">edit</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+                        <div class="w-12 h-12 rounded bg-stone-200 overflow-hidden">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ2sTZ3C-AEyZ18FQQu0LLsJbS57D-G4TyamxHucxBe6OvfILliIxBY0SIpcIizt3D5P2SjOTpLilyubbuXpiDZaOOV5ML6I8XOV6KlInLOCA8-9b4gvPeliPsTrZtFmGPUXJEOdla04F88L91qAu8QRTi7cbduJ_a6IbESnyX-IbMSoZihldP2-r6piFRmz3Yc9Eo4NyjbjH-msIQIMduZepNu5CUAg49bi7B7ip3SORewuwhcJ-Hs2qDkn4qb0Q0kS-Kdnh-lwQ" alt="Product" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold">Aero-Run Sneakers</h4>
+                            <p class="text-xs text-on-surface-variant">0 in stock • $89.00</p>
+                        </div>
+                        <button class="opacity-0 group-hover:opacity-100 p-2 hover:bg-white rounded transition-opacity">
+                            <span class="material-symbols-outlined text-sm">edit</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post Editor Card -->
+            <div class="lg:col-span-3 bg-surface-container p-6 rounded-xl border border-outline-variant/30">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-headline">Draft Blog Post</h3>
+                    <div class="flex gap-2">
+                        <span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 border border-outline-variant/50">
+                    <input type="text" value="The Future of Organic Design Systems" class="w-full text-lg font-headline font-bold border-none focus:ring-0 p-0 mb-4" placeholder="Post Title">
+                    <div class="flex items-center gap-4 border-y border-outline-variant/20 py-2 mb-4">
+                        <button class="p-1 hover:bg-stone-100 rounded"><span class="material-symbols-outlined text-lg">format_bold</span></button>
+                        <button class="p-1 hover:bg-stone-100 rounded"><span class="material-symbols-outlined text-lg">format_italic</span></button>
+                        <button class="p-1 hover:bg-stone-100 rounded"><span class="material-symbols-outlined text-lg">link</span></button>
+                        <div class="h-4 w-px bg-stone-200"></div>
+                        <button class="p-1 hover:bg-stone-100 rounded"><span class="material-symbols-outlined text-lg">image</span></button>
+                    </div>
+                    <p class="text-sm font-body leading-relaxed text-on-surface-variant line-clamp-3">
+                        In the rapidly evolving landscape of digital interfaces, there's a growing movement towards what we call "Rooted Warmth". This philosophy prioritizes human connection over sterile efficiency...
+                    </p>
+                    <div class="mt-6 flex justify-end gap-3">
+                        <button class="px-4 py-2 text-xs font-bold text-primary hover:bg-primary/5 rounded-lg transition-colors">Save as Draft</button>
+                        <button class="px-4 py-2 text-xs font-bold bg-primary text-white rounded-lg shadow-sm active:scale-95 transition-all">Publish to Site</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Card -->
+            <div class="bg-tertiary-container p-6 rounded-xl flex flex-col justify-between overflow-hidden relative">
+                <div class="relative z-10">
+                    <h3 class="text-lg font-headline text-on-tertiary-container">Conversion Rate</h3>
+                    <p class="text-4xl font-bold mt-2 text-on-tertiary-container">4.2%</p>
+                    <div class="mt-4 flex items-center gap-1 text-emerald-800 font-bold text-xs">
+                        <span class="material-symbols-outlined text-xs">trending_up</span>
+                        <span>+12% from last month</span>
+                    </div>
+                </div>
+                <div class="absolute -right-4 -bottom-4 opacity-10">
+                    <span class="material-symbols-outlined text-9xl">monitoring</span>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

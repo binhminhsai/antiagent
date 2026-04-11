@@ -1,0 +1,12 @@
+{
+  "name": "ToDesign Auto WebSocket",
+  "id": "123456",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["*"],
+    "reasoning": "Connects to localhost websocket"
+  }
+}

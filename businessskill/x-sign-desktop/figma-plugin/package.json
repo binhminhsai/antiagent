@@ -1,0 +1,17 @@
+{
+  "name": "todesign-automator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/code.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "@divriots/c2d-sdk": "latest"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "latest",
+    "esbuild": "latest",
+    "typescript": "latest"
+  }
+}

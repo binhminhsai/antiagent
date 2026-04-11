@@ -1,0 +1,152 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1e1e24 0%, #15151a 100%);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 40px;
+    width: 480px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 28px;
+    font-weight: 600;
+    background: -webkit-linear-gradient(45deg, #00C6FF, #0072FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p {
+    color: #aaa;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Inter';
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.tab-content {
+    display: none;
+    margin-bottom: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.upload-area {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+    background: rgba(0,0,0,0.2);
+    border: 2px dashed rgba(255,255,255,0.3);
+    border-radius: 12px;
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+input[type="url"], textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Inter';
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+input[type="url"]:focus, textarea:focus {
+    border-color: #0072FF;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(45deg, #0072FF, #00C6FF);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.status-box, .success-box {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.status-box {
+    background: rgba(255,255,255,0.05);
+    color: #aaa;
+}
+
+.success-box {
+    background: rgba(46, 204, 113, 0.1);
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
+}
+
+.hidden {
+    display: none;
+}

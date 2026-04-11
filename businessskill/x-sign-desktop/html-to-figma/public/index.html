@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Html to Figma automation</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>HTML to Figma</h1>
+        <p>Push anything directly to your Figma layout.</p>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="zip">React/Zip Upload</button>
+            <button class="tab-btn" data-tab="url">URL</button>
+            <button class="tab-btn" data-tab="code">Raw Code</button>
+        </div>
+
+        <div class="tab-content active" id="tab-zip">
+            <div class="upload-area" id="dropzone">
+                <input type="file" id="zipInput" accept=".zip,application/zip" style="display:none;" />
+                <p>Drag & Drop your React or static frontend .zip file here<br>or <span style="color:#0072FF;cursor:pointer;" onclick="document.getElementById('zipInput').click()">click to browse</span></p>
+                <div id="fileNameDisplay" style="margin-top:10px;color:#fff;font-weight:500;"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-url">
+            <input type="url" id="urlInput" placeholder="https://example.com" />
+        </div>
+
+        <div class="tab-content" id="tab-code">
+            <textarea id="codeInput" placeholder="Paste your HTML/CSS here..."></textarea>
+        </div>
+
+        <button id="convertBtn" class="btn-primary">Push to Figma Plugin</button>
+        
+        <div id="status" class="status-box hidden"></div>
+        <div id="successUi" class="success-box hidden"></div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
