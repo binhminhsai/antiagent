@@ -35,7 +35,9 @@ function App() {
       days: [0], // Default là Thứ 2
       startHour: 8,
       endHour: 10,
-      highlight: 'none'
+      highlight: 'none',
+      notes: '',
+      fileUrl: ''
     });
   };
 

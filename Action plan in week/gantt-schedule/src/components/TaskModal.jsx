@@ -9,7 +9,9 @@ export default function TaskModal({ task, categories, onClose, onSave, onDelete 
     day: 0,
     startHour: 8,
     endHour: 10,
-    highlight: 'none'
+    highlight: 'none',
+    notes: '',
+    fileUrl: ''
   });
 
   useEffect(() => {
@@ -113,6 +115,36 @@ export default function TaskModal({ task, categories, onClose, onSave, onDelete 
                   <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-wider mb-2">Giờ kết thúc</label>
                   <input type="number" step="0.25" min="0" max="24" name="endHour" value={formData.endHour} onChange={handleChange}
                     className="w-full border-2 border-slate-200 bg-white rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 font-bold text-slate-800 text-lg shadow-sm" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-wider mb-2">Ghi chú (Take note)</label>
+              <textarea 
+                name="notes" 
+                value={formData.notes || ''} 
+                onChange={handleChange}
+                className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all font-medium text-slate-800 h-28 resize-none"
+                placeholder="Nhập các lưu ý quan trọng cho task này..."
+              />
+            </div>
+            
+            <div>
+              <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-wider mb-2">Tài liệu / Link đính kèm (File)</label>
+              <div className="relative">
+                <input 
+                  type="text" 
+                  name="fileUrl" 
+                  value={formData.fileUrl || ''} 
+                  onChange={handleChange}
+                  className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all font-medium text-blue-600 underline"
+                  placeholder="Dán URL tài liệu quan trọng tại đây..."
+                />
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
+                  🔗
                 </div>
               </div>
             </div>

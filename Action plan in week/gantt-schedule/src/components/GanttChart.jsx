@@ -1,5 +1,6 @@
 import React from 'react';
 import { DAYS } from '../utils/data';
+import { FileText, Link as LinkIcon } from 'lucide-react';
 
 const getHighlightClasses = (highlight) => {
   switch (highlight) {
@@ -130,6 +131,16 @@ export default function GanttChart({ tasks, categories, onTaskClick, fontSize = 
                         >
                           {task.title}
                         </span>
+                        
+                        {/* Indicators for Notes and Files */}
+                        <div className="absolute bottom-1 right-2 flex gap-1 items-center opacity-70 group-hover:opacity-100 transition-opacity">
+                          {task.notes && (
+                            <FileText size={Math.max(10, fontSize * 0.7)} strokeWidth={2.5} className="text-slate-500" />
+                          )}
+                          {task.fileUrl && (
+                            <LinkIcon size={Math.max(10, fontSize * 0.7)} strokeWidth={2.5} className="text-blue-600" />
+                          )}
+                        </div>
                       </div>
                     );
                   })}
