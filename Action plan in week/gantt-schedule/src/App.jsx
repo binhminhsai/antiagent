@@ -37,7 +37,7 @@ function App() {
       endHour: 10,
       highlight: 'none',
       notes: '',
-      fileUrl: ''
+      linksText: ''
     });
   };
 

@@ -137,7 +137,7 @@ export default function GanttChart({ tasks, categories, onTaskClick, fontSize = 
                           {task.notes && (
                             <FileText size={Math.max(10, fontSize * 0.7)} strokeWidth={2.5} className="text-slate-500" />
                           )}
-                          {task.fileUrl && (
+                          {(task.fileUrl || task.linksText) && (
                             <LinkIcon size={Math.max(10, fontSize * 0.7)} strokeWidth={2.5} className="text-blue-600" />
                           )}
                         </div>

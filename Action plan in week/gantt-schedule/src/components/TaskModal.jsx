@@ -6,16 +6,38 @@ export default function TaskModal({ task, categories, onClose, onSave, onDelete 
   const [formData, setFormData] = useState({
     title: '',
     category: '',
-    day: 0,
+    days: [0],
     startHour: 8,
     endHour: 10,
     highlight: 'none',
     notes: '',
-    fileUrl: ''
+    linksText: ''
   });
 
+  const parseLinks = (text) => {
+    if (!text) return [];
+    return text.split('\n').filter(line => line.trim()).map(line => {
+      const firstColonIndex = line.indexOf(':');
+      if (firstColonIndex !== -1) {
+        const label = line.substring(0, firstColonIndex).trim();
+        const url = line.substring(firstColonIndex + 1).trim();
+        if (url.startsWith('http') || url.startsWith('www') || url.includes('.')) {
+          return { label, url: url.startsWith('www') ? `https://${url}` : url };
+        }
+      }
+      return { label: 'Link', url: line.trim().startsWith('www') ? `https://${line.trim()}` : line.trim() };
+    });
+  };
+
   useEffect(() => {
-    if (task) setFormData(task);
+    if (task) {
+      // Migration logic: if linksText is missing but fileUrl exists
+      const initialData = { ...task };
+      if (!initialData.linksText && initialData.fileUrl) {
+        initialData.linksText = initialData.fileUrl;
+      }
+      setFormData(initialData);
+    }
   }, [task]);
 
   if (!task) return null;
@@ -133,19 +155,34 @@ export default function TaskModal({ task, categories, onClose, onSave, onDelete 
             </div>
             
             <div>
-              <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-wider mb-2">Tài liệu / Link đính kèm (File)</label>
-              <div className="relative">
-                <input 
-                  type="text" 
-                  name="fileUrl" 
-                  value={formData.fileUrl || ''} 
+              <label className="block text-[13px] font-bold text-slate-500 uppercase tracking-wider mb-2">Tài liệu / Link đính kèm (Mỗi dòng 1 link)</label>
+              <div className="space-y-3">
+                <textarea 
+                  name="linksText" 
+                  value={formData.linksText || ''} 
                   onChange={handleChange}
-                  className="w-full border-2 border-slate-200 rounded-xl px-4 py-3.5 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all font-medium text-blue-600 underline"
-                  placeholder="Dán URL tài liệu quan trọng tại đây..."
+                  className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all font-medium text-slate-800 h-24 resize-none"
+                  placeholder="Ví dụ:&#10;Thiết kế: https://figma.com/...&#10;Tài liệu: https://google.com/..."
                 />
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
-                  🔗
-                </div>
+                
+                {/* Clickable Links Preview */}
+                {formData.linksText && (
+                  <div className="flex flex-wrap gap-2">
+                    {parseLinks(formData.linksText).map((link, idx) => (
+                      <a 
+                        key={idx}
+                        href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-sm font-bold border border-blue-100 hover:bg-blue-100 transition-colors"
+                      >
+                        <span className="opacity-70 text-[10px] uppercase tracking-tighter">{link.label}:</span>
+                        <span className="truncate max-w-[150px]">{link.url.replace(/^https?:\/\/(www\.)?/, '')}</span>
+                        <span className="text-[12px]">↗</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
