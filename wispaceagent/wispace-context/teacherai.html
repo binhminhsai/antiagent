@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WISPACE Agentic AI Blueprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e293b',
+                        accent: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-200">
+
+    <!-- Header -->
+    <header class="bg-secondary text-white py-12 px-6 shadow-lg">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-2xl font-bold">W</div>
+                <h1 class="text-3xl md:text-4xl font-bold tracking-tight">WISPACE Agentic AI</h1>
+            </div>
+            <p class="text-slate-300 text-lg max-w-2xl">Bản thiết kế Kiến trúc & Triển khai (Tháng 4 - Tháng
+                5)<br>Chuyển đổi từ Machine Learning truyền thống sang workflow Agentic LLMs cho IELTS Writing.</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-6 -mt-8 space-y-8">
+
+        <!-- Executive Summary -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900">
+                <i class="fas fa-rocket text-primary"></i> TL;DR & Cập nhật Chiến lược
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <h3 class="font-semibold text-slate-700 mb-2">Hạn chế hiện tại (Classical ML)</h3>
+                    <p class="text-slate-600 mb-2">Việc dự đoán "diffs" (sự thay đổi) và train mô hình từ đầu rất chậm
+                        và cứng nhắc khi xử lý các tác vụ suy luận phức tạp của giáo viên.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-primary mb-2">Cải tiến AI hiện đại (Agentic LLMs)</h3>
+                    <p class="text-slate-600">Sử dụng multi-agent workflows (LangGraph/CrewAI). Dùng "Golden Set" cho
+                        <strong>Few-Shot Prompting</strong> và đánh giá bằng <strong>LLM-as-a-Judge</strong>, thay vì
+                        train model baseline.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-4 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <p class="text-sm text-blue-800 font-medium">🎯 Mục tiêu tháng này: Xây dựng kiến trúc Agentic, Data
+                    Pipeline v1, và triển khai LLM Baseline sử dụng structured outputs (đầu ra có cấu trúc).</p>
+            </div>
+        </section>
+
+        <!-- Product Scope -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-slate-900">
+                <i class="fas fa-bullseye text-accent"></i> 1. Phạm vi Sản phẩm & Tầm nhìn
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700">
+                            <th class="p-3 rounded-tl-lg font-semibold">Thành phần</th>
+                            <th class="p-3 font-semibold">Tầm nhìn dài hạn (North Star)</th>
+                            <th class="p-3 rounded-tr-lg font-semibold">Phạm vi Prototype V1 (Tháng 4/5)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-3 font-medium text-slate-900">Roadmap Generator<br>(Tạo lộ trình)</td>
+                            <td class="p-3 text-slate-600">Tạo lộ trình đa kỹ năng, tuỳ biến động.</td>
+                            <td class="p-3 text-slate-600">Dùng Zero-shot/Few-shot LLM để tạo bản kế hoạch JSON có cấu
+                                trúc (Tuần, Bài tập).</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-medium text-slate-900">Roadmap Updater<br>(Cập nhật lộ trình)</td>
+                            <td class="p-3 text-slate-600">Điều chỉnh vi mô (micro-adjustments) theo thời gian thực.
+                            </td>
+                            <td class="p-3 text-slate-600">Cập nhật dựa trên Trigger dùng LLM Tool Calling (VD: học viên
+                                tạch 2 task → AI sửa JSON).</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-medium text-slate-900">Intervention<br>(Can thiệp hỗ trợ)</td>
+                            <td class="p-3 text-slate-600">Coaching 1-1 chủ động từ AI.</td>
+                            <td class="p-3 text-slate-600">Cung cấp feedback theo yêu cầu dựa trên bộ Rubric của IELTS.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- RACI -->
+        <section class="grid md:grid-cols-2 gap-6">
+            <div class="glass-card rounded-2xl p-6 shadow-sm">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900">
+                    <i class="fas fa-book-open text-purple-500"></i> Team Academic (Định nghĩa "Đúng")
+                </h2>
+                <ul class="space-y-3 text-sm text-slate-600">
+                    <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Chốt
+                            Output Schema:</strong> Chuẩn hoá format lộ trình (Unit, Mục tiêu, Tiêu chí pass).</li>
+                    <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Rubrics
+                            & Taxonomy:</strong> Định nghĩa tiêu chí IELTS, error tags, và các nhóm kỹ năng.</li>
+                    <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Tạo
+                            Golden Set:</strong> Xây dựng 20–50 case chuẩn do giáo viên làm tay để dùng cho LLM Few-Shot
+                        prompting.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 shadow-sm">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900">
+                    <i class="fas fa-code-branch text-blue-500"></i> Team AI (Thực thi Hệ thống)
+                </h2>
+                <ul class="space-y-3 text-sm text-slate-600">
+                    <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Agent
+                            Orchestration:</strong> Dùng LangGraph để chia tách các Agent: Planner, Assessor, và
+                        Adapter.</li>
+                    <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i>
+                        <strong>Structured Outputs:</strong> Ép LLM trả về đúng định dạng JSON cho App UI.
+                    </li>
+                    <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Đo lường
+                            (Metrics):</strong> Schema adherence (đúng cấu trúc), Match-rate so với giáo viên thật,
+                        Win-rate (Human preference).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Data & Event Schema -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900">
+                <i class="fas fa-database text-orange-500"></i> 3. Data Pipeline & Telemetry (ETL)
+            </h2>
+            <p class="text-sm text-slate-600 mb-4">Cần ghi log <em>ngữ cảnh (context)</em> của các quyết định, không chỉ
+                kết quả cuối cùng. Join keys chuẩn: <code>student_id, teacher_id, class_id, timestamp</code></p>
+            <div class="bg-slate-800 rounded-lg p-4 font-mono text-xs text-green-400 overflow-x-auto">
+                // Event Schemas tối thiểu cần cho V1
+                {
+                "event_type": "roadmap_initialized",
+                "payload": { "initial_level": 5.5, "target": 6.5, "generated_plan": {...} }
+                }
+                {
+                "event_type": "student_action",
+                "payload": { "step_id": "w1_t2", "action": "submit", "score": 5.0, "time_spent_sec": 1200 }
+                }
+                {
+                "event_type": "teacher_intervention",
+                "payload": { "trigger": "low_score", "action": "add_step", "rationale_tags": ["coherence"] }
+                }
+            </div>
+        </section>
+
+        <!-- Deliverables Checklist -->
+        <section class="glass-card rounded-2xl p-6 shadow-sm">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900">
+                <i class="fas fa-tasks text-teal-500"></i> 4. Kết quả cần chốt (Deliverables)
+            </h2>
+            <div class="space-y-3">
+                <label
+                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-colors cursor-pointer">
+                    <input type="checkbox" class="w-5 h-5 rounded text-primary focus:ring-primary">
+                    <span class="text-slate-700 font-medium">Tài liệu Kiến trúc: 1 trang mô tả Agent Workflow & Data
+                        Pipeline</span>
+                </label>
+                <label
+                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-colors cursor-pointer">
+                    <input type="checkbox" class="w-5 h-5 rounded text-primary focus:ring-primary">
+                    <span class="text-slate-700 font-medium">Dataset V1: Log đã được extract, clean, ẩn danh và đánh
+                        version</span>
+                </label>
+                <label
+                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-colors cursor-pointer">
+                    <input type="checkbox" class="w-5 h-5 rounded text-primary focus:ring-primary">
+                    <span class="text-slate-700 font-medium">Golden Set: 20-50 cases làm tay kèm Labeling Guidelines từ
+                        Academic</span>
+                </label>
+                <label
+                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-colors cursor-pointer">
+                    <input type="checkbox" class="w-5 h-5 rounded text-primary focus:ring-primary">
+                    <span class="text-slate-700 font-medium">LLM Baseline (Prompt Engineering): Trả ra JSON hợp lệ dựa
+                        trên few-shot</span>
+                </label>
+                <label
+                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-colors cursor-pointer">
+                    <input type="checkbox" class="w-5 h-5 rounded text-primary focus:ring-primary">
+                    <span class="text-slate-700 font-medium">Báo cáo Đánh giá (Evaluation Report): Baseline metrics &
+                        Top 5 vấn đề cần fix cho Pilot tháng 6</span>
+                </label>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 text-sm">
+        Tạo cho đội ngũ WISPACE • Kế hoạch triển khai Agentic AI
+    </footer>
+
+</body>
+
+</html>
