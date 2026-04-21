@@ -1,0 +1,57 @@
+Nowadays, more and more women decide to have children later in their life. What are the reasons for this?
+Do the advantages of this outweigh disadvantages?
+
+In recent days, the tendency of women making the decision to delay their motherhood is noticeably increasing. This trend might be affected by multiple factors, which will be analyzed in the essay below, bringing about not only notable benefits, but also certain drawbacks that are worth considering. 
+There are two crucial advantages of having children in women’s later stage of age. One of them should be acknowledged is that they are emotionally mature and well-qualified enough, both physically and mentally, to step in a broad new milestone of life, which will significantly support them in understanding their children’s psychological patterns remarkably better. Besides, they should have been financially sustainable since they have been working and saving to provide themselves and their beloved people with a decent and comfortable life. As women possess such sustainability, their children are well-supplied with a more well-rounded life experience and development. Maintaining this standard of preparedness may considerably lead to healthier and firmer parent-child relationships in the long-term period of time. 
+Looking on the downside, there are certain disadvantages of giving birth later in women’s life. The most striking one could be taken into serious consideration is that fertility is critically undermined. On the grounds that the older a woman is, the worse their health and ability of giving birth are, this risk may cause gynecological diseases in the mother and genealogical disorders in the child. In addition, women living in Asian countries might be forced to be faced with intense societal pressure due to the traditional stereotypes and culture. Having caused these vital consequences, motherhood ought to be seen and taken more appropriate actions towards this landmark within an individual's point of view of this aspect. 
+In conclusion, although postponing motherhood allows women to be more experienced and well-prepared, having children late will likely to cause unexpected health-related risks and receive social judgments influencing personal life, which is not recommended as a sustain plan afterwards.
+
+
+{
+  "task": "IELTS_WRITING_TASK_2_GRADING",
+  "coT": {
+    "layer1_errors": "[TA] Trả lời đủ các phần nhưng thiếu dẫn chứng/ví dụ cụ thể, làm luận điểm còn chung chung. [CC] Gặp vấn đề ở cấp độ câu (sentence level) như cách dùng 'should have been', 'One of them should be acknowledged is that', gây cản trở mạch đọc. [LR] Dùng từ sai dạng (sustain vs sustainable), từ vựng không tự nhiên ('later stage of age'), và nhầm lẫn thuật ngữ chuyên môn ('genealogical' thay vì 'congenital'). [GRA] Lỗi thì (tense) ở mở bài, lỗi thiếu động từ to-be trong cấu trúc 'is likely to', và lỗi lạm dụng bị động rườm rà ('be forced to be faced with').",
+    "layer2_matching": "[TA] Band 7 vì đáp ứng đủ các phần của đề bài và giữ quan điểm nhất quán. -> Expected TA: 7.0. [CC] Band 6 vì cấu trúc đoạn tốt nhưng sự kết nối giữa các câu còn cứng nhắc, thiếu sự trôi chảy. -> Expected CC: 6.0. [LR] Band 6 vì có nỗ lực dùng từ chuyên ngành nhưng nhiều lỗi dùng từ (word choice) và collocation. -> Expected LR: 6.0. [GRA] Band 6 vì có dùng câu phức nhưng lỗi ngữ pháp xuất hiện khá thường xuyên trong các cấu trúc này. -> Expected GRA: 6.0.",
+    "layer3_calibration": "TA=7.0; CC=6.0; LR=6.0; GRA=6.0. Mean = (7 + 6 + 6 + 6)/4 = 6.25. Làm tròn tiêu chuẩn IELTS = 6.5."
+  },
+  "overall_band": 6.5,
+  "evaluation": {
+    "1_task_achievement": {
+      "band_score": 7.0,
+      "feedback_detail": ["Cần phát triển sâu hơn các luận điểm bằng ví dụ cụ thể thay vì chỉ đưa ra nhận định chung (general statements)."],
+      "strengths": ["Đã trả lời đầy đủ các yêu cầu đề bài (nguyên nhân, ưu và nhược điểm).", "Giữ quan điểm nhất quán từ đầu đến cuối."],
+      "areas_for_improvement": ["Tập trung vào việc 'chứng minh' luận điểm thay vì chỉ 'nêu' luận điểm."],
+      "band_reason": "Addresses all parts of the task and presents a clear position throughout, though some arguments need further development."
+    },
+    "2_coherence_cohesion": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi cấu trúc câu: 'One of them should be acknowledged is that...' -> Nên đơn giản hóa thành 'One significant advantage is that...'.",
+        "Lỗi thì/modal: 'they should have been financially sustainable' -> Nên dùng thì hiện tại 'they are likely to be...'."
+      ],
+      "strengths": ["Cấu trúc đoạn văn (Intro/Body/Conclusion) rất chuẩn mực và dễ theo dõi."],
+      "areas_for_improvement": ["Cải thiện độ trôi chảy (flow) giữa các câu. Tránh các cấu trúc câu bị lặp hoặc diễn đạt rườm rà."],
+      "band_reason": "Organizes information and ideas logically, but cohesion within and/or between sentences may be faulty."
+    },
+    "3_lexical_resource": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi từ vựng: 'genealogical disorders' -> Nên dùng 'congenital disorders' (bệnh bẩm sinh).",
+        "Lỗi từ vựng: 'sustain plan' -> 'sustainable plan'."
+      ],
+      "strengths": ["Sử dụng tốt các từ vựng học thuật chủ đề: 'fertility', 'gynecological diseases', 'psychological patterns'."],
+      "areas_for_improvement": ["Cẩn trọng với các collocation (cụm từ đi cùng nhau). Cần kiểm tra kỹ dạng từ (noun, adj, verb)."],
+      "band_reason": "Attempts to use less common vocabulary, but noticeable errors in word choice and word formation occur."
+    },
+    "4_grammatical_range_accuracy": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi thì: 'This trend might be affected' (ở mở bài) -> Nên dùng 'This trend has been affected' (để chỉ xu hướng kéo dài đến hiện tại).",
+        "Lỗi cấu trúc: 'will likely to cause' -> Thiếu to-be: 'is likely to cause'."
+      ],
+      "strengths": ["Có sự kết hợp giữa câu đơn và câu phức."],
+      "areas_for_improvement": ["Tránh lỗi 'bị động kép' (double passive). Ưu tiên diễn đạt chủ động, ngắn gọn."],
+      "band_reason": "Uses a mix of simple and complex sentence forms, but errors in grammar and punctuation occur, though rarely impede communication."
+    }
+  }
+}

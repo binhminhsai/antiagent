@@ -1,0 +1,53 @@
+Some people believe that a crime is a result of social problems and poverty, others think that crime is a result of a bad person’s nature. Discuss both views and give your opinion
+
+Public opinions are divided as to whether crime is due to social problems and poverty or bad personality. Personally, both of them are reasonable, but I am inclined to advocate the former than the latter due to some reasons which will be explained in the essay below. 
+On the one hand, there are two compelling reasons why a bad person’s nature leads to crime. The most striking one is that hot-tempered individuals tend to exhibit brutal behaviors. Instead of verbal conflict resolution, they often settle disputes with fists and in the worst-case scenario, this negative nature can give rise to domestic violence. Coupled with this is that the risk of theft or pickpocketing is commonly found among those with express selfish tendencies. Surrounded by a large crowd, they desire to exploit others for personal gain such as thefting people’s money or belongings . There is a strong probability to result in embezzlement when it comes to public servants with a greedy disposition. 
+On the other hand, I believe that social issues and poverty cause crime for the following reasons. To begin with, children in poor conditions tend to exhibit violent behaviors on the grounds that the more dysfunctional their family became, the more such young individuals were preoccupied with violent behaviors. This regular exposure make them prone to embrace these tendencies recklessly, which is very likely to commit assault in the near future. In addition to this, those who are surrounded by toxic social circles are easily associated with criminal activities. Their peer group may lure them into gambling or betting, rendering them vulnerable to these criminal addiction. 
+In conclusion , although it is justifiable for some to endorse the perspective of crime being a result of a negative of negative personality, I firmly maintain that crime being by virtue of social problems and poverty represents a more compelling standpoint. 
+
+{
+  "task": "IELTS_WRITING_TASK_2_GRADING",
+  "coT": {
+    "layer1_errors": "[TA] Luận điểm về mối liên hệ giữa nghèo đói và tội phạm còn chung chung, thiếu ví dụ thực tế thuyết phục. [CC] Từ nối tốt nhưng cần nâng cao sự mạch lạc giữa các ý trong đoạn. [LR] Lỗi dùng từ nghiêm trọng (word choice & collocation): 'thefting', 'express selfish tendencies', 'negative of negative personality', và sai cấu trúc so sánh 'advocate... than'. [GRA] Lỗi chia thì không nhất quán (đang tả xu hướng xã hội nhưng dùng quá khứ), lỗi hòa hợp S-V ('This regular exposure make...'), và cấu trúc mệnh đề quan hệ sai chủ ngữ ('which is very likely to commit').",
+    "layer2_matching": "[TA] Band 6.5 vì trình bày đủ quan điểm nhưng cần phát triển chiều sâu lập luận. -> Expected TA: 6.5. [CC] Band 7.0 vì cấu trúc logic, có từ nối tốt. -> Expected CC: 7.0. [LR] Band 6.0 vì lỗi từ vựng xuất hiện dày đặc, gây hiểu lầm hoặc mất tự nhiên. -> Expected LR: 6.0. [GRA] Band 6.0 vì mắc lỗi ngữ pháp cơ bản thường xuyên. -> Expected GRA: 6.0.",
+    "layer3_calibration": "TA=6.5; CC=7.0; LR=6.0; GRA=6.0. Mean = (6.5 + 7.0 + 6.0 + 6.0)/4 = 6.375. Làm tròn theo tiêu chí IELTS = 6.5."
+  },
+  "overall_band": 6.5,
+  "evaluation": {
+    "1_task_achievement": {
+      "band_score": 6.5,
+      "feedback_detail": ["Cần phát triển luận điểm sâu hơn bằng ví dụ cụ thể thay vì chỉ đưa ra nhận định chung (general statements)."],
+      "strengths": ["Đáp ứng đủ yêu cầu đề bài (thảo luận 2 phía & đưa ý kiến).", "Luận điểm được chia tách rõ ràng cho hai đoạn thân bài."],
+      "areas_for_improvement": ["Phát triển ví dụ/dẫn chứng cụ thể để củng cố các nhận định về tính cách và xã hội."],
+      "band_reason": "Addresses all parts of the task and presents a clear position, though argument development needs to be more specific and convincing."
+    },
+    "2_coherence_cohesion": {
+      "band_score": 7.0,
+      "feedback_detail": ["Cần từ nối mạnh hơn để thể hiện sự đối lập: 'By contrast, I am of the opinion that...' thay vì chỉ dùng 'On the other hand'."],
+      "strengths": ["Sử dụng tốt từ nối chỉ trình tự và chuyển ý (On the one hand, To begin with, In addition)."],
+      "areas_for_improvement": ["Tăng tính logic trong quá trình từ nguyên nhân (hoàn cảnh gia đình) dẫn đến kết quả (hành vi tội phạm)."],
+      "band_reason": "Logical organization is present, and paragraphing is appropriate throughout."
+    },
+    "3_lexical_resource": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi từ vựng: 'thefting' -> Dùng 'committing theft'.",
+        "Lỗi collocation: 'express selfish tendencies' -> Dùng 'exhibit selfish tendencies'.",
+        "Lỗi diễn đạt: 'advocate... than' -> Dùng 'prefer... to...'"
+      ],
+      "strengths": ["Từ vựng chủ đề tốt: 'domestic violence', 'embezzlement', 'prone to', 'criminal activities'."],
+      "areas_for_improvement": ["Cần rà soát kỹ các collocation (cụm từ đi kèm) và dạng từ (word form) để tránh lỗi không tự nhiên."],
+      "band_reason": "Vocabulary is sufficient but lacks precision, with repeated errors in word choice and naturalness."
+    },
+    "4_grammatical_range_accuracy": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi hòa hợp S-V: 'This regular exposure make...' -> Sửa thành 'makes'.",
+        "Lỗi cấu trúc: 'which is very likely to commit' -> Sửa thành 'which makes them more likely to commit'."
+      ],
+      "strengths": ["Vận dụng tốt cấu trúc so sánh kép (the more... the more...) và mệnh đề quan hệ."],
+      "areas_for_improvement": ["Kiểm tra lại sự hòa hợp giữa chủ ngữ và động từ, đồng thời giữ tính nhất quán về thì (tense consistency)."],
+      "band_reason": "Uses a mix of simple and complex sentence forms, but errors in grammar occur frequently, though they rarely impede communication."
+    }
+  }
+}

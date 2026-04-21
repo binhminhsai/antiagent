@@ -1,0 +1,56 @@
+The charts below show the percentage of people aged 23-65 in different occupations in one UK town (Ashby) and in the UK as a whole.
+
+https://drive.google.com/file/d/1aKZRr2T0Wj0y3RCGgrVGbEpI6KkQ6sc9/view?usp=sharing 
+
+Given are the pie charts delineating the proportion of individuals aged 23-65 in different jobs in Ashby and the UK. Overall, in Ashby, the personal service had the highest proportion while the most common occupation in the USA was office work. In addition to this , the least popular job in Ashby was professional work whereas construction work and unemployed individuals accounted for the minority. To begin with, in Ashby, standing out clearly among all all among other occupations was personal service, with 21% while office work and construction work had smaller figures of 18% and 16% respectively. Much lower was unemployed people and shop work, which bore a striking similarity in terms of the prevalence, with 14% each. At the bottom of the chart was professional work and technical work, with no more than 9% each.
+
+{
+  "task": "IELTS_WRITING_TASK_1_GRADING",
+  "coT": {
+    "layer1_errors": "[TA] Lỗi sai nghiêm trọng về địa danh (UK vs USA) làm sai lệch trọng tâm. Bài viết chủ yếu liệt kê, thiếu các so sánh đối chiếu sâu sắc. [CC] Gặp lỗi thiếu tính song song khi so sánh các nhóm đối tượng khác nhau (người vs. công việc). [LR] Lặp từ thừa ('all all'), một số cụm từ chưa tự nhiên. [GRA] Lỗi cơ bản về sự hòa hợp chủ ngữ - động từ (chia số ít/số nhiều), lỗi thì (quá khứ vs. hiện tại), cấu trúc câu sai (dangling modifier).",
+    "layer2_matching": "[TA] Band 6 vì đáp ứng được yêu cầu nhưng mắc lỗi nội dung nghiêm trọng. -> Expected TA: 6.0. [CC] Band 7 vì bố cục mạch lạc, chuẩn format dù lỗi logic nhỏ. -> Expected CC: 7.0. [LR] Band 6 vì từ vựng đủ dùng nhưng thiếu chính xác và còn lặp từ. -> Expected LR: 6.0. [GRA] Band 5 vì mắc nhiều lỗi ngữ pháp căn bản làm ảnh hưởng đến tính chính xác và đọc hiểu. -> Expected GRA: 5.0.",
+    "layer3_calibration": "TA=6.0; CC=7.0; LR=6.0; GRA=5.0. Mean = (6 + 7 + 6 + 5)/4 = 6.0. overall_band = 6.0."
+  },
+  "overall_band": 6.0,
+  "evaluation": {
+    "1_task_achievement": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi nội dung: 'USA' trong khi biểu đồ là 'UK' -> Đây là lỗi nghiêm trọng làm sai lệch trọng tâm bài viết.",
+        "Thiếu tính phân tích: Nội dung dừng lại ở mức liệt kê, cần bổ sung các đoạn so sánh, đối chiếu giữa các nhóm ngành nghề."
+      ],
+      "strengths": ["Xác định đúng xu hướng chính (ngành cao nhất/thấp nhất)."],
+      "areas_for_improvement": ["Kiểm tra kỹ thông tin địa lý và số liệu trong đề bài. Cần tập trung vào việc so sánh dữ liệu thay vì chỉ liệt kê."],
+      "band_reason": "The response identifies key trends but contains a significant error regarding the subject matter, and relies too heavily on listing rather than analyzing."
+    },
+    "2_coherence_cohesion": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "Lỗi tính song song: 'unemployed people' (người) và 'shop work' (loại công việc) -> Không nên gộp chung trong câu so sánh. Ví dụ cải thiện → 'The figure for shop work stood at 14%, while the proportion of unemployed individuals was also 14%'."
+      ],
+      "strengths": ["Cấu trúc bài viết chuẩn mực (Intro, Overview, Body paragraphs)."],
+      "areas_for_improvement": ["Cần phân loại nhóm đối tượng đồng nhất để đảm bảo tính logic khi so sánh."],
+      "band_reason": "The essay is logically organized with clear paragraphing, despite some minor flaws in comparison logic."
+    },
+    "3_lexical_resource": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi dư thừa từ: 'all all among other occupations' -> Nên sửa thành 'among other occupations'."
+      ],
+      "strengths": ["Sử dụng tốt từ vựng cơ bản về so sánh: 'accounted for', 'prevalence', 'stood at'."],
+      "areas_for_improvement": ["Cần kiểm soát kỹ bài viết để tránh lặp từ vô nghĩa."],
+      "band_reason": "The vocabulary is sufficient for the task but lacks precision, with occasional repetition and awkward phrasing."
+    },
+    "4_grammatical_range_accuracy": {
+      "band_score": 5.0,
+      "feedback_detail": [
+        "Lỗi hòa hợp chủ ngữ - động từ: 'At the bottom... were professional work and technical work' (đã sửa đúng) -> Cần lưu ý các câu liệt kê nhiều đối tượng.",
+        "Lỗi chia thì: 'those who are unemployed' -> Cần dùng quá khứ 'those who were unemployed' để nhất quán với biểu đồ.",
+        "Lỗi cấu trúc: 'Much lower was unemployed people' -> Cần sửa thành 'The figure for unemployment was much lower'."
+      ],
+      "strengths": ["Có nỗ lực sử dụng cấu trúc so sánh phức hợp."],
+      "areas_for_improvement": ["Tập trung sửa các lỗi ngữ pháp cơ bản (thì, sự hòa hợp S-V). Đây là ưu tiên số 1 để nâng band."],
+      "band_reason": "Frequent grammatical errors and lack of consistency in verb tenses significantly affect the clarity of the response."
+    }
+  }
+}

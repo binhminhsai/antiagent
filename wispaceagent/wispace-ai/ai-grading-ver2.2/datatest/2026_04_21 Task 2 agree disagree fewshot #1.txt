@@ -1,0 +1,54 @@
+The best way to solve the world’s environmental problem is to increase the price of fuel. To what extent do you agree or disagree?
+
+It has become increasingly prevalent to observe a number of environmental problems happening in the world, so some believe that elevating the price of gasoline is the best way to address those problems. From my standpoint, however, I will challenge this school of thought for several reasons, which will be presented in the following essay.t
+On the one hand, there is a significant reason why increasing the fuel cost may be advantageous. The most striking one is the potential for the fuel emission to be reduced. To be more specific, less released fuel consumption resulting from affordability issues not only can render the environment fresher, but can also force many people to opt for public transport. This, according to the theory, ultimately results in less air pollution being recorded. However, this line of reasoning is not sound on the grounds that the percentage of pollution caused by fuel emission is negligible, compared to ones caused by public awareness such as littering, cutting trees,... This fact justifies that the effect of increasing the price of fuel is unremarkable.
+On the other hand, I believe that there are more effective solutions to tackle environmental problems. To add further credence to my assertion, I note the root cause of most ecological issues: human activities. This could be exemplified in many developing countries, where people’s literacy is low, which is very likely to littering as well as illegal dumping or trash burning. Hence, the key to solving environmental problems is to raise public awareness, especially about how themselves and the world would be adversely affected by those issues. This could be done by launching advocacy community consciousness campaigns through schools, offices and villages, thereby equipping preserving skills for residents and decreasing the problems caused by daily activities. Coupled with this is the fact that if awareness is not raised, there is a high probability that elevating fuel cost would be neglected, and people may still continue buying fuel due to high demand of travelling.
+In conclusion, it is a mistake to assume that increasing the price of fuel is the optimum way to alleviate problems posed to the environment by virtue of human activities, and the key is to raise public awareness about the importance of maintaining the ecological.
+
+
+{
+  "task": "IELTS_WRITING_TASK_2_GRADING",
+  "coT": {
+    "layer1_errors": "[TA] Lập luận về việc 'ô nhiễm do nhiên liệu là không đáng kể' chưa thuyết phục và làm yếu đi tính logic của bài viết. [CC] Cấu trúc bài ổn, nhưng sự liên kết giữa các câu đôi khi bị gãy do sai cấu trúc (ví dụ: 'likely to littering'). [LR] Lỗi kết hợp từ (collocation) và cách dùng từ không tự nhiên ('released fuel consumption', 'equipping preserving skills', 'demand of travelling'). [GRA] Lỗi ngữ pháp cơ bản tái diễn ('likely to + V-ing', thiếu danh từ sau mạo từ, sai giới từ sau 'demand').",
+    "layer2_matching": "[TA] Band 7.0 vì quan điểm nhất quán, bài viết có tư duy phản biện tốt dù lập luận đôi chỗ cần sắc bén hơn. -> Expected TA: 7.0. [CC] Band 6.5 vì bố cục tốt nhưng sự trôi chảy bị ảnh hưởng bởi lỗi diễn đạt. -> Expected CC: 6.5. [LR] Band 6.0 vì lỗi collocation xuất hiện nhiều, gây khó hiểu cho người đọc. -> Expected LR: 6.0. [GRA] Band 6.0 vì lỗi ngữ pháp cơ bản (cấu trúc cố định) ảnh hưởng đến độ chính xác. -> Expected GRA: 6.0.",
+    "layer3_calibration": "TA=7.0; CC=6.5; LR=6.0; GRA=6.0. Mean = (7.0 + 6.5 + 6.0 + 6.0)/4 = 6.375. Làm tròn theo tiêu chí IELTS = 6.5."
+  },
+  "overall_band": 6.5,
+  "evaluation": {
+    "1_task_achievement": {
+      "band_score": 7.0,
+      "feedback_detail": ["Lập luận về việc 'nhiên liệu không phải nguyên nhân chính' là một hướng đi táo bạo, nhưng cần dùng số liệu hoặc dẫn chứng thuyết phục hơn để tránh bị coi là thiếu thực tế."],
+      "strengths": ["Quan điểm nhất quán ngay từ đầu.", "Tư duy phản biện tốt (không đồng ý một cách mù quáng)."],
+      "areas_for_improvement": ["Cụ thể hóa các lý do. Thay vì nói 'unremarkable', hãy dùng 'inelastic demand' (nhu cầu không co giãn) để giải thích tại sao tăng giá không giảm được việc dùng xe."],
+      "band_reason": "Addresses all parts of the task with a clear position, though some counter-arguments need stronger logical backing."
+    },
+    "2_coherence_cohesion": {
+      "band_score": 6.5,
+      "feedback_detail": ["Cần chú ý cấu trúc song song (parallelism) khi liệt kê các hành động: 'littering, illegal dumping, and trash burning' thay vì ngắt quãng không cần thiết."],
+      "strengths": ["Bố cục bài văn (Introduction, Body 1, Body 2, Conclusion) rất chuẩn mực."],
+      "areas_for_improvement": ["Cải thiện sự trôi chảy (flow) giữa các câu bằng các từ nối chỉ quan hệ nhân quả mạnh hơn."],
+      "band_reason": "Information is logically organized, but cohesive devices within and between sentences are sometimes mechanical."
+    },
+    "3_lexical_resource": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi collocation: 'demand of travelling' -> 'demand for travel'.",
+        "Lỗi diễn đạt: 'less released fuel consumption' -> 'reduced fuel consumption'.",
+        "Lỗi dùng từ loại: 'maintaining the ecological' (thiếu danh từ) -> 'maintaining ecological balance'."
+      ],
+      "strengths": ["Từ vựng chủ đề môi trường khá ổn: 'environmental problems', 'air pollution', 'illegal dumping'."],
+      "areas_for_improvement": ["Học cụm từ theo khối (collocations). Đừng dịch word-by-word từ tiếng Việt sang."],
+      "band_reason": "Uses a sufficient range of vocabulary, but errors in word choice and collocation prevent a higher score."
+    },
+    "4_grammatical_range_accuracy": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi cấu trúc: 'likely to littering' -> Sai. Phải là 'likely to litter' (V-nguyên thể).",
+        "Lỗi giới từ: 'demand of' -> 'demand for'."
+      ],
+      "strengths": ["Nỗ lực sử dụng cấu trúc câu phức và mệnh đề quan hệ."],
+      "areas_for_improvement": ["Tập trung sửa các cấu trúc 'fixed grammar' (như: likely to V, demand for, equip sb with sth)."],
+      "band_reason": "Attempts complex structures, but errors in basic sentence patterns and fixed expressions occur frequently."
+    }
+  }
+}

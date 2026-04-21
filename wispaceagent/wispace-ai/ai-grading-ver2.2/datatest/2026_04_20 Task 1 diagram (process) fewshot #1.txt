@@ -1,0 +1,61 @@
+The diagram shows the process by which milk and related products are produced.
+
+https://engnovatewebsitestorage.blob.core.windows.net/ielts-writing-task-1-images/fb90902c854b9162
+
+The diagram illustrates the way dairy products including milk, cheese, cream and butter are produced, processed, and packaged for sale to consumers.
+Overall, there are 8 stages involved in the process, starting with cows grazing on grass and ending with the final products on sale in supermarkets and shops.
+In the first stage, cows graze in the fields before being taken to a milking machine twice a day. Following this, the milk is put into the refrigeration storage in order to be stored and kept it fresh on a daily basis.
+Next, the milk is contained in a tanker where it is then ready to be delivered to the Dairy daily. Once the milk has been transferred to the Dairy, it is subsequently put through a pasteurization process. It is then turned into various dairy products such as cheese, cream, and butter.
+Finally, as soon as the milk and dairy products have been processed and packaged, they are sent out to supermarkets and shops where they are ready for being purchased by consumers.
+
+
+{
+  "task": "IELTS_WRITING_TASK_1_GRADING",
+  "coT": {
+    "layer1_errors": "[TA] Phân tích quy trình còn mang tính liệt kê, chưa làm rõ được điểm rẽ nhánh của quy trình (nhánh sữa tươi và nhánh sản phẩm chế biến). [CC] Câu văn cuối bị rườm rà ('ready for being purchased'). Thiếu sự kết nối uyển chuyển giữa các câu đơn lẻ. [LR] Lặp từ 'milk', 'dairy products' quá nhiều. Một số từ chưa chính xác về mặt học thuật ('contained in a tanker', 'ready to be delivered'). [GRA] Lỗi diễn đạt ('put into', 'kept it fresh') và thiếu sự đa dạng cấu trúc câu (vẫn phụ thuộc nhiều vào câu đơn/ghép).",
+    "layer2_matching": "[TA] Phù hợp Band 7 vì Bao quát toàn bộ quy trình, thông tin chính xác, logic, nhưng chưa đạt Band 8 do thiếu phân tích sâu hơn về sự phân tách của quy trình. -> Expected TA: 7.0. [CC] Phù hợp Band 7 vì Sử dụng tốt các từ nối, cấu trúc mạch lạc, dù còn vài chỗ rườm rà. -> Expected CC: 7.0. [LR] Phù hợp Band 7 vì Có từ vựng chuyên ngành, nhưng bị trừ điểm do lặp từ và collocation chưa thật sự tự nhiên. -> Expected LR: 7.0. [GRA] Phù hợp Band 7 vì Sử dụng bị động tốt, ngữ pháp chính xác, nhưng thiếu các cấu trúc phức hợp cao cấp. -> Expected GRA: 7.0.",
+    "layer3_calibration": "TA=7.0; CC=7.0; LR=7.0; GRA=7.0. Mean = (7 + 7 + 7 + 7)/4 = 7.0. overall_band = 7.0."
+  },
+  "overall_band": 7.0,
+  "evaluation": {
+    "1_task_achievement": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "Cần làm rõ hơn sự phân tách của quy trình sau khi sữa được chuyển đến nhà máy: một nhánh cho sữa tươi, một nhánh cho các sản phẩm chế biến (cheese, cream, butter)."
+      ],
+      "strengths": ["Bao quát tốt quy trình toàn diện.", "Logic trình bày theo trình tự thời gian hợp lý."],
+      "areas_for_improvement": ["Tránh liệt kê máy móc từng bước. Cần có cái nhìn tổng quan (overview) tốt hơn về cách vận hành của quy trình."],
+      "band_reason": "The response presents a clear overview of the process, with information appropriately selected. The stages are clearly sequenced."
+    },
+    "2_coherence_cohesion": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "'ready for being purchased' -> Dài dòng. Ví dụ cải thiện → 'become available for purchase'.",
+        "Kết nối giữa các câu trong đoạn 2 còn rời rạc."
+      ],
+      "strengths": ["Sử dụng từ nối thời gian hiệu quả ('In the first stage', 'Next', 'Finally')."],
+      "areas_for_improvement": ["Sử dụng thêm các đại từ quan hệ hoặc liên từ để nối các câu phức hợp, tránh việc câu quá độc lập."],
+      "band_reason": "The response is logically organised and flows well, though some linking could be more sophisticated."
+    },
+    "3_lexical_resource": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "'contained in a tanker' -> Không tự nhiên. Ví dụ cải thiện → 'loaded into a tanker'.",
+        "'ready to be delivered' -> Thiếu tính học thuật. Ví dụ cải thiện → 'ready for distribution'."
+      ],
+      "strengths": ["Sử dụng tốt từ vựng chuyên ngành: 'pasteurized', 'refrigeration', 'packaged'."],
+      "areas_for_improvement": ["Khắc phục lỗi lặp từ 'milk' và 'dairy products' bằng cách dùng từ thay thế (paraphrasing) hoặc cấu trúc tham chiếu."],
+      "band_reason": "There is a sufficient range of vocabulary for the task, with some technical terms, though some repetition and awkward collocations exist."
+    },
+    "4_grammatical_range_accuracy": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "'put into' -> Mang tính văn nói. Ví dụ cải thiện → 'transferred to'.",
+        "'kept it fresh' -> Thừa tân ngữ 'it'. Ví dụ cải thiện → 'maintain its freshness'."
+      ],
+      "strengths": ["Sử dụng nhuần nhuyễn cấu trúc bị động (rất cần thiết cho Task 1 dạng quy trình)."],
+      "areas_for_improvement": ["Cần đa dạng hóa cấu trúc câu bằng cách lồng ghép thêm mệnh đề quan hệ và các cấu trúc phức hợp hơn."],
+      "band_reason": "A variety of complex structures is attempted and generally error-free, but sentence variety could be further developed."
+    }
+  }
+}

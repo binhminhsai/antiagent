@@ -1,0 +1,55 @@
+As major cities in the world are growing today, so do their problems. What are the problems for young people who are living in the cities as a result of continued growth? What are the solutions for these problems?
+
+In today's world, urbanization and globalization have become inevitable trends that profoundly affect the development of major cities. This could be associated with multiple issues, with a heavy impact placed on the urban youth, which will be analyzed in the essay below, together with several solutions that could be taken into consideration. 
+There are two problems emerging as urban centers grow globally. The most striking one is the deterioration in health conditions among young urban dwellers on the grounds that the more the metropolises expand, the more trees are cut down to make room for infrastructural growth. There is a strong likelihood that not only would airborne pollutant levels increase, but young citizens may also be exposed to these pollutants frequently, rendering them more vulnerable to respiratory diseases such as sinusitis, asthma, and lung cancer, in the worst-case scenario. In addition to this is that young urbanites may face financial pressure due to the requirement of adapting to the high living cost in urban areas. More specifically, they have to cover their basic necessities and housing expenses, which are two major financial burdens to young adults.
+To combat these, two methods as follow can be put into practice. To begin with, it is necessary for governments to implement policies to reduce the influx of the population into the city by virtue of the fewer people migrating to urban centers, the less public purse authorities need to allocate for the upgrade of infrastructure, allowing more resources for social welfare programs instead. For instance, government subsidies can be distributed to healthcare and housing, giving rise to the alleviation of economic adversity for the young individuals. This is very likely to help them ensure more financially comfortable lives, especially those who have not reached stability yet.
+In conclusion, the potential repercussions of the fact that urbanization and globalization are manifold. Fortunately, they could be addressed by a number of resolutions that require cooperation from many stakeholders.
+
+{
+  "task": "IELTS_WRITING_TASK_2_GRADING",
+  "coT": {
+    "layer1_errors": "[TA] Luận điểm về hạ tầng còn thiếu logic (việc giảm di cư không có nghĩa là không cần nâng cấp hạ tầng địa phương). [CC] Lỗi cấu trúc câu dẫn dắt ('In addition to this is that...'). [LR] Lỗi dùng từ (collocation) nghiêm trọng ở các cấu trúc nguyên nhân-kết quả ('by virtue of' + mệnh đề, 'distribute' vs 'allocate'). [GRA] Lỗi thống nhất các trợ động từ tình thái trong câu đảo ngữ ('would' vs 'may').",
+    "layer2_matching": "[TA] Band 7 vì bài viết trả lời đầy đủ, lập luận thực tế. -> Expected TA: 7.0. [CC] Band 7 vì bố cục chuẩn, logic đoạn văn rõ ràng. -> Expected CC: 7.0. [LR] Band 6 vì vốn từ vựng chuyên ngành tốt nhưng dính lỗi collocation cơ bản gây cản trở sự tự nhiên. -> Expected LR: 6.0. [GRA] Band 7 vì có nỗ lực dùng cấu trúc câu phức/đảo ngữ, lỗi ngữ pháp không làm mất nghĩa. -> Expected GRA: 7.0.",
+    "layer3_calibration": "TA=7.0; CC=7.0; LR=6.0; GRA=7.0. Mean = (7 + 7 + 6 + 7)/4 = 6.75. Làm tròn theo tiêu chí IELTS = 7.0."
+  },
+  "overall_band": 7.0,
+  "evaluation": {
+    "1_task_achievement": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "Lỗi logic: Lập luận về hạ tầng cần được làm rõ hơn (tập trung vào giảm tải cho đô thị lớn thay vì budget allocation tại các địa phương khác)."
+      ],
+      "strengths": ["Giải quyết đầy đủ các yêu cầu đề bài (problems & solutions).", "Vấn đề nêu ra (sức khỏe, tài chính) rất thực tế."],
+      "areas_for_improvement": ["Cần phát triển luận điểm sâu hơn, đảm bảo tính khả thi và logic trong việc đưa ra giải pháp."],
+      "band_reason": "Addresses all parts of the task and presents a clear position, though some logical links in arguments need refinement."
+    },
+    "2_coherence_cohesion": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "Lỗi cấu trúc nối câu: 'In addition to this is that' -> Nên sửa thành 'In addition to this, young urbanites may face...'"
+      ],
+      "strengths": ["Cấu trúc bài viết chuẩn mực (Intro, Body 1, Body 2, Conclusion)."],
+      "areas_for_improvement": ["Sử dụng các từ nối linh hoạt hơn để chuyển tiếp giữa các ý trong cùng một đoạn."],
+      "band_reason": "Organizes information and ideas logically throughout the response with clear progression."
+    },
+    "3_lexical_resource": {
+      "band_score": 6.0,
+      "feedback_detail": [
+        "Lỗi từ vựng/Ngữ pháp: 'by virtue of' + mệnh đề -> Nên dùng 'by virtue of reduced migration' (danh từ) hoặc 'because...' (mệnh đề).",
+        "Collocation: 'distribute subsidies' -> Nên dùng 'allocate subsidies'."
+      ],
+      "strengths": ["Sử dụng tốt từ vựng chuyên môn: 'urbanization', 'airborne pollutant', 'social welfare programs'."],
+      "areas_for_improvement": ["Cẩn trọng với các collocation học thuật. Kiểm tra kỹ xem từ đó có thể đi với mệnh đề (clause) hay cụm danh từ (phrase)."],
+      "band_reason": "Uses an adequate range of vocabulary, but errors in word choice and collocation prevent a higher band."
+    },
+    "4_grammatical_range_accuracy": {
+      "band_score": 7.0,
+      "feedback_detail": [
+        "Lỗi diễn đạt: 'not only would... but... may...' -> Nên thống nhất trợ động từ để đảm bảo sự nhất quán trong câu đảo ngữ."
+      ],
+      "strengths": ["Vận dụng được cấu trúc phức, câu điều kiện, câu đảo ngữ rất tốt."],
+      "areas_for_improvement": ["Cần nhất quán về thì và mood của động từ trong các câu phức tạp."],
+      "band_reason": "Uses a variety of complex structures with frequent error-free sentences; errors do not detract from meaning."
+    }
+  }
+}
