@@ -1,0 +1,40 @@
+# Link sheet
+SHEET_R2 = "https://docs.google.com/spreadsheets/d/10KMFiJVKSOu6lalTzfGlj5CkjPVKlBxpUrdlMsdPxz4/export?format=csv&gid=1325733395"
+SHEET_AK_T1 = "https://docs.google.com/spreadsheets/d/1W8VOxNPt0exubOTjQZEUdDP4c52VpuNpr7-uvZXnBKk/export?format=csv&gid=0"
+SHEET_AK_t2 = "https://docs.google.com/spreadsheets/d/1W8VOxNPt0exubOTjQZEUdDP4c52VpuNpr7-uvZXnBKk/export?format=csv&gid=1328193196"
+
+# Link export dataset test
+URL_EXPORT_TASK1 = "ai_test_suite_task1.json"
+URL_EXPORT_TASK2 = "ai_test_suite_task2.json"
+
+# Câu hình Open AI
+# BASE_URL = "None"
+# API_KEY = "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"
+# MODEL_NAME = "gpt-4o-mini"
+
+# Cấu hình codex token
+BASE_URL= "https://codex.xirothedev.io.vn/v1"
+API_KEY = "sk-clb-HYLBtlYfd1Hz09n7t3fTAj8NAvpYe_XN5rB-ZKCX8pY"
+MODEL_NAME = "gpt-5.2"
+
+# Cấu hình app
+PORT = 1000
+DEBUG = True
+
+# Server
+IP = "69.62.74.196"
+USER_NAME = "root"
+KEY_PATH = "tool_extract/deploy_key"
+DOMAIN_IMAGE = "https://image.aihubproduction.com/"
+FOLDER_IMAGE = "/var/www/task1-image/"
+
+# Postgresql
+HOST_DB = "69.62.74.196"
+PORT_DB = "5434"
+USERNAME_DB = "ielts_admin"
+PASSWORD_DB = "Dawnchu1024&ielts_admin"
+DATABASE = "ielts_writing_task1"
+MIN_SIZE = 5
+MAX_SIZE = 20
+COMMAND_TIMEOUT = 60
+MAX_INACTIVE_CONNECTION_LIFETIME = 600
