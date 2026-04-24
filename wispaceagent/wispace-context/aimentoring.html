@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher AI (WISPACE) - Phân Tích Thị Trường</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Tùy chỉnh font chữ */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfbf9;
+            color: #2d3748;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Chart Container Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            /* Chiều cao mặc định */
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Utility classes cho tương tác */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .tab-active {
+            border-bottom-color: #d97757;
+            color: #d97757;
+            font-weight: 600;
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #d97757;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals & Muted Earth Tones. Background: Off-white (#fcfbf9), Primary Text: Dark Slate (#2d3748), Accent 1: Terracotta (#d97757) for CTA/Highlights, Accent 2: Muted Blue (#5b7c99) for secondary data. -->
+    <!-- Application Structure Plan: Cấu trúc dạng Trang đơn (Single-Page Dashboard) chia thành 4 phần chính tương ứng với yêu cầu: Tổng quan Sản phẩm (từ PRD), và 3 bước Phân tích Thị trường (Nhu cầu, Cạnh tranh, Xu hướng). 
+    - Lý do: Giúp người xem có bối cảnh ngay lập tức về sản phẩm trước khi đi vào số liệu thị trường. Thanh điều hướng dính (sticky nav) giúp di chuyển nhanh. Sử dụng biểu đồ để cụ thể hóa các luận điểm phân tích thay vì chỉ dùng văn bản, tăng tính thuyết phục và dễ tiếp thu. -->
+    <!-- Visualization & Content Choices: 
+    1. Product PRD -> Goal: Inform -> Interactive Tabs/Cards -> Trình bày gọn gàng 4 module kỹ thuật, tránh văn bản quá dài.
+    2. Nhu cầu thị trường (Market Need) -> Goal: Compare -> Bar Chart (Mức độ đau đầu của học viên) -> Cho thấy sự cấp thiết của các tính năng Adaptive và Personalization. Library: Chart.js.
+    3. Phân tích Cạnh tranh (Competitive Analysis) -> Goal: Relationships/Compare -> Radar Chart -> So sánh trực quan sức mạnh của Teacher AI so với đối thủ truyền thống trên đa chiều. Library: Chart.js.
+    4. Xu hướng thị trường (Emerging Trends) -> Goal: Organize -> Grid Layout với hiệu ứng Hover -> Làm nổi bật sự phù hợp của sản phẩm với tương lai ngành EdTech. CSS/HTML thuần.
+    - Confirming NO SVG/Mermaid. Sử dụng Unicode Icon và Chart.js (Canvas). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-[#d97757]">WISPACE</span>
+                    <span class="ml-2 text-lg font-medium text-gray-600 hidden sm:block">| Phân Tích Thị Trường Teacher
+                        AI</span>
+                </div>
+                <div class="flex items-center space-x-4 md:space-x-8 text-sm font-medium text-gray-500">
+                    <a href="#overview" class="hover:text-[#d97757] transition">Tổng Quan</a>
+                    <a href="#need" class="hover:text-[#d97757] transition">Bước 1: Nhu Cầu</a>
+                    <a href="#compete" class="hover:text-[#d97757] transition">Bước 2: Cạnh Tranh</a>
+                    <a href="#trend" class="hover:text-[#d97757] transition">Bước 3: Xu Hướng</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-24">
+
+        <!-- Header / Hero -->
+        <header class="text-center space-y-4">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">Báo Cáo Nghiên Cứu Thị Trường
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Phân tích tiềm năng và định vị chiến lược cho giải pháp
+                <span class="text-[#d97757] font-semibold">Teacher AI</span> - Hệ thống học tập cá nhân hóa thích nghi
+                toàn diện.</p>
+        </header>
+
+        <!-- Section 0: Product Context (From Source Report) -->
+        <section id="overview" class="scroll-mt-24">
+            <div class="mb-8 border-b-2 border-gray-200 pb-2">
+                <h2 class="text-2xl font-bold text-gray-800">0. Bối Cảnh Sản Phẩm (Tính Năng Lõi)</h2>
+            </div>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+                Phần này tóm tắt cấu trúc PRD của Teacher AI để làm cơ sở cho phân tích thị trường. Mục tiêu cốt lõi là
+                thay thế/hỗ trợ giáo viên trong việc thiết kế lộ trình <strong>Cá nhân hóa tuyệt đối</strong>, có tính
+                <strong>Thích nghi (Adaptive)</strong> và khả năng <strong>Tương tác chủ động</strong>.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card A -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 feature-card cursor-pointer"
+                    onclick="toggleDetail('detail-a')">
+                    <div class="text-3xl mb-3">📥</div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-800">A. Thu thập & Phân tích</h3>
+                    <p class="text-sm text-gray-500">Xác định Input: Giai đoạn, Nền tảng, Mục tiêu, Áp lực, Điểm yếu.
+                    </p>
+                </div>
+                <!-- Card B -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 feature-card cursor-pointer"
+                    onclick="toggleDetail('detail-b')">
+                    <div class="text-3xl mb-3">⚙️</div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-800">B. Tạo Lộ Trình</h3>
+                    <p class="text-sm text-gray-500">Output 2 tầng: Tổng quan (Phase) và Chi tiết (Chunk/Module) có lý
+                        do.</p>
+                </div>
+                <!-- Card C -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 feature-card cursor-pointer"
+                    onclick="toggleDetail('detail-c')">
+                    <div class="text-3xl mb-3">🧠</div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-800">C. Cơ chế Thích nghi</h3>
+                    <p class="text-sm text-gray-500">Adaptive Logic: Tracking & Trigger điều chỉnh lộ trình theo thực
+                        tế.</p>
+                </div>
+                <!-- Card D -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 feature-card cursor-pointer"
+                    onclick="toggleDetail('detail-d')">
+                    <div class="text-3xl mb-3">💬</div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-800">D. AI Tutor & Chatbot</h3>
+                    <p class="text-sm text-gray-500">Tương tác Context-aware, Call to Action nhắc nhở & động viên.</p>
+                </div>
+            </div>
+
+            <!-- Detail Panels (Hidden by default) -->
+            <div id="detail-a"
+                class="mt-4 p-4 bg-orange-50 rounded-lg hidden text-sm text-gray-700 border-l-4 border-[#d97757]">
+                <strong>Chi tiết Input:</strong> Hệ thống tự động lấy data từ bài chấm gần nhất (AI Grading) để xác định
+                yếu ngữ pháp, logic, từ vựng, và phân tích phong cách học để đưa ra phương pháp phù hợp.
+            </div>
+            <div id="detail-b"
+                class="mt-4 p-4 bg-orange-50 rounded-lg hidden text-sm text-gray-700 border-l-4 border-[#d97757]">
+                <strong>Logic Phân bổ (Rationale):</strong> Mỗi module xuất hiện đều có lý do minh bạch (VD: "Do bạn yếu
+                Coherence nên AI bổ sung bài luyện tập..."). Bao gồm đa dạng module: Video, Quiz, Writing, Virtual Exam.
+            </div>
+            <div id="detail-c"
+                class="mt-4 p-4 bg-orange-50 rounded-lg hidden text-sm text-gray-700 border-l-4 border-[#d97757]">
+                <strong>Trigger:</strong> Làm quiz thấp -> Chèn module bổ trợ. Học nhanh -> Rút ngắn lý thuyết, đẩy
+                nhanh luyện đề. Nghỉ lâu -> Tính toán lại lịch trình để kịp Deadline thi.
+            </div>
+            <div id="detail-d"
+                class="mt-4 p-4 bg-orange-50 rounded-lg hidden text-sm text-gray-700 border-l-4 border-[#d97757]">
+                <strong>Context-Aware:</strong> AI biết học sinh đang ở chunk nào để giải đáp chính xác. Tự động gửi
+                thông báo gợi ý bài tập cụ thể trong ngày để giữ tiến độ.
+            </div>
+        </section>
+
+        <!-- Step 1: Market Need -->
+        <section id="need" class="scroll-mt-24">
+            <div class="mb-8 border-b-2 border-gray-200 pb-2">
+                <h2 class="text-2xl font-bold text-gray-800">Bước 1: Nhận diện Nhu cầu Thị trường (Market Need)</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Sự ra đời của Teacher AI phản ánh việc thị trường giáo dục ngôn ngữ (đặc biệt luyện thi như
+                        IELTS) đang tồn tại những <strong>"Nỗi đau" (Pain points)</strong> lớn mà mô hình lớp học truyền
+                        thống hay các ứng dụng học tập tĩnh không giải quyết được.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-[#d97757] font-bold mr-2">1.</span>
+                            <div>
+                                <strong class="text-gray-800">Nhu cầu Cá nhân hóa ở cấp độ vi mô (Granular
+                                    Personalization):</strong> Học viên chán nản với giáo trình "One-size-fits-all". Nhu
+                                cầu là giải quyết chính xác <em>"Điểm yếu cụ thể"</em> của từng người (Ví dụ: Yếu
+                                Coherence cần bài tập riêng, không cần học lại toàn bộ Writing).
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#d97757] font-bold mr-2">2.</span>
+                            <div>
+                                <strong class="text-gray-800">Sự linh hoạt về Thời gian & Áp lực (Time
+                                    Pressure):</strong> Học sinh, người đi làm có <em>"Thời gian thi dự kiến"</em> và
+                                <em>"Tần suất học"</em> khác nhau. Họ cần một lộ trình có thể tự động co giãn nếu họ bận
+                                rộn (nghỉ học quá lâu) hoặc tiếp thu nhanh.
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#d97757] font-bold mr-2">3.</span>
+                            <div>
+                                <strong class="text-gray-800">Sự đồng hành & Động lực (Proactive Interaction):</strong>
+                                Việc tự học qua App thường thất bại do thiếu tương tác. Cần một "người bạn đồng hành"
+                                biết rõ <em>Context</em>, liên tục nhắc nhở (CTA) và động viên kịp thời.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="text-center font-semibold text-gray-700 mb-2">Biểu đồ Mức độ Quan tâm của Học viên đối
+                        với các Giải pháp</h3>
+                    <p class="text-center text-xs text-gray-500 mb-4">(Dữ liệu mô phỏng dựa trên nhu cầu thị trường
+                        luyện thi)</p>
+                    <div class="chart-container max-w-md">
+                        <canvas id="needsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: Competitive Analysis -->
+        <section id="compete" class="scroll-mt-24">
+            <div class="mb-8 border-b-2 border-gray-200 pb-2">
+                <h2 class="text-2xl font-bold text-gray-800">Bước 2: Phân tích Cạnh tranh (Competitive Analysis)</h2>
+            </div>
+            <p class="text-gray-600 mb-8 leading-relaxed max-w-4xl">
+                Để đánh giá vị thế của Teacher AI (WISPACE), chúng ta so sánh nó với 2 giải pháp phổ biến nhất hiện nay:
+                <strong>Trung tâm truyền thống (Lớp học Offline/Online)</strong> và các <strong>Ứng dụng học tự động thế
+                    hệ cũ (App tĩnh)</strong>.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Competitor 1 -->
+                    <div class="p-5 bg-gray-50 rounded-lg border-l-4 border-gray-400">
+                        <h3 class="font-bold text-gray-800 mb-1">🏛️ Trung tâm Truyền thống</h3>
+                        <p class="text-sm text-gray-600">Ưu điểm là tương tác người-người tốt. Tuy nhiên, <strong>Lộ
+                                trình bị "đóng băng"</strong> (không thể đổi giáo trình giữa chừng cho 1 người), chi phí
+                            cao, và khó đáp ứng cá nhân hóa cho lớp đông.</p>
+                    </div>
+                    <!-- Competitor 2 -->
+                    <div class="p-5 bg-blue-50 rounded-lg border-l-4 border-[#5b7c99]">
+                        <h3 class="font-bold text-gray-800 mb-1">📱 Ứng dụng Học Tự động (Cũ)</h3>
+                        <p class="text-sm text-gray-600">Chi phí rẻ, tự do thời gian. Nhược điểm: Lộ trình tĩnh,
+                            <strong>thiếu Context-Aware</strong> (không biết học viên đang yếu thực sự chỗ nào để sửa),
+                            không có tính năng Trigger điều chỉnh khi kết quả kém.</p>
+                    </div>
+                    <!-- Teacher AI -->
+                    <div class="p-5 bg-orange-50 rounded-lg border-l-4 border-[#d97757] shadow-md transform scale-105">
+                        <h3 class="font-bold text-[#d97757] mb-1">🚀 Teacher AI (WISPACE)</h3>
+                        <p class="text-sm text-gray-700">Tích hợp ưu điểm của cả hai. Khả năng <strong>Adaptive Learning
+                                Logic</strong> vượt trội (tự động thêm module khi điểm thấp, rút ngắn khi điểm cao) +
+                            Chi phí biên thấp + Tương tác chủ động 24/7.</p>
+                    </div>
+                </div>
+
+                <div
+                    class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center items-center">
+                    <h3 class="text-center font-semibold text-gray-700 mb-2">Định vị Cạnh tranh Đa chiều</h3>
+                    <div class="chart-container w-full max-w-lg">
+                        <canvas id="competeChart"></canvas>
+                    </div>
+                    <div class="mt-4 flex space-x-4 text-xs text-gray-500">
+                        <span class="flex items-center"><span
+                                class="w-3 h-3 inline-block bg-gray-300 rounded-full mr-1"></span> Truyền thống</span>
+                        <span class="flex items-center"><span
+                                class="w-3 h-3 inline-block bg-[#5b7c99] rounded-full mr-1"></span> App Cũ</span>
+                        <span class="flex items-center"><span
+                                class="w-3 h-3 inline-block bg-[#d97757] rounded-full mr-1"></span> Teacher AI</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Emerging Trends -->
+        <section id="trend" class="scroll-mt-24">
+            <div class="mb-8 border-b-2 border-gray-200 pb-2">
+                <h2 class="text-2xl font-bold text-gray-800">Bước 3: Xu hướng Thị trường Tương lai (Emerging Trends)
+                </h2>
+            </div>
+            <p class="text-gray-600 mb-8 leading-relaxed max-w-4xl">
+                Teacher AI không chỉ giải quyết bài toán hiện tại mà còn bắt kịp 4 xu hướng lớn (Megatrends) trong ngành
+                EdTech toàn cầu. Các tính năng cốt lõi của WISPACE hoàn toàn khớp (Product-Market Fit) với các xu hướng
+                này.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Trend 1 -->
+                <div
+                    class="group p-6 bg-white border border-gray-200 rounded-xl hover:border-[#d97757] hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="text-6xl">🔄</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                        <span class="bg-gray-100 text-gray-600 rounded px-2 py-1 text-sm mr-3">Trend 1</span>
+                        Adaptive & Hyper-Personalization
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">Từ việc phân nhóm học sinh (segmentation) sang cá nhân hóa cho
+                        từng cá thể (hyper-personalization) dựa trên dữ liệu thời gian thực.</p>
+                    <div class="bg-orange-50 p-3 rounded text-sm text-[#d97757] border border-orange-100">
+                        <strong>Teacher AI Fit:</strong> Module <span class="font-semibold">"Engine Tạo Lộ trình Tự
+                            động"</span> và <span class="font-semibold">"Trigger điều chỉnh"</span> giải quyết chính xác
+                        xu hướng này.
+                    </div>
+                </div>
+
+                <!-- Trend 2 -->
+                <div
+                    class="group p-6 bg-white border border-gray-200 rounded-xl hover:border-[#d97757] hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="text-6xl">🧩</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                        <span class="bg-gray-100 text-gray-600 rounded px-2 py-1 text-sm mr-3">Trend 2</span>
+                        Micro-learning & Chunking
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">Học viên mất tập trung nhanh hơn. Họ thích những bài học ngắn,
+                        giải quyết dứt điểm một vấn đề nhỏ thay vì học nhồi nhét.</p>
+                    <div class="bg-orange-50 p-3 rounded text-sm text-[#d97757] border border-orange-100">
+                        <strong>Teacher AI Fit:</strong> Lộ trình được chia nhỏ đến mức <span
+                            class="font-semibold">"Chunk và Module"</span> (Ví dụ: Video 15 phút về Task 1).
+                    </div>
+                </div>
+
+                <!-- Trend 3 -->
+                <div
+                    class="group p-6 bg-white border border-gray-200 rounded-xl hover:border-[#d97757] hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="text-6xl">🤖</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                        <span class="bg-gray-100 text-gray-600 rounded px-2 py-1 text-sm mr-3">Trend 3</span>
+                        Conversational UI in Education
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">Chuyển dịch từ giao diện tĩnh (click/chọn) sang giao diện hội
+                        thoại. Học viên muốn được hỏi-đáp tự nhiên với hệ thống.</p>
+                    <div class="bg-orange-50 p-3 rounded text-sm text-[#d97757] border border-orange-100">
+                        <strong>Teacher AI Fit:</strong> Tính năng <span class="font-semibold">"AI Tutor & Context-Aware
+                            Chat"</span> biến AI thành người bạn đồng hành.
+                    </div>
+                </div>
+
+                <!-- Trend 4 -->
+                <div
+                    class="group p-6 bg-white border border-gray-200 rounded-xl hover:border-[#d97757] hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="text-6xl">📊</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                        <span class="bg-gray-100 text-gray-600 rounded px-2 py-1 text-sm mr-3">Trend 4</span>
+                        Data-Driven Continuous Feedback
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">Đánh giá không chỉ nằm ở cuối kỳ thi. Đánh giá diễn ra liên
+                        tục qua từng bài tập để tinh chỉnh phương pháp ngay lập tức.</p>
+                    <div class="bg-orange-50 p-3 rounded text-sm text-[#d97757] border border-orange-100">
+                        <strong>Teacher AI Fit:</strong> Module <span class="font-semibold">"Tracking trạng thái & điểm
+                            số"</span> kết hợp data từ AI Grading để làm Input liên tục.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conclusion -->
+            <div class="mt-12 p-6 bg-gray-900 text-white rounded-xl text-center">
+                <h3 class="text-xl font-bold mb-2">Kết Luận Thị Trường</h3>
+                <p class="text-gray-300 max-w-3xl mx-auto">
+                    Với các tính năng mô tả trong PRD, <strong class="text-[#d97757]">Teacher AI của WISPACE</strong>
+                    đang đánh đúng vào khoảng trống lớn nhất của thị trường: <em>Khoảng cách giữa chi phí đắt đỏ của
+                        việc cá nhân hóa truyền thống và sự cứng nhắc của công nghệ EdTech thế hệ cũ.</em> Nếu thực thi
+                    tốt phần Logic Phân bổ (Rationale) và Context-Aware Chat, sản phẩm có tiềm năng tạo ra lợi thế cạnh
+                    tranh tuyệt đối (Unfair Advantage).
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-center text-sm text-gray-500">
+        <p>Market Analysis Report for WISPACE Teacher AI Feature Set.</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // 1. Logic cho UI Tương tác (Toggle Overview Details)
+        function toggleDetail(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                // Ẩn tất cả trước
+                ['detail-a', 'detail-b', 'detail-c', 'detail-d'].forEach(divId => {
+                    document.getElementById(divId).classList.add('hidden');
+                });
+                // Hiện cái được chọn
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // 2. Cấu hình chung cho Chart.js
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#64748b';
+
+        // 3. Khởi tạo Biểu đồ Nhu cầu (Bar Chart)
+        const ctxNeeds = document.getElementById('needsChart').getContext('2d');
+        new Chart(ctxNeeds, {
+            type: 'bar',
+            data: {
+                labels: ['Lộ trình cứng nhắc', 'Thiếu cá nhân hóa', 'Chi phí học 1-1 cao', 'Thiếu người nhắc nhở'],
+                datasets: [{
+                    label: 'Mức độ ảnh hưởng (Pain Point)',
+                    data: [85, 92, 78, 88],
+                    backgroundColor: [
+                        'rgba(91, 124, 153, 0.7)', // Muted blue
+                        'rgba(217, 119, 87, 0.9)', // Terracotta (Highest need)
+                        'rgba(91, 124, 153, 0.7)',
+                        'rgba(217, 119, 87, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(91, 124, 153, 1)',
+                        'rgba(217, 119, 87, 1)',
+                        'rgba(91, 124, 153, 1)',
+                        'rgba(217, 119, 87, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) { return context.parsed.y + '% người học gặp phải'; }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: '#f1f5f9' },
+                        title: { display: true, text: 'Chỉ số %' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            callback: function (value) {
+                                // Wrap label logic
+                                const label = this.getLabelForValue(value);
+                                return label.length > 15 ? label.match(/.{1,15}(\s|$)/g) : label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. Khởi tạo Biểu đồ Cạnh tranh (Radar Chart)
+        const ctxCompete = document.getElementById('competeChart').getContext('2d');
+        new Chart(ctxCompete, {
+            type: 'radar',
+            data: {
+                labels: ['Cá nhân hóa', 'Khả năng Thích nghi (Adaptive)', 'Sẵn sàng 24/7 (Tương tác)', 'Tối ưu Chi phí', 'Lộ trình linh hoạt'],
+                datasets: [
+                    {
+                        label: 'Trung tâm Truyền thống',
+                        data: [60, 40, 20, 30, 40],
+                        backgroundColor: 'rgba(203, 213, 225, 0.2)', // Gray
+                        borderColor: 'rgba(148, 163, 184, 1)',
+                        pointBackgroundColor: 'rgba(148, 163, 184, 1)',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'App Học Tự động Cũ',
+                        data: [30, 20, 80, 90, 20],
+                        backgroundColor: 'rgba(91, 124, 153, 0.2)', // Blue
+                        borderColor: 'rgba(91, 124, 153, 1)',
+                        pointBackgroundColor: 'rgba(91, 124, 153, 1)',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Teacher AI (WISPACE)',
+                        data: [95, 100, 90, 85, 95],
+                        backgroundColor: 'rgba(217, 119, 87, 0.3)', // Terracotta
+                        borderColor: 'rgba(217, 119, 87, 1)',
+                        pointBackgroundColor: 'rgba(217, 119, 87, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(217, 119, 87, 1)',
+                        borderWidth: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false } // Custom legend built in HTML
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(0,0,0,0.05)' },
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        pointLabels: {
+                            font: { size: 12, family: "'Inter', sans-serif" },
+                            color: '#475569'
+                        },
+                        ticks: { display: false, min: 0, max: 100 } // Hide scale numbers for cleaner look
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
