@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Flow – FRS_F3 Bank Feed | CASSO × Viindoo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #F5F7FA; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 60%, #388E3C 100%);
+    color: #fff; padding: 16px 28px; display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .badge { background: #FF6F00; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  header h1 { font-size: 17px; font-weight: 700; }
+  header p { font-size: 12px; opacity: .8; margin-top: 2px; }
+
+  .flow-container { padding: 28px; display: flex; flex-direction: column; gap: 0; }
+
+  /* Actor row */
+  .actor-row { display: flex; gap: 0; margin-bottom: 0; }
+  .actor-col { flex: 1; text-align: center; padding: 12px 8px; font-size: 12px; font-weight: 700; border-bottom: 3px solid; }
+  .actor-casso { background: #E3F2FD; color: #1565C0; border-color: #1565C0; }
+  .actor-viindoo { background: #E8F5E9; color: #2E7D32; border-color: #2E7D32; }
+  .actor-keto { background: #FFF8E1; color: #E65100; border-color: #E65100; }
+
+  .flow-step-row { display: flex; gap: 0; min-height: 100px; }
+
+  /* Step number column */
+  .step-num {
+    width: 52px; min-width: 52px; display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 20px; font-size: 11px; font-weight: 700; color: #90A4AE;
+  }
+
+  /* Column for each actor */
+  .col-casso { flex: 1; background: #F3F8FF; border-right: 1px dashed #90CAF9; padding: 10px; position: relative; }
+  .col-viindoo { flex: 1; background: #F3FBF4; border-right: 1px dashed #A5D6A7; padding: 10px; position: relative; }
+  .col-keto { flex: 1; background: #FFFDF0; padding: 10px; position: relative; }
+
+  .step-card {
+    background: #fff; border-radius: 10px; padding: 10px 14px; margin: 6px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-left: 4px solid;
+    font-size: 12px; position: relative;
+  }
+  .step-card.casso { border-color: #1565C0; }
+  .step-card.viindoo { border-color: #2E7D32; }
+  .step-card.keto { border-color: #E65100; }
+  .step-card.decision { border-color: #F57F17; background: #FFFDE7; }
+  .step-card.error { border-color: #C62828; background: #FFEBEE; }
+  .step-card.success { border-color: #2E7D32; background: #E8F5E9; }
+
+  .step-title { font-weight: 700; font-size: 12px; margin-bottom: 3px; }
+  .step-desc { font-size: 11px; color: #546E7A; line-height: 1.4; }
+  .step-tag { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-bottom: 4px; }
+  .tag-auto { background: #E3F2FD; color: #1565C0; }
+  .tag-manual { background: #FFF9C4; color: #E65100; }
+  .tag-decision { background: #FFF9C4; color: #F57F17; }
+  .tag-system { background: #E8F5E9; color: #2E7D32; }
+  .tag-error { background: #FFEBEE; color: #C62828; }
+
+  .connector { display: flex; justify-content: center; align-items: center; padding: 0; }
+  .arrow-down { width: 2px; height: 20px; background: #B0BEC5; margin: 0 auto; }
+  .arrow-tip { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #B0BEC5; margin: 0 auto; }
+
+  .section-label {
+    background: #263238; color: #fff; padding: 6px 20px; font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; border-radius: 4px; margin: 12px 0 4px;
+    display: inline-block;
+  }
+
+  .divider { height: 2px; background: linear-gradient(to right, #E3F2FD, #E8F5E9, #FFF8E1); margin: 4px 0; }
+
+  .gateway-row {
+    display: flex; align-items: center; gap: 0;
+    background: linear-gradient(to right, #FFF9C4, #FFFDE7); border: 1.5px dashed #F57F17;
+    border-radius: 8px; padding: 10px 14px; margin: 8px 0; font-size: 12px;
+  }
+  .gateway-diamond {
+    width: 28px; height: 28px; background: #FFE082; border: 2px solid #F57F17;
+    transform: rotate(45deg); display: flex; align-items: center; justify-content: center;
+    margin-right: 14px; flex-shrink: 0;
+  }
+  .gateway-diamond span { transform: rotate(-45deg); font-size: 14px; font-weight: 900; color: #E65100; }
+  .gateway-text { font-weight: 700; color: #E65100; font-size: 12px; }
+  .gateway-branches { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; }
+  .branch { padding: 4px 10px; border-radius: 12px; font-weight: 700; }
+  .branch-yes { background: #E8F5E9; color: #2E7D32; }
+  .branch-no { background: #FFEBEE; color: #C62828; }
+
+  .end-state {
+    background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border: 2px solid #2E7D32;
+    border-radius: 10px; padding: 14px 20px; margin: 12px 0; text-align: center;
+  }
+  .end-state h3 { font-size: 14px; color: #1B5E20; margin-bottom: 4px; }
+  .end-state p { font-size: 11px; color: #2E7D32; }
+
+  .screen-label {
+    font-size: 9px; color: #78909C; font-style: italic; margin-top: 3px;
+  }
+
+  .full-flow { max-width: 1400px; margin: 0 auto; }
+
+  /* Swimlane wrapper */
+  .swimlane { display: grid; grid-template-columns: 52px 1fr 1fr 1fr; }
+  .swimlane-header { grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="badge">FRS-F3 · BANK FEED</div>
+    <h1>User Flow – Kế toán viên sử dụng Bank Feed (Semi-Auto)</h1>
+    <p>CASSO × Viindoo ERP · Hành trình: Đồng bộ GD → Xem xét → Xác nhận → Hạch toán → Đối soát</p>
+  </div>
+</header>
+
+<div class="flow-container">
+<div class="full-flow">
+
+<!-- Actor headers -->
+<div style="display: grid; grid-template-columns: 52px 1fr 1fr 1fr; margin-bottom: 0;">
+  <div></div>
+  <div class="actor-col actor-casso">🏦 CASSO SYSTEM<br><small>Open Banking API</small></div>
+  <div class="actor-col actor-viindoo">⚙️ VIINDOO ERP<br><small>Bank Feed Module</small></div>
+  <div class="actor-col actor-keto">👩‍💼 KẾ TOÁN VIÊN<br><small>Người dùng ERP</small></div>
+</div>
+
+<!-- ===== PHASE 1: SYNC ===== -->
+<div style="padding: 8px 0;">
+  <span class="section-label">⚡ GIAI ĐOẠN 1 – ĐỒNG BỘ GIAO DỊCH NGÂN HÀNG</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 52px 1fr 1fr 1fr; min-height: 220px;">
+  <div class="step-num">S1</div>
+  <div class="col-casso">
+    <div class="step-card casso">
+      <span class="step-tag tag-auto">TỰ ĐỘNG</span>
+      <div class="step-title">Kết nối API ngân hàng</div>
+      <div class="step-desc">CASSO gọi Open Banking API theo lịch (mỗi 5–15 phút) hoặc nhận webhook realtime từ ngân hàng đối tác.</div>
+      <div class="screen-label">📡 Open Banking API · Webhook trigger</div>
+    </div>
+    <div class="step-card casso">
+      <span class="step-tag tag-auto">TỰ ĐỘNG</span>
+      <div class="step-title">Lấy giao dịch mới</div>
+      <div class="step-desc">Fetch danh sách giao dịch phát sinh (tiền vào / tiền ra) kể từ lần sync cuối cùng. Dedup & validate.</div>
+      <div class="screen-label">🔄 Timestamp last sync · Dedup by txID</div>
+    </div>
+    <div class="step-card casso">
+      <span class="step-tag tag-auto">TỰ ĐỘNG</span>
+      <div class="step-title">Push sang Viindoo</div>
+      <div class="step-desc">Gửi payload JSON chứa: số tiền, ngày GD, nội dung chuyển khoản, mã tham chiếu, tài khoản ngân hàng.</div>
+      <div class="screen-label">📤 POST /api/bankfeed/sync</div>
+    </div>
+  </div>
+  <div class="col-viindoo">
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Nhận payload & Tạo Bank Statement Line</div>
+      <div class="step-desc">Viindoo tạo các dòng sao kê ngân hàng (bank statement lines) trong nhật ký ngân hàng tương ứng. Trạng thái: <strong>Draft</strong>.</div>
+      <div class="screen-label">🗄️ Kế toán → Ngân hàng → Sao kê</div>
+    </div>
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Auto-match với hóa đơn / phiếu thanh toán</div>
+      <div class="step-desc">Engine so khớp dựa trên: số tiền, ngày, mã đối tác, nội dung chuyển khoản. Nếu khớp → đề xuất bút toán đối ứng.</div>
+      <div class="screen-label">🤖 Reconciliation Engine · Score matching</div>
+    </div>
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Gửi thông báo cho Kế toán viên</div>
+      <div class="step-desc">Hiển thị badge / thông báo trên Viindoo: "Có X giao dịch ngân hàng mới cần xem xét".</div>
+      <div class="screen-label">🔔 Notification · Email alert (tùy cài đặt)</div>
+    </div>
+  </div>
+  <div class="col-keto">
+    <div style="height: 80px; display: flex; align-items: center; justify-content: center; color: #90A4AE; font-size: 12px; font-style: italic;">
+      (Hệ thống tự chạy nền — không cần thao tác)
+    </div>
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Nhận thông báo</div>
+      <div class="step-desc">Kế toán viên thấy notification trên dashboard Viindoo hoặc email: "Giao dịch ngân hàng mới cần xử lý".</div>
+      <div class="screen-label">💡 Trigger hành động tiếp theo</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== PHASE 2: REVIEW (Có đề xuất khớp) ===== -->
+<div style="padding: 8px 0;">
+  <span class="section-label">🔍 GIAI ĐOẠN 2A – XEM XÉT & XÁC NHẬN (Có đề xuất khớp tự động)</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 52px 1fr 1fr 1fr; min-height: 320px;">
+  <div class="step-num">S2a</div>
+  <div class="col-casso">
+    <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: #90A4AE; font-size: 11px; font-style: italic; text-align: center;">
+      CASSO chờ — đã hoàn thành sync
+    </div>
+  </div>
+  <div class="col-viindoo">
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Hiển thị màn Bank Feed</div>
+      <div class="step-desc">Danh sách giao dịch theo 3 tab: <br>• <strong>Chờ xác nhận</strong> (đã đề xuất)<br>• <strong>Cần xử lý thủ công</strong><br>• <strong>Cần kiểm tra</strong></div>
+      <div class="screen-label">📋 Kế toán → Ngân hàng → Bank Feed</div>
+    </div>
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Hiển thị bút toán đề xuất</div>
+      <div class="step-desc">Với mỗi GD, hiện thị: đối tác khớp, hóa đơn liên quan, số tiền, tài khoản kế toán Nợ/Có đề xuất. Độ tin cậy (%).</div>
+      <div class="screen-label">💡 Suggested match panel · Confidence score</div>
+    </div>
+  </div>
+  <div class="col-keto">
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Mở màn hình Bank Feed</div>
+      <div class="step-desc">Điều hướng: <strong>Kế toán → Ngân hàng & Tiền mặt → Bank Feed</strong><br>Chọn tab "Chờ xác nhận".</div>
+      <div class="screen-label">🖥️ Menu Kế toán Viindoo</div>
+    </div>
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Chọn giao dịch & Kiểm tra đề xuất</div>
+      <div class="step-desc">Click vào 1 giao dịch. Đọc thông tin: số tiền, nội dung, đối tác, bút toán đề xuất. So sánh với thực tế.</div>
+      <div class="screen-label">👁️ Transaction detail panel</div>
+    </div>
+    <div class="step-card decision" style="border-color: #F57F17;">
+      <span class="step-tag tag-decision">QUYẾT ĐỊNH</span>
+      <div class="step-title">Đề xuất có đúng không?</div>
+      <div class="gateway-branches" style="margin-top: 6px;">
+        <span class="branch branch-yes">✅ Đúng → Xác nhận</span>
+        <span class="branch branch-no">❌ Sai → Từ chối / Sửa</span>
+      </div>
+    </div>
+    <div class="step-card success">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Click nút "Xác nhận" (Validate)</div>
+      <div class="step-desc">Nhấn nút xanh <strong>Xác nhận</strong> trên panel. Viindoo tự động: tạo bút toán → post → đối soát hóa đơn.</div>
+      <div class="screen-label">✅ Button: Xác nhận · Đã xử lý</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== PHASE 2B: MANUAL ===== -->
+<div style="padding: 8px 0;">
+  <span class="section-label">🔧 GIAI ĐOẠN 2B – XỬ LÝ THỦ CÔNG (Không có đề xuất / Đề xuất sai)</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 52px 1fr 1fr 1fr; min-height: 380px;">
+  <div class="step-num">S2b</div>
+  <div class="col-casso">
+    <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: #90A4AE; font-size: 11px; font-style: italic; text-align: center;">
+      Không tham gia
+    </div>
+  </div>
+  <div class="col-viindoo">
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Hiển thị form nhập liệu thủ công</div>
+      <div class="step-desc">Mở panel nhập liệu: đối tác, tài khoản kế toán, nhãn (label), số tiền (không thể sửa), ghi chú nội bộ.</div>
+      <div class="screen-label">📝 Manual Entry Panel</div>
+    </div>
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Gợi ý hóa đơn liên quan</div>
+      <div class="step-desc">Tìm kiếm và hiển thị danh sách hóa đơn/phiếu thanh toán chưa thanh toán của đối tác được chọn.</div>
+      <div class="screen-label">🔎 Invoice lookup · Open payments</div>
+    </div>
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Validate cân bằng Nợ / Có</div>
+      <div class="step-desc">Kiểm tra tổng Nợ = tổng Có trước khi cho phép xác nhận. Cảnh báo nếu chênh lệch.</div>
+      <div class="screen-label">⚖️ Debit = Credit check</div>
+    </div>
+  </div>
+  <div class="col-keto">
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Chọn tab "Cần xử lý thủ công"</div>
+      <div class="step-desc">Chọn giao dịch chưa được đề xuất khớp. Click để mở form nhập liệu.</div>
+      <div class="screen-label">📂 Tab: Chưa khớp</div>
+    </div>
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Nhập đối tác & Tài khoản kế toán</div>
+      <div class="step-desc">
+        Chọn từ dropdown:<br>
+        • <strong>Đối tác</strong> (khách hàng / nhà cung cấp)<br>
+        • <strong>Tài khoản Nợ / Có</strong> (TK 112, 131, 331…)
+      </div>
+      <div class="screen-label">🏷️ Partner · Account code</div>
+    </div>
+    <div class="step-card decision">
+      <span class="step-tag tag-decision">QUYẾT ĐỊNH</span>
+      <div class="step-title">Có hóa đơn liên quan không?</div>
+      <div class="gateway-branches" style="margin-top: 6px;">
+        <span class="branch branch-yes">✅ Có → Chọn hóa đơn từ danh sách</span>
+        <span class="branch branch-no">❌ Không → Tạo bút toán mới độc lập</span>
+      </div>
+    </div>
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Thêm ghi chú / nhãn (Label)</div>
+      <div class="step-desc">Nhập nội dung bút toán, ghi chú nội bộ. Kiểm tra lại số tiền và tài khoản.</div>
+      <div class="screen-label">📝 Note · Internal reference</div>
+    </div>
+    <div class="step-card success">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Click "Xác nhận" (Validate)</div>
+      <div class="step-desc">Nhấn Xác nhận. Viindoo tạo bút toán thủ công → post → đối soát (nếu có HĐ liên kết).</div>
+      <div class="screen-label">✅ Button: Xác nhận</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== PHASE 3: POST & RECONCILE ===== -->
+<div style="padding: 8px 0;">
+  <span class="section-label">✅ GIAI ĐOẠN 3 – HẠC TOÁN & ĐỐI SOÁT (Hệ thống tự động)</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 52px 1fr 1fr 1fr; min-height: 240px;">
+  <div class="step-num">S3</div>
+  <div class="col-casso">
+    <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: #90A4AE; font-size: 11px; font-style: italic; text-align: center;">
+      Không tham gia
+    </div>
+  </div>
+  <div class="col-viindoo">
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Tạo bút toán kế toán (Journal Entry)</div>
+      <div class="step-desc">Tự động sinh bút toán:<br>• <strong>Nợ</strong>: TK Tiền gửi ngân hàng (112x)<br>• <strong>Có</strong>: TK Phải thu / Phải trả (131/331) hoặc TK được chỉ định</div>
+      <div class="screen-label">📒 Journal Entry · Draft → Posted</div>
+    </div>
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Hạch toán (Post Entry)</div>
+      <div class="step-desc">Bút toán chuyển sang trạng thái <strong>Posted</strong>. Cập nhật số dư tài khoản trong sổ cái (General Ledger).</div>
+      <div class="screen-label">✅ Status: Posted · GL Updated</div>
+    </div>
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Đối soát hóa đơn</div>
+      <div class="step-desc">Nếu có hóa đơn liên kết: trạng thái HĐ chuyển thành <strong>Đã thanh toán (Paid)</strong>. Giao dịch ngân hàng: <strong>Đã đối soát</strong>.</div>
+      <div class="screen-label">💚 Invoice: Paid · Bank line: Reconciled</div>
+    </div>
+  </div>
+  <div class="col-keto">
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Xem kết quả xử lý</div>
+      <div class="step-desc">Giao dịch biến mất khỏi danh sách "Chờ xử lý". Kế toán có thể click để xem bút toán đã tạo và trạng thái hóa đơn.</div>
+      <div class="screen-label">📊 Transaction moved to "Đã xử lý"</div>
+    </div>
+    <div class="step-card success">
+      <span class="step-tag tag-manual">TÙY CHỌN</span>
+      <div class="step-title">Kiểm tra & In sao kê / Báo cáo</div>
+      <div class="step-desc">Kế toán có thể in Sao kê ngân hàng đã đối soát, xem báo cáo dòng tiền cập nhật real-time từ Viindoo.</div>
+      <div class="screen-label">🖨️ Bank Statement Report · Cash Flow</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SPECIAL CASE: Cần kiểm tra ===== -->
+<div style="padding: 8px 0;">
+  <span class="section-label">⏸️ TRƯỜNG HỢP ĐẶC BIỆT – "CẦN KIỂM TRA" (Defer)</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 52px 1fr 1fr 1fr; min-height: 120px;">
+  <div class="step-num">⏸</div>
+  <div class="col-casso">
+    <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: #90A4AE; font-size: 11px; font-style: italic;">
+      Không tham gia
+    </div>
+  </div>
+  <div class="col-viindoo">
+    <div class="step-card viindoo">
+      <span class="step-tag tag-system">HỆ THỐNG</span>
+      <div class="step-title">Lưu GD vào tab "Cần kiểm tra"</div>
+      <div class="step-desc">Giao dịch được đánh dấu để xử lý sau. Không tạo bút toán. Xuất hiện trong báo cáo tồn đọng.</div>
+    </div>
+  </div>
+  <div class="col-keto">
+    <div class="step-card keto">
+      <span class="step-tag tag-manual">NGƯỜI DÙNG</span>
+      <div class="step-title">Click "Cần kiểm tra"</div>
+      <div class="step-desc">Khi không chắc chắn về cách đối soát, nhấn nút <strong>"Cần kiểm tra"</strong> để tạm hoãn và xử lý sau. GD vào tab riêng.</div>
+      <div class="screen-label">⏸ Button: Cần kiểm tra</div>
+    </div>
+  </div>
+</div>
+
+<!-- End state -->
+<div class="end-state" style="margin-top: 16px;">
+  <h3>🏁 Kết thúc quy trình – Trạng thái cuối cùng</h3>
+  <p>Giao dịch ngân hàng: <strong>Đã đối soát ✅</strong> &nbsp;·&nbsp; Bút toán kế toán: <strong>Posted ✅</strong> &nbsp;·&nbsp; Hóa đơn (nếu có): <strong>Đã thanh toán ✅</strong> &nbsp;·&nbsp; Sổ cái: <strong>Cập nhật real-time ✅</strong></p>
+</div>
+
+<!-- Quick reference -->
+<div style="margin-top: 20px; background: #263238; border-radius: 10px; padding: 16px 20px; color: #fff;">
+  <div style="font-size: 12px; font-weight: 700; margin-bottom: 10px; color: #80CBC4;">📌 BẢNG TRẠNG THÁI GIAO DỊCH TRONG BANK FEED</div>
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 11px;">
+    <div style="background: #FFF9C4; color: #E65100; border-radius: 6px; padding: 8px 10px; border-left: 3px solid #F57F17;">
+      <strong>Chờ xác nhận</strong><br>Đã có đề xuất khớp tự động, chờ KTV duyệt
+    </div>
+    <div style="background: #FFEBEE; color: #C62828; border-radius: 6px; padding: 8px 10px; border-left: 3px solid #C62828;">
+      <strong>Cần xử lý thủ công</strong><br>Không khớp tự động, KTV phải nhập liệu
+    </div>
+    <div style="background: #E3F2FD; color: #1565C0; border-radius: 6px; padding: 8px 10px; border-left: 3px solid #1565C0;">
+      <strong>Cần kiểm tra</strong><br>KTV tạm hoãn, xử lý sau
+    </div>
+    <div style="background: #E8F5E9; color: #1B5E20; border-radius: 6px; padding: 8px 10px; border-left: 3px solid #2E7D32;">
+      <strong>Đã đối soát</strong><br>Hoàn tất — Bút toán posted, HĐ paid
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 12px; font-size: 11px; color: #90A4AE; text-align: center; padding-bottom: 20px;">
+  FRS_F3 Bank Feed · User Flow v1.0 · CASSO ISA Team · 2026-05-06
+</div>
+
+</div>
+</div>
+</body>
+</html>

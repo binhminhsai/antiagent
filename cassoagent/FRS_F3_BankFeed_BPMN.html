@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPMN – FRS_F3 Bank Feed | CASSO × Viindoo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #F0F2F5; font-family: 'Segoe UI', Arial, sans-serif; }
+
+  header {
+    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 60%, #1565c0 100%);
+    color: #fff; padding: 16px 28px; display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  header .badge { background: #FF6F00; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  header h1 { font-size: 17px; font-weight: 700; }
+  header p { font-size: 12px; opacity: .8; margin-top: 2px; }
+
+  .legend {
+    display: flex; gap: 18px; padding: 10px 28px; background: #fff;
+    border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; font-size: 12px; align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .leg-circle { width: 22px; height: 22px; border-radius: 50%; border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; }
+  .leg-rect { width: 60px; height: 22px; border-radius: 4px; border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; }
+  .leg-diamond { width: 22px; height: 22px; transform: rotate(45deg); border: 2px solid; display: flex; align-items: center; justify-content: center; }
+  .leg-diamond span { transform: rotate(-45deg); font-size: 8px; font-weight: 700; }
+
+  .canvas-wrap { overflow-x: auto; padding: 20px 28px 40px; }
+  svg { display: block; }
+
+  /* Pool colors */
+  .pool-casso { fill: #E3F2FD; }
+  .pool-viindoo { fill: #E8F5E9; }
+  .pool-keto { fill: #FFF8E1; }
+  .pool-label-casso { fill: #1565C0; }
+  .pool-label-viindoo { fill: #2E7D32; }
+  .pool-label-keto { fill: #E65100; }
+
+  /* Shapes */
+  .start-event { fill: #4CAF50; stroke: #2E7D32; stroke-width: 2; }
+  .end-event { fill: #F44336; stroke: #B71C1C; stroke-width: 3; }
+  .end-event-inner { fill: #F44336; }
+  .int-event { fill: #fff; stroke: #1565C0; stroke-width: 2; }
+
+  .task { fill: #fff; stroke: #1565C0; stroke-width: 1.8; rx: 8; ry: 8; }
+  .task-auto { fill: #E3F2FD; stroke: #1565C0; stroke-width: 1.8; }
+  .task-manual { fill: #FFF9C4; stroke: #F57F17; stroke-width: 1.8; }
+  .task-system { fill: #E8F5E9; stroke: #2E7D32; stroke-width: 1.8; }
+  .task-error { fill: #FFEBEE; stroke: #C62828; stroke-width: 1.8; }
+
+  .gateway { fill: #FFF9C4; stroke: #F57F17; stroke-width: 2; }
+  .gateway-x { fill: #FCE4EC; stroke: #AD1457; stroke-width: 2; }
+
+  .flow { stroke: #455A64; stroke-width: 1.8; fill: none; marker-end: url(#arrow); }
+  .flow-cond { stroke: #E65100; stroke-width: 1.8; fill: none; marker-end: url(#arrow-org); stroke-dasharray: 5,3; }
+  .flow-msg { stroke: #1565C0; stroke-width: 1.5; fill: none; marker-end: url(#arrow-blue); stroke-dasharray: 8,4; }
+
+  .label { font-size: 10px; fill: #263238; font-weight: 600; text-anchor: middle; dominant-baseline: middle; }
+  .label-small { font-size: 9px; fill: #546E7A; text-anchor: middle; dominant-baseline: middle; }
+  .pool-header { font-size: 13px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+  .lane-header { font-size: 11px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; }
+  .cond-label { font-size: 9px; fill: #AD1457; font-weight: 700; text-anchor: middle; }
+
+  .note { fill: #FFFDE7; stroke: #F9A825; stroke-width: 1.2; }
+  .note-text { font-size: 9px; fill: #5D4037; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="badge">FRS-F3 · BANK FEED</div>
+    <h1>BPMN – Quy trình Đồng bộ Giao dịch Ngân hàng (Semi-Auto)</h1>
+    <p>CASSO × Viindoo ERP · Scenario: Kế toán viên xem xét & xác nhận · Phiên bản 1.0 · 2026-05</p>
+  </div>
+</header>
+
+<div class="legend">
+  <strong>Chú giải:</strong>
+  <div class="legend-item">
+    <svg width="22" height="22"><circle cx="11" cy="11" r="9" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/></svg>
+    Start Event
+  </div>
+  <div class="legend-item">
+    <svg width="22" height="22"><circle cx="11" cy="11" r="9" fill="#F44336" stroke="#B71C1C" stroke-width="3"/></svg>
+    End Event
+  </div>
+  <div class="legend-item">
+    <svg width="70" height="22"><rect x="1" y="1" width="68" height="20" rx="5" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.8"/><text x="34" y="11" font-size="9" font-weight="700" fill="#1565C0" text-anchor="middle" dominant-baseline="middle">Task Hệ thống</text></svg>
+  </div>
+  <div class="legend-item">
+    <svg width="70" height="22"><rect x="1" y="1" width="68" height="20" rx="5" fill="#FFF9C4" stroke="#F57F17" stroke-width="1.8"/><text x="34" y="11" font-size="9" font-weight="700" fill="#E65100" text-anchor="middle" dominant-baseline="middle">Task Thủ công</text></svg>
+  </div>
+  <div class="legend-item">
+    <svg width="22" height="22"><polygon points="11,1 21,11 11,21 1,11" fill="#FFF9C4" stroke="#F57F17" stroke-width="2"/></svg>
+    Gateway (XOR)
+  </div>
+  <div class="legend-item">
+    <svg width="30" height="14"><line x1="0" y1="7" x2="25" y2="7" stroke="#455A64" stroke-width="1.8" marker-end="url(#arrow)"/></svg>
+    Sequence Flow
+  </div>
+  <div class="legend-item">
+    <svg width="30" height="14"><line x1="0" y1="7" x2="25" y2="7" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="5,3"/></svg>
+    Message Flow
+  </div>
+</div>
+
+<div class="canvas-wrap">
+<svg width="1700" height="1020" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <polygon points="0 0, 9 3.5, 0 7" fill="#455A64"/>
+  </marker>
+  <marker id="arrow-org" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <polygon points="0 0, 9 3.5, 0 7" fill="#E65100"/>
+  </marker>
+  <marker id="arrow-blue" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <polygon points="0 0, 9 3.5, 0 7" fill="#1565C0"/>
+  </marker>
+  <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0002"/>
+  </filter>
+</defs>
+
+<!-- ===================== POOL 1: CASSO SYSTEM ===================== -->
+<rect x="20" y="20" width="1660" height="180" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2" filter="url(#shadow)"/>
+<rect x="20" y="20" width="40" height="180" rx="8" fill="#1565C0"/>
+<text x="40" y="110" class="pool-header" fill="white" transform="rotate(-90,40,110)">CASSO SYSTEM</text>
+
+<!-- Lane: Open Banking API -->
+<rect x="60" y="20" width="1620" height="90" fill="#DCEEFB" rx="0"/>
+<rect x="60" y="20" width="120" height="90" fill="#bbdefb"/>
+<text x="120" y="65" class="lane-header" fill="#0D47A1">Open Banking API</text>
+
+<!-- Lane: Webhook / Push -->
+<rect x="60" y="110" width="1620" height="90" fill="#E3F2FD" rx="0" stroke="#90CAF9" stroke-width="0.5"/>
+<rect x="60" y="110" width="120" height="90" fill="#bbdefb"/>
+<text x="120" y="155" class="lane-header" fill="#0D47A1">Webhook / Push</text>
+
+<!-- START EVENT: Lịch định kỳ hoặc Realtime trigger -->
+<circle cx="230" cy="65" r="18" class="start-event" filter="url(#shadow)"/>
+<text x="230" y="100" class="label-small">Trigger</text>
+<text x="230" y="110" class="label-small">(định kỳ/realtime)</text>
+
+<!-- TASK: Gọi API ngân hàng lấy giao dịch mới -->
+<rect x="275" y="38" width="150" height="54" rx="8" class="task-auto" filter="url(#shadow)"/>
+<text x="350" y="60" class="label" fill="#0D47A1">Gọi API Ngân hàng</text>
+<text x="350" y="75" class="label-small">Lấy giao dịch mới</text>
+
+<!-- TASK: Chuẩn hóa & validate dữ liệu -->
+<rect x="455" y="38" width="150" height="54" rx="8" class="task-auto" filter="url(#shadow)"/>
+<text x="530" y="60" class="label" fill="#0D47A1">Chuẩn hóa dữ liệu</text>
+<text x="530" y="75" class="label-small">Validate & dedup</text>
+
+<!-- GATEWAY: Có giao dịch mới? -->
+<polygon points="655,65 680,40 705,65 680,90" class="gateway" filter="url(#shadow)"/>
+<text x="680" y="65" class="label" fill="#E65100">?</text>
+<text x="680" y="105" class="cond-label">Có GD mới?</text>
+
+<!-- No branch: kết thúc vòng này -->
+<circle cx="780" cy="65" r="12" fill="#F44336" stroke="#B71C1C" stroke-width="3"/>
+<circle cx="780" cy="65" r="7" fill="#F44336"/>
+<text x="780" y="95" class="label-small">Không có GD</text>
+<text x="780" y="105" class="label-small">(chờ vòng tiếp)</text>
+
+<!-- Yes → push Webhook to Viindoo -->
+<rect x="270" y="128" width="150" height="54" rx="8" class="task-auto" filter="url(#shadow)"/>
+<text x="345" y="150" class="label" fill="#0D47A1">Push Webhook</text>
+<text x="345" y="165" class="label-small">Gửi payload GD → Viindoo</text>
+
+<!-- Dedup check gateway -->
+<polygon points="455,155 480,130 505,155 480,180" class="gateway" filter="url(#shadow)"/>
+<text x="480" y="155" class="label" fill="#E65100">≠</text>
+<text x="480" y="195" class="cond-label">Trùng lặp?</text>
+
+<!-- Duplicate → drop -->
+<rect x="540" y="128" width="120" height="54" rx="8" class="task-error" filter="url(#shadow)"/>
+<text x="600" y="150" class="label" fill="#B71C1C">Bỏ qua (Dedup)</text>
+<text x="600" y="165" class="label-small">Log & skip</text>
+
+<!-- OK → end casso lane -->
+<circle cx="700" cy="155" r="12" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+<text x="700" y="185" class="label-small">Đã push</text>
+
+<!-- FLOWS in CASSO -->
+<line x1="248" y1="65" x2="273" y2="65" class="flow"/>
+<line x1="425" y1="65" x2="453" y2="65" class="flow"/>
+<line x1="607" y1="65" x2="655" y2="65" class="flow"/>
+<!-- Yes down to webhook lane -->
+<line x1="680" y1="90" x2="680" y2="120" class="flow"/>
+<path d="M680,120 Q680,128 672,128 L422,128" class="flow"/>
+<!-- No right to end -->
+<line x1="705" y1="65" x2="766" y2="65" class="flow"/>
+<text x="733" y="58" class="cond-label">Không</text>
+<text x="672" y="115" class="cond-label">Có</text>
+<!-- push to dedup -->
+<line x1="420" y1="155" x2="453" y2="155" class="flow"/>
+<!-- dedup no = ok -->
+<line x1="505" y1="155" x2="538" y2="155" class="flow"/>
+<text x="521" y="148" class="cond-label">Trùng</text>
+<!-- dedup yes = pass -->
+<path d="M480,180 L480,205 Q480,215 490,215 L700,215 Q712,215 712,203 L712,167" class="flow"/>
+<text x="570" y="223" class="cond-label">Không trùng</text>
+
+<!-- ===================== POOL 2: VIINDOO ERP ===================== -->
+<rect x="20" y="215" width="1660" height="360" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2" filter="url(#shadow)"/>
+<rect x="20" y="215" width="40" height="360" rx="8" fill="#2E7D32"/>
+<text x="40" y="395" class="pool-header" fill="white" transform="rotate(-90,40,395)">VIINDOO ERP – HỆ THỐNG</text>
+
+<!-- Lane: Bank Feed Module -->
+<rect x="60" y="215" width="1620" height="180" fill="#C8E6C9" rx="0"/>
+<rect x="60" y="215" width="120" height="180" fill="#A5D6A7"/>
+<text x="120" y="305" class="lane-header" fill="#1B5E20">Bank Feed Module</text>
+
+<!-- Lane: Accounting Engine -->
+<rect x="60" y="395" width="1620" height="180" fill="#E8F5E9" rx="0" stroke="#81C784" stroke-width="0.5"/>
+<rect x="60" y="395" width="120" height="180" fill="#A5D6A7"/>
+<text x="120" y="485" class="lane-header" fill="#1B5E20">Accounting Engine</text>
+
+<!-- TASK: Nhận webhook & Tạo bank statement line -->
+<rect x="200" y="235" width="160" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="280" y="256" class="label" fill="#1B5E20">Nhận Webhook</text>
+<text x="280" y="271" class="label-small">Tạo Bank Statement Line</text>
+
+<!-- TASK: Auto-match với hóa đơn/phiếu thanh toán -->
+<rect x="390" y="235" width="160" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="470" y="256" class="label" fill="#1B5E20">Auto-match</text>
+<text x="470" y="271" class="label-small">So khớp Invoice / Payment</text>
+
+<!-- GATEWAY: Khớp được? -->
+<polygon points="590,262 620,235 650,262 620,289" class="gateway" filter="url(#shadow)"/>
+<text x="620" y="262" class="label" fill="#E65100">?</text>
+<text x="620" y="302" class="cond-label">Tự động khớp?</text>
+
+<!-- Yes: Đánh dấu "Đề xuất khớp" -->
+<rect x="680" y="235" width="160" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="760" y="256" class="label" fill="#1B5E20">Đề xuất khớp</text>
+<text x="760" y="271" class="label-small">Status: "Chờ xác nhận"</text>
+
+<!-- No: Đánh dấu "Chưa khớp" -->
+<rect x="680" y="318" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="760" y="339" class="label" fill="#E65100">Chưa khớp</text>
+<text x="760" y="354" class="label-small">Status: "Cần xử lý thủ công"</text>
+
+<!-- After accountant confirm → Create Journal Entry (Accounting Engine) -->
+<rect x="940" y="235" width="170" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="1025" y="256" class="label" fill="#1B5E20">Tạo Bút toán (Draft)</text>
+<text x="1025" y="271" class="label-small">Nợ / Có tự động sinh</text>
+
+<!-- Post journal entry -->
+<rect x="1140" y="235" width="170" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="1225" y="256" class="label" fill="#1B5E20">Hạch toán (Post)</text>
+<text x="1225" y="271" class="label-small">Bút toán → Posted</text>
+
+<!-- Reconcile: mark invoice paid -->
+<rect x="1340" y="235" width="170" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="1425" y="256" class="label" fill="#1B5E20">Đối soát hoàn tất</text>
+<text x="1425" y="271" class="label-small">Hóa đơn → Đã thanh toán</text>
+
+<!-- End event Viindoo Bank Feed -->
+<circle cx="1560" cy="262" r="18" fill="#F44336" stroke="#B71C1C" stroke-width="3" filter="url(#shadow)"/>
+<circle cx="1560" cy="262" r="11" fill="#F44336"/>
+<text x="1560" y="295" class="label-small">Hoàn tất</text>
+
+<!-- Accounting Engine lane tasks -->
+<!-- For manual path from accountant: create entry also goes here -->
+<rect x="680" y="415" width="170" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="765" y="436" class="label" fill="#1B5E20">Tạo Bút toán thủ công</text>
+<text x="765" y="451" class="label-small">Từ nhập liệu kế toán viên</text>
+
+<rect x="890" y="415" width="170" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="975" y="436" class="label" fill="#1B5E20">Validate bút toán</text>
+<text x="975" y="451" class="label-small">Kiểm tra cân bằng Nợ/Có</text>
+
+<rect x="1090" y="415" width="170" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="1175" y="436" class="label" fill="#1B5E20">Hạch toán (Post)</text>
+<text x="1175" y="451" class="label-small">Bút toán → Posted</text>
+
+<rect x="1290" y="415" width="170" height="54" rx="8" class="task-system" filter="url(#shadow)"/>
+<text x="1375" y="436" class="label" fill="#1B5E20">Đối soát thủ công</text>
+<text x="1375" y="451" class="label-small">Gán GD với bút toán</text>
+
+<circle cx="1520" cy="442" r="18" fill="#F44336" stroke="#B71C1C" stroke-width="3" filter="url(#shadow)"/>
+<circle cx="1520" cy="442" r="11" fill="#F44336"/>
+<text x="1520" y="475" class="label-small">Hoàn tất</text>
+
+<!-- FLOWS in Viindoo ERP Bank Feed lane -->
+<line x1="360" y1="262" x2="388" y2="262" class="flow"/>
+<line x1="550" y1="262" x2="588" y2="262" class="flow"/>
+<!-- gateway yes right -->
+<line x1="650" y1="262" x2="678" y2="262" class="flow"/>
+<text x="662" y="255" class="cond-label">Khớp</text>
+<!-- gateway no down -->
+<path d="M620,289 L620,345 Q620,345 678,345" class="flow"/>
+<text x="628" y="325" class="cond-label">Chưa khớp</text>
+
+<!-- Yes path flows (after accountant confirms): -->
+<line x1="840" y1="262" x2="938" y2="262" class="flow" stroke-dasharray="4,3"/>
+<text x="889" y="255" class="cond-label">Kế toán xác nhận ↓</text>
+<line x1="1110" y1="262" x2="1138" y2="262" class="flow"/>
+<line x1="1310" y1="262" x2="1338" y2="262" class="flow"/>
+<line x1="1510" y1="262" x2="1540" y2="262" class="flow"/>
+
+<!-- Manual path flows -->
+<line x1="850" y1="442" x2="888" y2="442" class="flow"/>
+<line x1="1060" y1="442" x2="1088" y2="442" class="flow"/>
+<line x1="1260" y1="442" x2="1288" y2="442" class="flow"/>
+<line x1="1460" y1="442" x2="1500" y2="442" class="flow"/>
+
+<!-- Message flow from CASSO push to Viindoo receive -->
+<line x1="700" y1="167" x2="700" y2="215" class="flow-msg" stroke-dasharray="6,4"/>
+
+<!-- ===================== POOL 3: KẾ TOÁN VIÊN ===================== -->
+<rect x="20" y="590" width="1660" height="400" rx="8" fill="#FFF8E1" stroke="#F57F17" stroke-width="2" filter="url(#shadow)"/>
+<rect x="20" y="590" width="40" height="400" rx="8" fill="#E65100"/>
+<text x="40" y="790" class="pool-header" fill="white" transform="rotate(-90,40,790)">KẾ TOÁN VIÊN</text>
+
+<!-- Lane: Xem xét giao dịch -->
+<rect x="60" y="590" width="1620" height="200" fill="#FFF9C4" rx="0"/>
+<rect x="60" y="590" width="120" height="200" fill="#FFE082"/>
+<text x="120" y="690" class="lane-header" fill="#BF360C">Xem xét & Xác nhận</text>
+
+<!-- Lane: Xử lý thủ công -->
+<rect x="60" y="790" width="1620" height="200" fill="#FFF8E1" rx="0" stroke="#FFD54F" stroke-width="0.5"/>
+<rect x="60" y="790" width="120" height="200" fill="#FFE082"/>
+<text x="120" y="890" class="lane-header" fill="#BF360C">Xử lý thủ công</text>
+
+<!-- Accountant sees notification -->
+<rect x="200" y="610" width="150" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="275" y="631" class="label" fill="#BF360C">Nhận thông báo</text>
+<text x="275" y="646" class="label-small">Bank Feed có GD mới</text>
+
+<!-- Open Bank Feed screen -->
+<rect x="380" y="610" width="150" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="455" y="631" class="label" fill="#BF360C">Mở màn Bank Feed</text>
+<text x="455" y="646" class="label-small">Xem danh sách GD chờ</text>
+
+<!-- Gateway: GD đã được đề xuất khớp? -->
+<polygon points="575,637 605,610 635,637 605,664" class="gateway" filter="url(#shadow)"/>
+<text x="605" y="637" class="label" fill="#E65100">?</text>
+<text x="605" y="678" class="cond-label">Có đề xuất khớp?</text>
+
+<!-- YES: Review suggested match -->
+<rect x="660" y="610" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="740" y="631" class="label" fill="#BF360C">Kiểm tra đề xuất</text>
+<text x="740" y="646" class="label-small">Xem Bút toán đối ứng</text>
+
+<!-- GATEWAY: Chấp nhận đề xuất? -->
+<polygon points="860,637 890,610 920,637 890,664" class="gateway" filter="url(#shadow)"/>
+<text x="890" y="637" class="label" fill="#E65100">?</text>
+<text x="890" y="678" class="cond-label">Chấp nhận?</text>
+
+<!-- Yes: Click Xác nhận -->
+<rect x="940" y="610" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="1020" y="631" class="label" fill="#BF360C">Click "Xác nhận"</text>
+<text x="1020" y="646" class="label-small">Gửi lệnh Post lên ERP</text>
+
+<!-- No: Reject → manual -->
+<rect x="860" y="715" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="940" y="736" class="label" fill="#BF360C">Từ chối đề xuất</text>
+<text x="940" y="751" class="label-small">Chuyển sang thủ công</text>
+
+<!-- END for auto path -->
+<circle cx="1160" cy="637" r="18" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" filter="url(#shadow)"/>
+<text x="1160" y="670" class="label-small">Gửi lệnh</text>
+<text x="1160" y="680" class="label-small">thành công</text>
+
+<!-- NO (no suggested match): Xử lý thủ công lane -->
+<!-- Start manual flow -->
+<rect x="200" y="810" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="280" y="831" class="label" fill="#BF360C">Chọn GD chưa khớp</text>
+<text x="280" y="846" class="label-small">Mở form nhập liệu</text>
+
+<rect x="390" y="810" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="470" y="831" class="label" fill="#BF360C">Nhập đối tác</text>
+<text x="470" y="846" class="label-small">Chọn tài khoản kế toán</text>
+
+<!-- Gateway: Có hóa đơn liên kết? -->
+<polygon points="590,837 620,810 650,837 620,864" class="gateway" filter="url(#shadow)"/>
+<text x="620" y="837" class="label" fill="#E65100">?</text>
+<text x="620" y="878" class="cond-label">Có HĐ liên kết?</text>
+
+<!-- Yes: Link to invoice -->
+<rect x="670" y="810" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="750" y="831" class="label" fill="#BF360C">Chọn Hóa đơn liên quan</text>
+<text x="750" y="846" class="label-small">Gán GD với Invoice</text>
+
+<!-- No: Create new journal entry -->
+<rect x="670" y="900" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="750" y="921" class="label" fill="#BF360C">Tạo Bút toán mới</text>
+<text x="750" y="936" class="label-small">Nhập Nợ / Có thủ công</text>
+
+<!-- Merge and confirm -->
+<rect x="870" y="855" width="160" height="54" rx="8" class="task-manual" filter="url(#shadow)"/>
+<text x="950" y="876" class="label" fill="#BF360C">Click "Xác nhận"</text>
+<text x="950" y="891" class="label-small">Hạch toán & Đối soát</text>
+
+<!-- End manual -->
+<circle cx="1090" cy="882" r="18" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" filter="url(#shadow)"/>
+<text x="1090" y="915" class="label-small">Gửi lệnh</text>
+<text x="1090" y="925" class="label-small">thành công</text>
+
+<!-- FLOWS accountant review lane -->
+<line x1="350" y1="637" x2="378" y2="637" class="flow"/>
+<line x1="530" y1="637" x2="573" y2="637" class="flow"/>
+<!-- gateway yes right -->
+<line x1="635" y1="637" x2="658" y2="637" class="flow"/>
+<text x="645" y="630" class="cond-label">Có</text>
+<!-- gateway no down -->
+<path d="M605,664 L605,712 Q605,812 198,837 L198,837" class="flow-cond" stroke="#E65100"/>
+<text x="500" y="750" class="cond-label">Không có đề xuất</text>
+
+<line x1="820" y1="637" x2="858" y2="637" class="flow"/>
+<!-- accept yes right -->
+<line x1="920" y1="637" x2="938" y2="637" class="flow"/>
+<text x="928" y="630" class="cond-label">Có</text>
+<!-- accept no down -->
+<path d="M890,664 L890,715 L858,715" class="flow-cond"/>
+<text x="895" y="697" class="cond-label">Không</text>
+<!-- reject → manual lane -->
+<path d="M940,742 Q940,780 280,837" class="flow-cond"/>
+
+<line x1="1100" y1="637" x2="1140" y2="637" class="flow"/>
+
+<!-- FLOWS manual lane -->
+<line x1="360" y1="837" x2="388" y2="837" class="flow"/>
+<line x1="550" y1="837" x2="588" y2="837" class="flow"/>
+<!-- has invoice yes right -->
+<line x1="650" y1="837" x2="668" y2="837" class="flow"/>
+<text x="657" y="830" class="cond-label">Có</text>
+<!-- no invoice down -->
+<path d="M620,864 L620,927 Q620,927 668,927" class="flow-cond"/>
+<text x="630" y="905" class="cond-label">Không</text>
+<!-- merge -->
+<line x1="830" y1="837" x2="868" y2="882" class="flow"/>
+<line x1="830" y1="927" x2="868" y2="882" class="flow"/>
+<line x1="1030" y1="882" x2="1070" y2="882" class="flow"/>
+
+<!-- Message flows: Accountant confirm → Viindoo -->
+<!-- Auto path confirm → ERP -->
+<line x1="1020" y1="610" x2="1025" y2="262" class="flow-msg" stroke-dasharray="6,4"/>
+<!-- Manual path confirm → ERP -->
+<line x1="950" y1="855" x2="765" y2="469" class="flow-msg" stroke-dasharray="6,4"/>
+
+<!-- START notification event -->
+<circle cx="182" cy="637" r="14" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" filter="url(#shadow)"/>
+<text x="182" y="670" class="label-small">Nhận TB</text>
+
+<!-- Note box: Mô hình đối soát -->
+<rect x="1200" y="610" width="200" height="80" rx="6" class="note"/>
+<polygon points="1390,610 1400,610 1400,620" fill="#F9A825"/>
+<text x="1300" y="630" class="note-text" text-anchor="middle">📌 Mô hình đối soát tự động</text>
+<text x="1300" y="645" class="note-text" text-anchor="middle">(Reconciliation Model)</text>
+<text x="1300" y="660" class="note-text" text-anchor="middle">Dùng cho: phí ngân hàng,</text>
+<text x="1300" y="675" class="note-text" text-anchor="middle">lãi tiết kiệm, chi định kỳ...</text>
+
+<!-- Note box: Cần kiểm tra -->
+<rect x="1200" y="810" width="200" height="80" rx="6" class="note"/>
+<polygon points="1390,810 1400,810 1400,820" fill="#F9A825"/>
+<text x="1300" y="830" class="note-text" text-anchor="middle">📌 Nút "Cần kiểm tra"</text>
+<text x="1300" y="848" class="note-text" text-anchor="middle">Kế toán có thể tạm giữ GD</text>
+<text x="1300" y="863" class="note-text" text-anchor="middle">để xử lý sau. GD sẽ xuất</text>
+<text x="1300" y="878" class="note-text" text-anchor="middle">hiện trong tab "Cần kiểm tra"</text>
+
+<!-- Legend for pools vertical connector -->
+<line x1="700" y1="215" x2="200" y2="590" class="flow-msg" stroke-dasharray="6,4" stroke="#2E7D32"/>
+<text x="350" y="395" class="label-small" fill="#2E7D32">Thông báo hiển thị trên ERP</text>
+
+</svg>
+</div>
+
+<div style="padding: 16px 28px; background: #fff; border-top: 1px solid #e0e0e0; font-size: 12px; color: #546E7A; display: flex; gap: 40px; flex-wrap: wrap;">
+  <div><strong>Project:</strong> X-doo+ · FRS_F3 Bank Feed</div>
+  <div><strong>Scenario:</strong> Semi-Auto (Kế toán xem xét & xác nhận)</div>
+  <div><strong>Phiên bản:</strong> 1.0 · 2026-05-06</div>
+  <div><strong>Stakeholders:</strong> Dev Team, CEO (CASSO)</div>
+  <div style="margin-left: auto;"><strong>Tạo bởi:</strong> CASSO ISA Team</div>
+</div>
+
+</body>
+</html>
