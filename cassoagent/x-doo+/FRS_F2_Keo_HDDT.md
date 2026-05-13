@@ -1,90 +1,95 @@
-# FRS: F2 - Đồng bộ & Quản lý Hoá đơn điện tử từ Thuế
+# FRS: F2 - Kéo Hoá Đơn Điện Tử Từ Cơ Quan Thuế
 
 ## 1. Thông tin chung (General Information)
 **Mục đích (Purpose):** 
-Tính năng này giúp tự động hoá quy trình đồng bộ hoá đơn điện tử (cả đầu vào và đầu ra) từ Tổng cục Thuế về ERP. Từ đó, hỗ trợ kế toán đối soát, tự động map hoá đơn với chứng từ đã có, và gợi ý tạo chứng từ mới cho các hoá đơn "mồ côi" (chưa được hạch toán).
+Xoá bỏ bước thủ công kéo hoá đơn từ portal Tổng cục Thuế (iDOC/GDT) rồi nhập lại vào ERP. Tính năng này cho phép đồng bộ hoá đơn đầu vào/ra, tự động tạo chứng từ nháp, hỗ trợ workflow phê duyệt và cung cấp Dashboard đối soát tình trạng hạch toán của hoá đơn.
 
 **Phạm vi (Scope):**
 - **In-scope:** 
-  - Gọi API `GET /gdt/invoices` để kéo dữ liệu hoá đơn theo khoảng thời gian.
-  - Hiển thị danh sách hoá đơn (Split-view UI).
-  - Tự động map hoá đơn với chứng từ kế toán đã có.
-  - Cảnh báo hoá đơn bị trùng lặp hoặc điều chỉnh.
-  - Khởi tạo chứng từ nháp (Auto-Journaling) cho hoá đơn mới.
+  - Kết nối cổng thuế (iDOC) để kéo danh sách hoá đơn mua vào/bán ra theo kỳ.
+  - Tự động sinh draft journal entry (Nợ/Có theo TT99) cho mỗi hoá đơn.
+  - Workflow phê duyệt chứng từ: Kế toán review -> Approve -> Vào sổ cái.
+  - Dashboard theo dõi trạng thái hoá đơn, highlight cảnh báo hoá đơn chưa map chứng từ.
 - **Out of scope:** 
-  - Quản trị kết nối Bankhub (API Keys/Credentials) - thuộc phân hệ Settings.
-  - Chỉnh sửa dữ liệu trực tiếp lên cổng ETAX của Thuế.
+  - Huỷ/điều chỉnh hoá đơn (Phase 2).
+  - Tích hợp chữ ký số HSM (Phase 2).
 
 **Thuật ngữ (Glossary):**
-- **GDT (General Department of Taxation):** Tổng cục Thuế.
-- **Hoá đơn "mồ côi":** Hoá đơn kéo từ Thuế về nhưng chưa có chứng từ kế toán nào khớp.
-- **Auto-Journaling:** Tự động sinh bút toán Nợ/Có.
+- **GDT/iDOC:** Cổng dữ liệu hoá đơn điện tử của Tổng cục Thuế.
+- **Chứng từ nháp (Draft Entry):** Bút toán được hệ thống tự sinh từ hoá đơn, chờ Kế toán duyệt.
+- **Mapping:** Sự liên kết 2 chiều giữa một Hoá đơn điện tử và một Bút toán/Chứng từ kế toán.
 
 ---
 
 ## 2. Mô tả chức năng chi tiết (Functional Requirements)
 
-### F2.1 Đồng bộ dữ liệu hoá đơn
-- **Mô tả:** Gọi API lấy danh sách hoá đơn trong kỳ theo `fromDate` và `toDate`.
-- **Tác nhân:** Kế toán viên, Kế toán trưởng.
-- **Tiền điều kiện:** Đã cấu hình thành công API Bankhub.
-- **Hậu điều kiện:** Dữ liệu JSON hoá đơn được lưu trữ vào CSDL ERP, sàng lọc bỏ các hoá đơn trùng.
-
-### F2.2 Giao diện Split-view và Đối soát Chứng từ
-- **Mô tả:** Màn hình chia làm 2 phần: Danh sách hoá đơn và Bản thể hiện chi tiết (mặt hoá đơn).
+### F2.1 Kết nối cổng thuế & Đồng bộ hoá đơn
+- **Mô tả:** Gọi API iDOC lấy danh sách hoá đơn theo kỳ. Dedupe dữ liệu.
 - **Tác nhân:** Kế toán viên.
-- **Tiền điều kiện:** Có dữ liệu hoá đơn trong hệ thống.
-- **Hậu điều kiện:** Các hoá đơn được map thành công hiển thị trạng thái "Đã hạch toán"; các hoá đơn mồ côi bị highlight cảnh báo.
 
-### F2.3 Tự động sinh Bút toán (Auto-Journaling)
-- **Mô tả:** Với hoá đơn đầu vào chưa có chứng từ, hệ thống tự sinh chứng từ nháp, gợi ý tài khoản chi phí và thuế.
-- **Tác nhân:** Kế toán viên.
-- **Tiền điều kiện:** Hoá đơn là loại mua vào (`bought`).
-- **Hậu điều kiện:** Chứng từ nháp được tạo và liên kết 2 chiều với hoá đơn.
+### F2.2 Tự động tạo chứng từ nháp & Gợi ý mapping
+- **Mô tả:** Từ hoá đơn kéo về, hệ thống parse dòng hàng/thuế, xác định loại (mua/bán), xác định đối tác (tạo mới/link) và sinh bút toán nháp (Nợ 156/642, Có 331...). 
+- **Tác nhân:** Hệ thống.
+
+### F2.3 Workflow phê duyệt chứng từ & Dashboard
+- **Mô tả:** Kế toán review chứng từ nháp và approve để post vào Sổ cái. Dashboard hiển thị rõ hoá đơn nào đã hạch toán, hoá đơn nào chưa (cảnh báo nổi bật).
+- **Tác nhân:** Kế toán viên / Kế toán trưởng.
 
 ---
 
 ## 3. Kịch bản nghiệp vụ (Use Cases & Flows)
 
-### UC-F2-01: Đồng bộ dữ liệu hoá đơn
-- **Luồng chính (Happy Path):**
-  1. Người dùng chọn từ ngày đến ngày (max 31 ngày) và bấm [Đồng bộ HĐĐT].
-  2. ERP gọi API `GET /gdt/invoices`.
-  3. API trả về Array `gdtInvoices`.
-  4. ERP parse dữ liệu, lọc trùng lặp (`isDuplicateInvoice`).
-  5. Dữ liệu mới được insert vào ERP, hiển thị thông báo "Đã đồng bộ X hoá đơn".
-- **Luồng ngoại lệ:** Khoảng thời gian > 31 ngày, chặn không cho gọi API.
+### UC-F2-01: Sync hoá đơn điện tử (đầu vào + đầu ra) từ cổng thuế
+- **Mục tiêu:** Đồng bộ danh sách hoá đơn, giảm thao tác nhập tay.
+- **Luồng chính:**
+  1. Người dùng chọn kỳ hoặc hệ thống lấy kỳ mặc định.
+  2. Hệ thống gọi API lấy danh sách hoá đơn mua vào + bán ra, sau đó dedupe theo (MST + ký hiệu + số + ngày + tổng tiền).
+  3. Lưu invoice log, trạng thái, và file XML/PDF.
+  4. Cập nhật Dashboard:
+     - **Đầu ra:** Map hoá đơn có mã CQT với Posted Accounting Entry.
+     - **Đầu vào:** Highlight cảnh báo nổi bật các hoá đơn chưa được mapping với chứng từ.
+- **Luồng ngoại lệ:** Token hết hạn -> Yêu cầu re-auth. API lỗi -> Ghi log, đánh dấu thất bại, cho phép retry.
 
-### UC-F2-02: Mapping và Hạch toán
-- **Luồng chính (Happy Path):**
-  1. ERP quét danh sách hoá đơn vừa tải về.
-  2. Map tự động với các Chứng từ kế toán đã có dựa trên (`invoiceSerial`, `invoiceNumber`, `amount`, mã số thuế).
-  3. Những hoá đơn map thành công sẽ chuyển trạng thái sang "Đã hạch toán".
-  4. Kế toán click vào hoá đơn "Chưa hạch toán", bấm [Sinh chứng từ nháp].
-  5. Hệ thống gợi ý bút toán Nợ/Có, Kế toán kiểm tra và lưu lại.
+### UC-F2-02: Tạo chứng từ nháp từ hoá đơn (mua vào/bán ra)
+- **Mục tiêu:** Tự sinh draft journal entry đúng nghiệp vụ.
+- **Luồng chính:**
+  1. Xác định loại hoá đơn (mua/bán).
+  2. Xác định đối tác theo MST.
+  3. Parse dòng hàng/thuế suất. Tính toán net/VAT/total.
+  4. Sinh bút toán nháp theo TT99 (Ví dụ: Mua vào -> Nợ 156/Nợ 133, Có 331).
+  5. Liên kết hoá đơn ↔ chứng từ nháp, lưu giải thích mapping.
+- **Luồng ngoại lệ:** Không xác định được TK -> Để trạng thái "Cần phân loại". Có chiết khấu -> Đánh dấu "Cần kiểm tra". Trùng -> Không tạo chứng từ nháp, chờ xác nhận.
+
+### UC-F2-03: Review & approve chứng từ nháp (vào sổ)
+- **Mục tiêu:** Kế toán review, chỉnh sửa và approve để vào sổ cái.
+- **Luồng chính:**
+  1. Kế toán mở chứng từ nháp, xem preview hoá đơn (PDF/XML).
+  2. Kiểm tra mapping tài khoản, đối tác, thuế.
+  3. Bấm "Approve" -> Hệ thống post vào GL, ghi audit log, đảm bảo liên kết 2 chiều.
+- **Luồng ngoại lệ:** Lỗi khoá sổ/kỳ kế toán -> Chặn approve và hiển thị lý do.
 
 ---
 
 ## 4. Tiêu chí nghiệm thu (Acceptance Criteria - AC)
 
 ```gherkin
-Scenario: Đồng bộ quá 31 ngày
-    Given Kế toán chọn fromDate="2026-01-01" và toDate="2026-02-15"
-    When Kế toán bấm nút "Đồng bộ HĐĐT"
-    Then Hệ thống báo lỗi "Khoảng thời gian tra cứu không được vượt quá 31 ngày"
-    And Chặn không gọi API
+Scenario: Sync hoá đơn đầu vào chưa có chứng từ
+    Given API trả về 1 hoá đơn mua vào mới
+    When Hệ thống đồng bộ xong
+    Then Trên Dashboard, hoá đơn đó bị highlight/signal cảnh báo "Chưa hạch toán"
+    And Hệ thống tự động tạo 1 chứng từ nháp tương ứng với hoá đơn đó
 
-Scenario: Mapping hoá đơn đầu vào đã có chứng từ
-    Given Trong ERP đã có chứng từ mua hàng số X khớp tổng tiền và MST nhà cung cấp
-    When Hệ thống đồng bộ hoá đơn điện tử số X về
-    Then Hoá đơn X được tự động gán trạng thái "Đã hạch toán"
-    And Cung cấp hyperlink nối hoá đơn với chứng từ mua hàng đó
+Scenario: Tự sinh bút toán cho hoá đơn mua vào
+    Given Hệ thống xử lý hoá đơn mua vào trị giá 10M, VAT 10%
+    When Hàm tự sinh chứng từ nháp chạy
+    Then Bút toán nháp được tạo: Có TK 331 (11M), Nợ TK 133 (1M), Nợ TK 156/642 (10M)
+    And Liên kết ID chứng từ với ID hoá đơn
 
-Scenario: Sinh chứng từ nháp cho hoá đơn mua vào
-    Given Hoá đơn đầu vào (invoiceType = "bought") chưa có chứng từ
-    When Kế toán chọn hoá đơn và bấm "Tạo chứng từ"
-    Then Hệ thống tạo phiếu nháp, mặc định ghi Nợ (156/642/...) và Nợ Thuế (1331)
-    And Ghi Có vào 331 bằng đúng với financials.totalPaymentAmount
+Scenario: Kế toán approve chứng từ nháp
+    Given Kế toán đang xem chứng từ nháp có liên kết hoá đơn
+    When Kế toán bấm "Approve"
+    Then Trạng thái chứng từ chuyển thành "Posted"
+    And Dashboard hoá đơn tắt cảnh báo, hiển thị "Đã hạch toán" kèm link tới chứng từ
 ```
 
 ---
@@ -93,62 +98,52 @@ Scenario: Sinh chứng từ nháp cho hoá đơn mua vào
 
 ```mermaid
 sequenceDiagram
-    participant KT as Kế Toán
+    participant KT as Kế toán
     participant ERP as Hệ thống ERP
-    participant API as Bankhub API
+    participant API as Cổng Thuế (iDOC)
 
-    KT->>ERP: Chọn từ ngày, đến ngày và Bấm [Đồng bộ HĐĐT]
-    ERP->>API: GET /gdt/invoices?fromDate=... và toDate=...
-    API-->>ERP: Trả về Array JSON (gdtInvoices)
+    KT->>ERP: Chọn kỳ và bấm Sync
+    ERP->>API: Lấy danh sách hoá đơn
+    API-->>ERP: Trả về JSON Hoá đơn (Mua + Bán)
     
-    Note over ERP: Xử lý Mapping và Lọc dữ liệu
-    ERP->>ERP: Lọc hoá đơn trùng (isDuplicateInvoice bằng true)
-    ERP->>ERP: Quét đối chiếu với Chứng từ kế toán có sẵn
+    ERP->>ERP: Dedupe & Lưu Invoice Log
     
-    alt Có chứng từ khớp
-        ERP->>ERP: Map 2 chiều và Gắn cờ Đã hạch toán
-    else Chưa có chứng từ
-        ERP->>ERP: Đánh dấu Cảnh báo Chưa lập chứng từ
+    opt Tự tạo chứng từ nháp
+        ERP->>ERP: Parse dữ liệu & Xác định đối tác/tài khoản
+        ERP->>ERP: Tạo Bút toán nháp (Draft JE)
     end
-
-    ERP-->>KT: Hiển thị Split-view danh sách hoá đơn
-    KT->>ERP: Chọn hoá đơn cảnh báo và Bấm [Tạo chứng từ]
-    ERP->>ERP: Sinh Chứng từ Nháp (Auto-Journaling)
-    KT->>ERP: Review và Bấm [Ghi sổ (Post)]
+    
+    ERP-->>KT: Hiển thị Dashboard (Highlight hoá đơn mồ côi)
+    
+    KT->>ERP: Mở chứng từ nháp, Review mặt hoá đơn & mapping
+    KT->>ERP: Bấm Approve
+    ERP->>ERP: Post chứng từ vào Sổ cái (GL)
+    ERP-->>KT: Cập nhật Dashboard (Đã hạch toán)
 ```
 
 ---
 
 ## 6. Quy tắc nghiệp vụ (Business Rules)
-- **BR-1 (Deduplication):** Không lưu mới hoá đơn nếu `isDuplicateInvoice` bằng true hoặc tổ hợp `[invoiceSerial] + [invoiceNumber] + [seller.taxCode]` đã tồn tại trong database ERP.
-- **BR-2 (Alerts):** Hoá đơn có trường `status` báo huỷ hoặc có `hasCorrection` bằng 1 phải hiển thị Banner đỏ/vàng cảnh báo để kế toán không hạch toán nhầm.
-- **BR-3 (Split View):** Bắt buộc phân tách 2 Tab `Đầu vào (bought)` và `Đầu ra (sold)` để tránh nhầm lẫn.
+- **BR-1:** Dashboard bắt buộc phát hiện và cảnh báo đỏ/vàng đối với các hoá đơn đầu vào chưa có chứng từ kế toán.
+- **BR-2:** Bút toán tự sinh phải bám sát cấu trúc Tài khoản TT99 (Ví dụ 131, 331, 133, 3331, 156, 511).
+- **BR-3:** Hoá đơn đã bị "Huỷ" hoặc "Điều chỉnh" trên cổng thuế phải được cảnh báo để không duyệt nhầm.
 
 ---
 
 ## 7. Giao diện người dùng (UI/UX Requirements)
-- **Split-View Layout:** Màn hình 2 panel. Panel trái (60%) chứa List hoá đơn (có phân trang và filter theo ngày, trạng thái mapping). Panel phải (40%) hiển thị bản thể hiện hoá đơn bằng HTML (hoặc iframe PDF nếu có `customsData`).
-- **Trạng thái Mapping (Visuals):**
-  - Icon Xanh lá (Đã hạch toán): Link thẳng tới ID Chứng từ.
-  - Icon Vàng (Chưa lập chứng từ): Nút [Tạo chứng từ nhanh] hiển thị bên cạnh.
-- **Render Mặt Hoá Đơn:** Dựa trên array `lineItems` và object `financials` trả về từ API để vẽ table HTML.
+- **Dashboard Hoá Đơn:** 
+  - Split-view (hoặc list-detail) để dễ dàng xem danh sách bên trái và mặt hoá đơn/chứng từ bên phải.
+  - Signal cảnh báo (Badge màu đỏ/cam) cho các hoá đơn "Chưa mapping chứng từ".
+- **Màn hình Review:** Cho phép preview PDF mặt hoá đơn trực tiếp khi đang xem chứng từ nháp.
 
 ---
 
 ## 8. Yêu cầu về dữ liệu (Data Requirements)
-- **Data Mapping từ API Response:**
-  - Định danh: `id` (UUID) -> `invoice.uuid`, `invoiceSerial` -> `invoice.serial`, `invoiceNumber` -> `invoice.number`.
-  - Phân loại: `invoiceType` -> `invoice.type` (`bought` / `sold`), `invoiceFormCode` -> `invoice.form_code`.
-  - Giá trị: `amount` -> `invoice.total_amount` (Tổng thanh toán).
-  - Đối tác: `seller` object -> Map với `vendor_id`, `buyer` object -> Map với `customer_id`.
-  - Ngày giao dịch: `transactionDate` -> `invoice.date`.
-- **Data Validation:** 
-  - Đảm bảo `lineItems` không rỗng trước khi render bản HTML.
-  - Chặn đồng bộ nếu `fromDate` và `toDate` bị null.
+- **Deduplication Key:** `MST người bán` + `Ký hiệu` + `Số hoá đơn` + `Ngày lập` + `Tổng tiền`.
+- Lưu trữ file đính kèm XML/PDF liên kết chặt với bản ghi Hoá đơn trong ERP.
 
 ---
 
 ## 9. Yêu cầu phi chức năng (Non-functional Requirements - NFR)
-- **Hiệu năng API:** Xử lý bất đồng bộ (Background job) nếu số lượng hoá đơn kéo về > 1000 bản ghi để tránh timeout giao diện.
-- **Audit Logging:** Lưu lại vết ai là người nhấn nút "Đồng bộ HĐĐT" và đồng bộ được bao nhiêu hoá đơn vào ngày nào.
-- **Bảo mật:** Không log payload chi tiết `financials` của hoá đơn ra màn hình console của trình duyệt.
+- Chạy batch processing khi số lượng hoá đơn lớn, tránh timeout.
+- Mọi thao tác Approve/Sửa chứng từ nháp phải được ghi Audit Log đầy đủ (User, Timestamp, Old_Value, New_Value).

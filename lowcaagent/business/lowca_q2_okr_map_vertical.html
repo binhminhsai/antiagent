@@ -1,0 +1,324 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Calibri',sans-serif;font-size:10px}
+
+.page{padding:12px;background:transparent}
+
+/* Header */
+.header{background:#1F3864;border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.header h1{color:#fff;font-size:14px;font-weight:700;margin-bottom:3px}
+.header p{color:#BDD7EE;font-size:9px}
+.phases{display:flex;gap:6px}
+.ph{font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px}
+.ph-t5{background:#2E75B6;color:#fff}
+.ph-t6{background:#1F7A45;color:#fff}
+.ph-t7{background:#C55A11;color:#fff}
+
+/* Band */
+.band{border-radius:10px;padding:10px 12px 12px;margin-bottom:10px}
+.band-f{background:#FFFBF0;border:1.5px solid #F0C040}
+.band-c{background:#FDF0FF;border:1.5px solid #C67EDD}
+.band-i{background:#EFF6FF;border:1.5px solid #7BAEE8}
+.band-g{background:#EDFCF2;border:1.5px solid #5EC48A}
+
+.band-label{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.08)}
+.lf{color:#8B6200}.lc{color:#6B2090}.li{color:#1A3A8A}.lg{color:#0F5A2A}
+
+/* Grid of cards inside band */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+/* Card */
+.card{background:#fff;border-radius:8px;padding:9px 10px;border:1px solid #E0E0E0;font-size:9.5px}
+.card-alert{border:2px solid #E04040;background:#FFF5F5}
+.card-amber{border-color:#E8B820;background:#FFFBF0}
+.card-purple{border-color:#CC88E0;background:#FBF4FF}
+.card-blue{border-color:#7BAEE8;background:#F4F8FF}
+.card-green{border-color:#5EC48A;background:#F2FCF6}
+
+/* Badge */
+.bdg{display:inline-block;font-size:7.5px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:.04em;margin-bottom:4px;text-transform:uppercase}
+.bdg-r{background:#FFE8E8;color:#8B0000;border:1px solid #E04040}
+.bdg-a{background:#FFF0B3;color:#7A5800;border:1px solid #E8C840}
+.bdg-p{background:#F3E8FF;color:#581A80;border:1px solid #CC88E0}
+.bdg-b{background:#E8F1FF;color:#1A3A7A;border:1px solid #7BAEE8}
+.bdg-g{background:#DFF8EC;color:#0F5A2A;border:1px solid #5EC48A}
+
+/* Card title */
+.ct{font-size:10px;font-weight:700;line-height:1.3;margin-bottom:3px}
+.ct-r{color:#8B0000}.ct-a{color:#7A5000}.ct-p{color:#581A80}.ct-b{color:#1A3A7A}.ct-g{color:#0F5A2A}
+
+/* Owner */
+.own{font-size:8px;color:#888;font-style:italic;margin-bottom:5px}
+
+/* KR list */
+.kr{border-left:2.5px solid;padding:2px 0 2px 7px;margin:3px 0;font-size:9px;line-height:1.35}
+.kr-r{border-color:#CC2020;color:#7A0000}
+.kr-a{border-color:#E8A020;color:#7A4A00}
+.kr-p{border-color:#A855C8;color:#581A80}
+.kr-b{border-color:#3A78CC;color:#1A3A7A}
+.kr-g{border-color:#2EA85A;color:#0F5A2A}
+
+.kl{font-size:7.5px;font-weight:700;opacity:.7;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px}
+
+/* Phase pills */
+.t5,.t6,.t7,.tw{font-size:7.5px;font-weight:700;padding:1px 5px;border-radius:8px;display:inline-block;margin-right:2px}
+.t5{background:#D4EDFF;color:#004C88}
+.t6{background:#D4FFE8;color:#005522}
+.t7{background:#FFE8D4;color:#7A3000}
+.tw{background:#FFE8FF;color:#5A0080}
+
+/* Number circle */
+.nc{width:18px;height:18px;border-radius:50%;background:#3A78CC;color:#fff;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-right:4px;vertical-align:middle;flex-shrink:0}
+.nc-g{background:#2EA85A}
+
+/* Causal arrow between bands */
+.causal{text-align:center;padding:2px 0;font-size:9px;color:#999;letter-spacing:.05em}
+.causal span{margin:0 4px;opacity:.5}
+
+/* Timeline mini bar */
+.tbar{display:flex;border-radius:5px;overflow:hidden;height:18px;margin-bottom:6px}
+.tb5{background:#2E75B6;color:#fff;flex:1;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700}
+.tb6{background:#1F7A45;color:#fff;flex:1;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700}
+.tb7{background:#C55A11;color:#fff;flex:1;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700}
+</style>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <h1>LOWCA — Strategy OKRs Map · Q2 / 2026</h1>
+    <p>MVP B2B hoàn thiện T6 · T5–T6 = Build &amp; Prepare · T7 = M&amp;A Pitch bắt đầu</p>
+  </div>
+  <div class="phases">
+    <div class="ph ph-t5">T5 · BUILD</div>
+    <div class="ph ph-t6">T6 · PREPARE</div>
+    <div class="ph ph-t7">T7 → PITCH ↗</div>
+  </div>
+</div>
+
+<!-- ══ FINANCIAL ══ -->
+<div class="band band-f">
+  <div class="band-label lf">▌ Financial Perspective — Q2 đầu tư để M&amp;A Q3: build asset, kiểm soát burn</div>
+  <div class="grid">
+
+    <!-- F1 -->
+    <div class="card card-alert">
+      <div class="bdg bdg-r">STRATEGIC GOAL — ĐẦU RA Q2</div>
+      <div class="tbar"><div class="tb5">T5: Build core</div><div class="tb6">T6: Prepare</div><div class="tb7">T7: PITCH ↗</div></div>
+      <div class="ct ct-r">Cuối Q2: Sẵn sàng 100% để pitch M&amp;A tháng 7</div>
+      <div class="own">Owner: Founder + Co-founder · All team</div>
+      <div class="kr kr-r"><div class="kl">KR1 · Gate T6</div><span class="t6">T6</span> Product hoàn thiện: 0 critical bug, TTV &lt;3 phút, AI accuracy ≥90%</div>
+      <div class="kr kr-r"><div class="kl">KR2 · Gate T6</div><span class="t6">T6</span> ≥20 quán pilot active, GMV ≥300M VND/tháng</div>
+      <div class="kr kr-r"><div class="kl">KR3 · Gate T6</div><span class="t6">T6</span> Data Room 11 docs hoàn chỉnh, sẵn sàng Due Diligence</div>
+      <div class="kr kr-r"><div class="kl">KR4 · Trigger T7</div><span class="t7">T7</span> Book buổi pitch với CASSO leadership tuần 1–2 T7</div>
+    </div>
+
+    <!-- F2 -->
+    <div class="card card-amber">
+      <div class="bdg bdg-a">TRACTION — PROOF POINTS</div>
+      <div class="ct ct-a">Build proof points thuyết phục acquirer trước T7</div>
+      <div class="own">Owner: Founder · Colab: Product + Growth</div>
+      <div class="kr kr-a"><div class="kl">KR1</div><span class="t5">T5</span> 10 quán pilot onboard, NPS + testimonial đầu tiên</div>
+      <div class="kr kr-a"><div class="kl">KR2</div><span class="t6">T6</span> 20–25 quán active, GMV ≥300M VND/tháng documented</div>
+      <div class="kr kr-a"><div class="kl">KR3</div><span class="t6">T6</span> NPS ≥50 · ≥5 video testimonial dùng được trong deck</div>
+      <div class="kr kr-a"><div class="kl">KR4</div><span class="t6">T6</span> ≥3 quán sẵn sàng trả tiền T7 (soft commit)</div>
+    </div>
+
+    <!-- F3 -->
+    <div class="card card-amber">
+      <div class="bdg bdg-a">PRODUCTIVITY — BURN RATE</div>
+      <div class="ct ct-a">Giữ cash burn &lt;5M VND/tháng, runway đến close deal</div>
+      <div class="own">Owner: Founder</div>
+      <div class="kr kr-a"><div class="kl">KR1</div>AI API: Gemini Flash cho volume — tổng ≤2M VND/tháng</div>
+      <div class="kr kr-a"><div class="kl">KR2</div>Infra + tools ≤1.5M VND/tháng (Supabase free, Vercel hobby)</div>
+      <div class="kr kr-a"><div class="kl">KR3</div><span class="t6">T6</span> Legal advisor briefed, phí 30–50M VND chuẩn bị sẵn cho T7–T8</div>
+    </div>
+
+    <!-- F4 -->
+    <div class="card card-amber">
+      <div class="bdg bdg-a">M&amp;A READINESS — END OF Q2</div>
+      <div class="ct ct-a">Định vị LOWCA đúng strategic value cho CASSO</div>
+      <div class="own">Owner: Founder + Co-founder · Colab: Growth</div>
+      <div class="kr kr-a"><div class="kl">KR1</div><span class="t6">T6</span> M&amp;A Deck: synergy LOWCA + CASSO payOS + Open Banking Circular 64</div>
+      <div class="kr kr-a"><div class="kl">KR2</div><span class="t6">T6</span> Demo video 3 phút: AI scan → E-menu → QR order → GMV dashboard</div>
+      <div class="kr kr-a"><div class="kl">KR3</div><span class="t6">T6</span> Sweat equity documented ≥200M VND — valuation anchor khi negotiate</div>
+      <div class="kr kr-a"><div class="kl">KR4</div><span class="tw">Prep T7</span> Research iPOS + Sapo làm BATNA nếu CASSO chậm</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Arrow -->
+<div class="causal"><span>▲</span> Customer Perspective drive Financial outcomes <span>▲</span></div>
+
+<!-- ══ CUSTOMER ══ -->
+<div class="band band-c">
+  <div class="band-label lc">▌ Customer Perspective — Value Prop cho Merchant &amp; Diner đủ mạnh để justify M&amp;A</div>
+  <div class="grid">
+
+    <!-- C1 -->
+    <div class="card card-purple">
+      <div class="bdg bdg-p">VALUE PROP — MERCHANT (B2B)</div>
+      <div class="ct ct-p">Chứng minh LOWCA giải quyết pain thực của chủ quán MSME No-POS</div>
+      <div class="own">Owner: Founder + Co-founder · Colab: Product + AI</div>
+      <div class="kr kr-p"><div class="kl">KR1 · JTBD Instant Ops</div><span class="t5">T5</span> TTV ≤3 phút: chụp ảnh → E-menu live trên điện thoại nhân viên</div>
+      <div class="kr kr-p"><div class="kl">KR2 · AI Gate (Kill Criterion)</div><span class="t5">T5</span> AI scan accuracy ≥90% trên 100 menu thực tế MSME Việt</div>
+      <div class="kr kr-p"><div class="kl">KR3 · JTBD Loss Prevention</div><span class="t6">T6</span> 100% order real-time, chủ quán xem từ xa được</div>
+      <div class="kr kr-p"><div class="kl">KR4</div><span class="t6">T6</span> Onboarding ≤30 phút/quán, chủ tự làm sau 1 lần hướng dẫn</div>
+    </div>
+
+    <!-- C2 -->
+    <div class="card card-purple">
+      <div class="bdg bdg-p">VALUE PROP — DINER (B2B2C)</div>
+      <div class="ct ct-p">Trải nghiệm scan-order-pay không ma sát, validate adoption rate</div>
+      <div class="own">Owner: Product · Colab: Dev + AI</div>
+      <div class="kr kr-p"><div class="kl">KR1 · Adoption</div><span class="t5">T5</span> Scan-to-order rate ≥30% tại cafe/trà sữa pilot</div>
+      <div class="kr kr-p"><div class="kl">KR2 · Payment</div>VietQR / MoMo tích hợp, 0 redirect, confirm ≤5 giây</div>
+      <div class="kr kr-p"><div class="kl">KR3 · Dual Flow</div>QR self-order VÀ nhân viên order giúp — dual flow ổn định T6</div>
+      <div class="kr kr-p"><div class="kl">KR4</div><span class="t6">T6</span> Scan rate tại bún/phở ≥15% — validate phân khúc truyền thống</div>
+    </div>
+
+    <!-- C3 -->
+    <div class="card card-purple">
+      <div class="bdg bdg-p">RELATIONSHIP — MERCHANT</div>
+      <div class="ct ct-p">Chủ quán gắn bó, sẵn sàng trả tiền T7</div>
+      <div class="own">Owner: Founder · Colab: Growth</div>
+      <div class="kr kr-p"><div class="kl">KR1</div>W4 retention ≥60% — quán vẫn dùng sau 4 tuần</div>
+      <div class="kr kr-p"><div class="kl">KR2</div>≥5 video testimonial chủ quán — dùng trong M&amp;A deck</div>
+      <div class="kr kr-p"><div class="kl">KR3</div>Zalo/WhatsApp support: phản hồi ≤2 giờ giờ hành chính</div>
+    </div>
+
+    <!-- C4 -->
+    <div class="card card-purple">
+      <div class="bdg bdg-p">RELATIONSHIP — ACQUIRER (Prep T6→T7)</div>
+      <div class="ct ct-p">Xây warm relationship với CASSO trước pitch chính thức T7</div>
+      <div class="own">Owner: Founder (Insider CASSO) · Colab: Co-founder</div>
+      <div class="kr kr-p"><div class="kl">KR1</div><span class="t6">T6</span> Informal coffee/brainstorm với CASSO decision maker qua kênh nội bộ — không pitch, chỉ "share ideas"</div>
+      <div class="kr kr-p"><div class="kl">KR2</div><span class="t6">T6</span> Research CASSO roadmap, pain points, budget cycle Q3/Q4 — pitch đúng timing</div>
+      <div class="kr kr-p"><div class="kl">KR3</div><span class="tw">Prep T7</span> Gửi teaser 1-pager cho iPOS + Sapo — tạo FOMO khi negotiate</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Arrow -->
+<div class="causal"><span>▲</span> Internal Processes drive Customer outcomes <span>▲</span></div>
+
+<!-- ══ INTERNAL ══ -->
+<div class="band band-i">
+  <div class="band-label li">▌ Internal Perspective — Quy trình build product, pilot &amp; chuẩn bị M&amp;A</div>
+  <div class="grid">
+
+    <!-- I1 -->
+    <div class="card card-blue">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div class="nc">1</div><div class="bdg bdg-b" style="margin-bottom:0">PRODUCT — CRITICAL PATH</div>
+      </div>
+      <div class="ct ct-b">Hoàn thiện B2B MVP — production ready cuối T6</div>
+      <div class="own">Owner: AI Eng + Dev · Colab: Product</div>
+      <div class="kr kr-b"><div class="kl">KR1 · AI Gate (Tuần 1–2 T5)</div><span class="t5">T5</span> Benchmark ≥90% accuracy trên 100 menu thực — nếu &lt;90% fix trước mọi thứ</div>
+      <div class="kr kr-b"><div class="kl">KR2</div><span class="t5">T5</span> Core flow: QR order → bếp notify → dashboard, 0 critical bug</div>
+      <div class="kr kr-b"><div class="kl">KR3</div><span class="t6">T6</span> Performance: load ≤2s trên 3G, xử lý 50 concurrent orders</div>
+      <div class="kr kr-b"><div class="kl">KR4</div><span class="t6">T6</span> AI up-sell prototype demo-ready: gợi ý món high-margin khi diner order</div>
+    </div>
+
+    <!-- I2 -->
+    <div class="card card-blue">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div class="nc">2</div><div class="bdg bdg-b" style="margin-bottom:0">PILOT OPERATIONS</div>
+      </div>
+      <div class="ct ct-b">Onboard &amp; vận hành 20–25 quán pilot song song build</div>
+      <div class="own">Owner: Founder + Co-founder · Colab: Growth</div>
+      <div class="kr kr-b"><div class="kl">KR1</div><span class="t5">T5</span> 10 quán: 5 cafe + 3 trà sữa + 2 bún/phở — onboard &amp; collect data</div>
+      <div class="kr kr-b"><div class="kl">KR2</div><span class="t6">T6</span> 20–25 quán active, mở rộng quận mới, loại hình đa dạng</div>
+      <div class="kr kr-b"><div class="kl">KR3</div>Weekly data pull: orders/ngày, scan rate, drop-off → feed vào M&amp;A deck</div>
+      <div class="kr kr-b"><div class="kl">KR4</div><span class="t6">T6</span> Pilot Playbook: onboard mới không cần Founder trực tiếp</div>
+    </div>
+
+    <!-- I3 -->
+    <div class="card card-blue">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div class="nc">3</div><div class="bdg bdg-b" style="margin-bottom:0">M&amp;A PREPARATION (T6)</div>
+      </div>
+      <div class="ct ct-b">Build Data Room &amp; Deck — sẵn sàng 100% trước T7</div>
+      <div class="own">Owner: Founder + Co-founder + Growth · Colab: Legal</div>
+      <div class="kr kr-b"><div class="kl">KR1 · T6 Tuần 1</div><span class="t6">T6</span> Brief luật sư M&amp;A/IT startup — review IP, user data compliance</div>
+      <div class="kr kr-b"><div class="kl">KR2 · T6 Tuần 2</div><span class="t6">T6</span> Data Room 11 docs: AI report, GMV, cap table, IP docs, team agreements</div>
+      <div class="kr kr-b"><div class="kl">KR3 · T6 Tuần 3</div><span class="t6">T6</span> M&amp;A Deck + demo video 3 phút + valuation model updated</div>
+      <div class="kr kr-b"><div class="kl">KR4 · T6 Tuần 4</div><span class="t6">T6</span> Dry run pitch nội bộ với team — iterate trước khi gặp CASSO T7</div>
+    </div>
+
+    <!-- I4 -->
+    <div class="card card-blue">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div class="nc">4</div><div class="bdg bdg-b" style="margin-bottom:0">AI &amp; TECH INNOVATION</div>
+      </div>
+      <div class="ct ct-b">Tối ưu AI pipeline — accuracy, cost, build IP moat</div>
+      <div class="own">Owner: AI Engineer · Colab: Dev</div>
+      <div class="kr kr-b"><div class="kl">KR1</div><span class="t5">T5</span> Migrate volume → Gemini Flash, giảm AI cost ≥70% vs GPT-4o</div>
+      <div class="kr kr-b"><div class="kl">KR2</div>Prompt caching: giảm redundant API calls ≥40%</div>
+      <div class="kr kr-b"><div class="kl">KR3</div>Fine-tune OCR cho menu viết tay tiếng Việt (dấu, giá viết tay)</div>
+      <div class="kr kr-b"><div class="kl">KR4</div><span class="t6">T6</span> Dataset 100+ menu MSME labeled → document như AI training asset trong M&amp;A deck</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Arrow -->
+<div class="causal"><span>▲</span> Growth Perspective enables all Internal Processes <span>▲</span></div>
+
+<!-- ══ GROWTH ══ -->
+<div class="band band-g">
+  <div class="band-label lg">▌ Growth Perspective — Năng lực nền tảng: team, data, tổ chức sẵn sàng cho M&amp;A</div>
+  <div class="grid">
+
+    <!-- G1 -->
+    <div class="card card-green">
+      <div class="bdg bdg-g">HUMAN CAPITAL</div>
+      <div class="ct ct-g">Giữ team part-time aligned — ký equity agreement trước pitch</div>
+      <div class="own">Owner: Founder + Co-founder · Colab: All</div>
+      <div class="kr kr-g"><div class="kl">KR1</div>Weekly sync 45 phút không bỏ tuần nào — update, unblock, re-priority</div>
+      <div class="kr kr-g"><div class="kl">KR2 · Critical</div><span class="t5">T5</span> Ký equity / vesting agreement với tất cả core team trước khi pitch M&amp;A</div>
+      <div class="kr kr-g"><div class="kl">KR3</div>Xác định 3 "must-retain" sau M&amp;A: AI Eng, Founder, Co-founder — document vào deal ask</div>
+      <div class="kr kr-g"><div class="kl">KR4</div><span class="t6">T6</span> Growth/M&amp;A researcher upskill: LOI, SPA, Due Diligence terms</div>
+    </div>
+
+    <!-- G2 -->
+    <div class="card card-green">
+      <div class="bdg bdg-g">INFORMATION CAPITAL</div>
+      <div class="ct ct-g">Data assets = Core IP — đây là thứ CASSO mua, không phải code</div>
+      <div class="own">Owner: AI Eng + Dev · Colab: Founder</div>
+      <div class="kr kr-g"><div class="kl">KR1</div><span class="t5">T5</span> 100+ menu MSME Việt labeled (ground truth dataset) — structured &amp; documented</div>
+      <div class="kr kr-g"><div class="kl">KR2</div>Transaction log: timestamp, outlet, item, GMV, payment — queryable</div>
+      <div class="kr kr-g"><div class="kl">KR3</div>Dashboard real-time: doanh thu ngày/tuần, món chạy, peak hour</div>
+      <div class="kr kr-g"><div class="kl">KR4</div><span class="t6">T6</span> IP documentation: note AI algorithm authorship — chuẩn bị cho DD</div>
+    </div>
+
+    <!-- G3 -->
+    <div class="card card-green">
+      <div class="bdg bdg-g">ORGANISATION CAPITAL</div>
+      <div class="ct ct-g">Tổ chức clean &amp; compliant — Due Diligence pass nhanh</div>
+      <div class="own">Owner: Founder · Colab: Legal advisor</div>
+      <div class="kr kr-g"><div class="kl">KR1</div><span class="t5">T5</span> Đăng ký pháp nhân / IP assignment cá nhân — entity rõ ràng trước DD</div>
+      <div class="kr kr-g"><div class="kl">KR2</div>Code repo clean: README, 0 hardcoded secret, license rõ, CI/CD basic</div>
+      <div class="kr kr-g"><div class="kl">KR3</div>User data: consent flow + privacy policy theo PDPD Decree 13/2023</div>
+      <div class="kr kr-g"><div class="kl">KR4</div><span class="t6">T6</span> Integration roadmap LOWCA + CASSO payOS — "Day 1 plan" cho acquirer</div>
+    </div>
+
+    <!-- G4 -->
+    <div class="card card-green">
+      <div class="bdg bdg-g">BRAND &amp; SOCIAL PROOF</div>
+      <div class="ct ct-g">Build credibility trước khi CASSO research LOWCA online</div>
+      <div class="own">Owner: Growth · Colab: Founder</div>
+      <div class="kr kr-g"><div class="kl">KR1</div><span class="t5">T5</span> 2 case study TikTok/Reel: "Quán X tăng doanh thu nhờ LOWCA AI menu"</div>
+      <div class="kr kr-g"><div class="kl">KR2</div><span class="t6">T6</span> Xuất hiện tại 1 event F&amp;B / startup — name recognition trước pitch T7</div>
+      <div class="kr kr-g"><div class="kl">KR3</div><span class="t6">T6</span> Founder LinkedIn: 3 bài về "AI E-menu cho F&amp;B Việt" — authority trước khi CASSO research</div>
+    </div>
+
+  </div>
+</div>
+
+</div>

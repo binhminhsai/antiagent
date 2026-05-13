@@ -1,0 +1,122 @@
+﻿Wispace Feature 
+"Epic","Title","Description","End Date","Status","Note(s)","Role"
+"0. General Information Pages","0.1. Trang chủ (Home page)","Mô tả: Trang chính sau khi đăng nhập, đóng vai trò trung tâm điều hướng (dashboard). Hiển thị: Onboarding Checklist (danh sách các bước cần hoàn thành), các module luyện tập chính (Writing Task 1, Writing Task 2, Virtual Exam), và truy cập nhanh đến các công cụ hỗ trợ.
+Người dùng nhận được: Tổng quan trạng thái học tập, truy cập nhanh vào mọi tính năng từ một nơi duy nhất, và hướng dẫn từng bước cho người dùng mới.
+","","Released","","For All"
+"0. General Information Pages","0.2. Landing page","Mô tả: Trang giới thiệu tổng quan về sản phẩm Wispace, là nơi người dùng thấy đầu tiên khi truy cập website (nếu chưa đăng nhập). Trang hiển thị các giá trị cốt lõi, tính năng nổi bật, và nút kêu gọi đăng ký/đăng nhập. Hỗ trợ chuyển đổi ngôn ngữ (Tiếng Việt/English).
+Người dùng nhận được: Cái nhìn tổng quan về sản phẩm, hiểu được giá trị mà Wispace mang lại trước khi quyết định đăng ký.
+","","Released","","For All"
+"1. Account Management","1.1. Đăng kí (Register)","Mô tả: Trang đăng ký tài khoản mới. Người dùng điền Họ tên, Email, Mật khẩu, và tùy chọn nhập Mã giáo viên (teacher code) 8 ký tự để liên kết với lớp học. Hỗ trợ đăng ký nhanh qua Google OAuth. Sau khi đăng ký, hệ thống gửi OTP xác thực email.
+Người dùng nhận được: Tài khoản cá nhân trên hệ thống, có thể liên kết với giáo viên nếu đang theo lớp.
+","","Released","",""
+"1. Account Management","1.2. Đăng nhập/ Đăng xuất (Login/Logout)","Mô tả: Tính năng đăng nhập bằng email/mật khẩu hoặc Google OAuth. Sử dụng JWT token để xác thực phiên làm việc.
+(Người dùng có thể đăng xuất ở trang hồ sơ người dùng)
+Người dùng nhận được: Truy cập vào hệ thống và tất cả tính năng đã mua/được cấp quyền.
+","","Released","","For All"
+"1. Account Management","1.3. Hồ sơ người dùng (User profile)","Mô tả: Nơi người dùng có thể xem/ điều chỉnh thông tin của tài khoản người dùng","","Released","","For All"
+"1. Account Management","1.4. Thay đổi mật khẩu (Change/Reset password)","Mô tả: Người dùng thay đổi mật khẩu hoặc tạo mới lại mật khẩu khi quên mật khẩu","","Released","","For All"
+"2. IELTS Writing Task 1 ","2.1. Tạo câu hỏi Writing Task 1 (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.2. Trang viết bài Writing Task 1 (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.3. Hỗ trợ viết bài  (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.4. Tính năng ghi chú khi viết bài (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.5. Từ vựng và cụm từ thường gặp (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.6. Chấm điểm bài Writing Task 1 (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.7. Nhận xét và sửa lỗi bài Writing Task 1 (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.8. Làm lại bài Writing Task 1 (WT1)","","","Released","","For Learner, For Teacher"
+"2. IELTS Writing Task 1 ","2.10. Chấm điểm bài viết có sẵn (WT1)","Mô tả: Công cụ chấm điểm bài viết độc lập — người dùng không cần đi qua quy trình tạo/chọn topic essay. Nhập trực tiếp: chọn loại task (Task 1/Task 2), chọn dạng đề, dán đề bài, và dán bài viết đã viết sẵn. AI sẽ chấm điểm và đưa ra phản hồi chi tiết giống như module Writing Practice.
+Người dùng nhận được: Chấm điểm nhanh bất kỳ bài viết IELTS nào (ví dụ: bài làm ở lớp học, bài tự luyện offline) mà không cần viết lại trên nền tảng. Tiết kiệm thời gian khi chỉ cần đánh giá chất lượng bài viết.
+","","Released","",""
+"3. IELTS Writing Task 2 ","3.1. Tạo câu hỏi Writing Task 2 (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.2. Trang viết bài Writing Task 2 (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.3. Hỗ trợ viết bài  (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.4. Tính năng ghi chú khi viết bài (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.5. Từ vựng và cụm từ thường gặp (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.6. Chấm điểm bài Writing Task 2 (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.7. Nhận xét và sửa lỗi bài Writing Task 2 (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.8. Làm lại bài Writing Task 2 (WT2)","","","Released","","For Learner, For Teacher"
+"3. IELTS Writing Task 2 ","3.10. Chấm điểm bài viết có sẵn (WT2)","Mô tả: Công cụ chấm điểm bài viết độc lập — người dùng không cần đi qua quy trình tạo/chọn topic essay. Nhập trực tiếp: chọn loại task (Task 1/Task 2), chọn dạng đề, dán đề bài, và dán bài viết đã viết sẵn. AI sẽ chấm điểm và đưa ra phản hồi chi tiết giống như module Writing Practice.
+Người dùng nhận được: Chấm điểm nhanh bất kỳ bài viết IELTS nào (ví dụ: bài làm ở lớp học, bài tự luyện offline) mà không cần viết lại trên nền tảng. Tiết kiệm thời gian khi chỉ cần đánh giá chất lượng bài viết.
+","","Released","",""
+"4. Virtual Exams","4.1. Tạo đề thi thử","","","Released","","For Learner, For Teacher"
+"4. Virtual Exams","4.2. Trang làm bài thi","","","Released","","For Learner, For Teacher"
+"4. Virtual Exams","4.3. Tạo highlight/chi chú","","","Released","","For Learner, For Teacher"
+"4. Virtual Exams","4.4. Chấm điểm và nhận xét bài thi","","","Released","","For Learner, For Teacher"
+"4. Virtual Exams","4.5. Làm lại bài thi  (Retake exam)","","","Released","","For Learner, For Teacher"
+"5. Progress Tracking","5.1. Thông số học tập của người dùng","Mô tả: Trang theo dõi tiến trình học tập toàn diện. Bao gồm:
+Goals Section — Hiển thị band score mục tiêu, ngày thi dự kiến, số ngày còn lại đếm ngược.
+
+Essay History Table — Bảng lịch sử bài viết với: ngày, loại task, dạng đề, điểm số, sắp xếp/lọc theo nhiều tiêu chí, tìm kiếm, lọc theo khoảng thời gian (tuần/tháng/tùy chỉnh), đánh dấu sao (star) bài quan trọng. Hỗ trợ phân trang (50 bài đầu cho chart, lazy load 10 bài/trang).
+Date Filter — Lọc dữ liệu theo tuần, tháng, hoặc khoảng ngày tùy chỉnh với calendar picker.
+Người dùng nhận được: Bức tranh toàn cảnh về hành trình học tập, nhận biết xu hướng tiến bộ hoặc tụt lùi, xác định dạng bài cần cải thiện, và động lực từ việc thấy sự tiến bộ qua biểu đồ.
+","","Released","","For Learner"
+"5. Progress Tracking","5.2. Điểm trung bình của người dùng","","","Released","","For Learner"
+"5. Progress Tracking","5.3. Biểu đồ tiến độ học tập","Charts Section — Biểu đồ điểm số theo thời gian cho Task 1, Task 2, và Virtual Exam (sử dụng Chart.js). Hiển thị xu hướng tiến bộ.","","Released","","For Learner"
+"5. Progress Tracking","5.4. Lịch sử bài viết","Essay History Table — Bảng lịch sử bài viết với: ngày, loại task, dạng đề, điểm số, sắp xếp/lọc theo nhiều tiêu chí, tìm kiếm, lọc theo khoảng thời gian (tuần/tháng/tùy chỉnh), đánh dấu sao (star) bài quan trọng. Hỗ trợ phân trang (50 bài đầu cho chart, lazy load 10 bài/trang).","","Released","","For Learner, For Teacher"
+"5. Progress Tracking","5.8. Trắc nghiệm luyện tập (Quiz AI)","Mô tả: Hệ thống quiz AI tự động sinh câu hỏi trắc nghiệm dựa trên bài viết và feedback của người dùng. Sau khi nhận feedback cho bài viết, người dùng có thể vào Quiz để kiểm tra kiến thức. AI (Gemini) phân tích bài viết gốc, lỗi sai, và feedback chi tiết để tạo câu hỏi liên quan đến từ vựng, ngữ pháp, cấu trúc bài viết. Giao diện gồm: danh sách câu hỏi với navigation sidebar, đồng hồ đếm thời gian, lịch sử làm bài, và trang kết quả với giải thích chi tiết cho từng câu.
+Người dùng nhận được: Củng cố kiến thức từ chính lỗi sai của mình, ôn tập có mục tiêu thay vì học tràn lan, theo dõi sự tiến bộ qua các lần làm quiz.
+","2026-03-15T00:00:00.000Z","Released","","For Learner"
+"6. Exam Library","6.1. Trang tải đề thi lên","Mô tả: Admin có thể tải đề thi lên để người dùng có thể sử dụng (tính năng này chỉ nằm trong Admin Portal)","","Released","","For Admin"
+"6. Exam Library","6.2. Xem/lọc/tìm kiếm đề thi","Mô tả: Thư viện đề thi IELTS Writing được phân loại theo 3 tab: Task 1 (lọc theo loại biểu đồ), Task 2 (lọc theo dạng đề), và Full Exam (lọc theo nguồn Cambridge/Actual Test). 
+- Mỗi đề hiển thị dạng card với preview câu hỏi, hover để xem chi tiết và nút ""Practice""/""Take Exam"". Hỗ trợ tìm kiếm, phân trang, và sắp xếp.
+- Người dùng có thể chọn ""Practice""/""Take Exam"" để di chuyển đến trang Writing practice/Virtual Exam để làm bài.
+Người dùng nhận được: Kho đề thi phong phú từ Cambridge IELTS và đề thi thật, dễ dàng tìm và luyện tập theo dạng đề yếu, hoặc thi thử full exam với đề thật.
+","","Released","","For Learner, For Teacher"
+"6. Exam Library","6.3. Hiển thị gợi ý đề thi ở trang Writing Practice/ Virtual Exam","Mô tả: Mỗi đề hiển thị dạng card với preview câu hỏi. Khi hover để xem chi tiết và nhấn nút ""Practice""/""Take Exam"" để chọn đề thi và làm bài
+Người dùng nhận được: Người dùng dễ dàng lựa chọn đề và làm bài khi ở giao diện thiết lập đề writing.","","Released","","For Learner, For Teacher"
+"7. Payments ","7.1. Trang thông tin về các gói dịch vụ","Mô tả: Modal hiển thị các gói dịch vụ có sẵn, chia theo 2 tab: Experience và Premium. 
+Mỗi gói hiển thị: tên gói, giá (VND), thời hạn, số lượt sử dụng/ngày (pooled tokens), danh sách tính năng có giới hạn (Writing Practice, Virtual Exam, Essay Grading) và không giới hạn (AI 5-minute test, Exam Library, Progress Tracking). 
+
+Nút ""Mua ngay"" chuyển hướng đến trang thanh toán. Hỗ trợ hiển thị gói hiện tại, chặn mua lại gói không cho phép repurchase.
+
+Người dùng nhận được: So sánh rõ ràng các gói dịch vụ, hiểu được quyền lợi cụ thể ở từng gói, và mua gói phù hợp nhu cầu.
+","","Released","","For Learner"
+"7. Payments ","7.2. Cổng thanh toán cho người dùng","Mô tả: Hiển thị QR thanh toán cho người dùng
+-> Trang xác nhận sau khi thanh toán thành công hoặc bị hủy. Trang Success hiển thị thông tin đơn hàng, gói đã mua, và nút quay lại trang chính. Trang Cancel thông báo giao dịch không hoàn thành với tùy chọn thử lại.
+Người dùng nhận được: Xác nhận trạng thái giao dịch rõ ràng, yên tâm về việc kích hoạt gói dịch vụ.
+","","Released","","For Learner"
+"8. User Engagement","8.2. Câu hỏi thiết lập mục tiêu người dùng","Mô tả: Modal thiết lập mục tiêu hiển thị cho người dùng mới sau lần đăng nhập đầu tiên. 
+
+Quy trình 4 bước: 
+(1) Thiết lập hồ sơ cá nhân (tên, độ tuổi, nghề nghiệp, lý do học), 
+(2) Thiết lập mục tiêu band score & ngày thi, 
+(3) Tự đánh giá năng lực hiện tại qua khảo sát, 
+(4) Thiết lập lịch nhắc nhở học tập hàng tuần.
+
+Người dùng nhận được: Trải nghiệm cá nhân hóa ngay từ đầu, hệ thống hiểu rõ trình độ và mục tiêu để đề xuất lộ trình phù hợp. Lịch nhắc nhở giúp duy trì thói quen học
+","","Released","","For Learner"
+"8. User Engagement","8.6. Giới thiệu người dùng mới (Refferal system)","","","Released","","For Learner"
+"9. Behavior Analytics","9.2. Dashboard số liệu hành vi người dùng ","","","Released","","For Admin"
+"10. Teacher-side","9.3. Trang tổng quan cho giáo viên ","Mô tả: Cổng vào chính của giáo viên, đóng vai trò hub điều hướng trung tâm. Sidebar gồm 2 mục: Lớp của bạn và Trung tâm chấm bài. Trang chính hiển thị toàn bộ các lớp học dưới dạng card với thông tin: trình độ hiện tại, band score mục tiêu, thời gian khóa học, số học viên, số buổi học. Hỗ trợ tìm kiếm lớp theo tên và thu gọn/mở rộng sidebar.
+Giáo viên nhận được: Tổng quan nhanh về tất cả lớp học, truy cập tức thì vào công cụ quản lý lớp và chấm bài từ một điểm duy nhất.","2026-03-29T00:00:00.000Z","In Testing","","For Teacher"
+"5. Progress Tracking","5.9. Tạo bài viết cải thiện bằng AI","","2026-03-10T00:00:00.000Z","In Dev","",""
+"10. Teacher-side","10.1 Trang tạo và quản lý lớp","Mô tả: Tính năng quản lý lớp học với đầy đủ chức năng CRUD (tạo, xem, sửa, xóa). Dialog tạo/chỉnh sửa lớp gồm các trường: tên lớp, trình độ hiện tại (5.0–7.5+), band score mục tiêu (5.0–8.5+), ngày bắt đầu/kết thúc (tự động gợi ý 3 tháng từ ngày bắt đầu), số buổi học, mô tả lớp (tối đa 100 từ). Validation đầy đủ: tên không trùng lặp, điểm mục tiêu phải cao hơn trình độ hiện tại, số buổi không âm.
+Giáo viên nhận được: Tổ chức và quản lý nhiều lớp học riêng biệt, thiết lập thông tin khóa học rõ ràng ngay từ ban đầu.","","In Dev","","For Teacher"
+"10. Teacher-side","10.2 Trang tổng quan cho từng lớp","Mô tả: Trang chi tiết của từng lớp học gồm nhiều phần: (1) Biểu đồ điểm trung bình theo tuần cho Task 1/Task 2, có thể lọc theo từng tiêu chí chấm điểm (TA, LR, CC, GRA); (2) Widget tổng quan tiến độ — số học viên đang đạt aim; (3) Danh sách học viên kèm trạng thái bài nộp mới, hỗ trợ tìm kiếm và lọc; (4) Tạo bài tập/bài thi trực tiếp từ trang này; (5) Tạo và giao lộ trình học (roadmap) cho cả lớp hoặc từng học viên. Hỗ trợ thêm học viên qua email.
+Giáo viên nhận được: Theo dõi sát tiến trình từng lớp và từng học viên, phát hiện kịp thời ai đang cần hỗ trợ thêm, giao bài và lộ trình học ngay từ một trang duy nhất.","","In Dev","","For Teacher"
+"10. Teacher-side","10.3 Trang trung tâm chấm bài","Mô tả: Hub quản lý tập trung toàn bộ bài tập và bài thi đã giao cho các lớp. Hiển thị dạng bảng với các thông tin: nội dung bài tập, loại bài (Task 1/Task 2/Full Exam), dạng đề, ngày mở/hạn nộp, số bài đã nộp/tổng số, thời gian làm bài, lớp áp dụng. Badge trạng thái 3 loại: Đang diễn ra, Đã kết thúc, Chưa bắt đầu. Hỗ trợ tìm kiếm, lọc theo lớp/loại bài/trạng thái và phân trang.
+Giáo viên nhận được: Cái nhìn tổng thể về tất cả bài tập đang chạy, ưu tiên chấm bài theo deadline và số lượng bài đang chờ chấm, không bỏ sót bài nào.","","In Dev","","For Teacher"
+"10. Teacher-side","10.4 Trang chấm chữa bài viết của học viên","Mô tả: Giao diện chấm và chữa bài gồm 2 lớp: (1) Trang danh sách bài nộp — bảng tất cả học viên với điểm AI/điểm GV, thời gian nộp, trạng thái Đúng giờ/Nộp muộn, hỗ trợ tìm kiếm và phân trang; (2) Trang giao diện chấm bài — hiển thị bài viết gốc với highlight lỗi theo màu, AI feedback phân loại theo 4 tiêu chí IELTS (TR/CC/LR/GRA), giáo viên có thể xem, sửa, thêm/xóa nhận xét, điều chỉnh điểm từng tiêu chí. Hỗ trợ bật/tắt chế độ edit, lọc feedback theo loại lỗi, font size tuỳ chỉnh.
+Giáo viên nhận được: Chấm bài nhanh hơn nhờ AI pre-grade sẵn, kiểm soát hoàn toàn nội dung feedback trước khi gửi học viên, đảm bảo chất lượng và tính nhất quán của phản hồi.","","In Dev","","For Teacher"
+"10. Teacher-side","10.5 Tạo và giao bài tập / bài thi","Mô tả: Modal tạo bài tập hoặc bài thi và giao ngay cho một hoặc nhiều lớp. Cấu hình gồm: Loại bài (Task 1 / Task 2 / Full Exam), Hình thức (Bài tập / Bài thi), Áp dụng cho lớp (chọn đơn/đa/tất cả). Hai chế độ đề: Tự tạo đề (nhập đề bài, upload ảnh biểu đồ cho Task 1) hoặc Đề ngẫu nhiên (chọn dạng đề muốn luyện). Thiết lập thời gian: ngày mở, hạn nộp (validate không trước ngày mở), thời gian làm bài (20/30/40/60 phút hoặc không giới hạn, tự gợi ý theo loại bài). Tuỳ chọn: cho phép nộp muộn, cho phép xem phân tích AI, cho học viên xem trước đề, lưu ý cho học viên.
+Giáo viên nhận được: Giao bài nhanh chóng, linh hoạt giữa đề tự soạn và đề ngẫu nhiên, kiểm soát đầy đủ điều kiện làm bài cho từng lớp.","","In Dev","","For Teacher"
+"10. Teacher-side","10.6 Tạo và chỉnh sửa lộ trình học cho học viên","Mô tả: Luồng 2 bước để tạo lộ trình học cá nhân hóa bằng AI: (1) Modal thu thập thông tin — trình độ IELTS Writing hiện tại (Chưa học / Biết cơ bản / Đã nắm vững), năng lực ngữ pháp & từ vựng (Yếu / Trung bình / Tốt), ngày thi dự kiến, số tiếng học/tuần; phạm vi giao (cả lớp hoặc từng học viên cụ thể). AI generate lộ trình xong, giáo viên được chuyển đến trang editor. (2) Trang chỉnh sửa lộ trình — cấu trúc dạng Phase > Chunk > Module; module có 3 loại (Video / Tự luận / Mix-quiz); giáo viên có thể đổi tên, thêm/xóa module, đính kèm tài liệu (resources), xem bài mẫu tham chiếu. Lộ trình sau khi xác nhận được giao tới lớp/học viên đã chọn.
+Giáo viên nhận được: Lộ trình học có hệ thống, được AI cá nhân hóa theo trình độ và timeline của từng nhóm học viên, giáo viên vẫn có thể tinh chỉnh trước khi giao.","","In Dev","","For Teacher"
+"8. User Engagement","8.1. Lộ trình Onboarding của người dùng mới","","","In Design","","For Learner"
+"8. User Engagement","8.3. Bài kiểm tra năng lực 5 phút (enhance)","Mô tả: Bài kiểm tra nhanh 5 phút — tính năng được liệt kê trong các gói subscription như không giới hạn, cho phép người dùng luyện viết ngắn để đánh giá nhanh trình độ.
+Người dùng nhận được: Đánh giá nhanh năng lực viết trong thời gian ngắn.","","In Design","","For Learner"
+"10. Teacher-side","9.4. Trang tổng quan cho Admin","","2026-03-15T00:00:00.000Z","In Design","","For Admin"
+"11. AI Roadmap","AI Roadmap ","Mô tả: Lộ trình học IELTS Writing cá nhân hóa, thiết kế như khóa học online. Mỗi bài học có thể là video, bài đọc (article), hoặc quiz. Hỗ trợ: đánh dấu hoàn thành, lưu bookmark, ghi chú, hỏi đáp, tải tài liệu đính kèm, điều hướng bài trước/sau.
+Người dùng nhận được: Lộ trình học có hệ thống từ cơ bản đến nâng cao, theo dõi tiến trình hoàn thành, học đa phương tiện (video + bài đọc + quiz), và tương tác qua hỏi đáp trên từng bài học.
+","","In Design","",""
+"0. General Information Pages","0.3. Trang về các chính sách và hỗ trợ khách hàng","","","Backlog","","For All"
+"0. General Information Pages","0.4. Chuyển đổi ngôn ngữ Tiếng Anh/Tiếng Việt","","","Backlog","","For All"
+"5. Progress Tracking","5.5. Phân tích điểm yếu của người dùng","","","Backlog","","For Learner"
+"5. Progress Tracking","5.6. Kế hoạch học tập chi tiết","","","Backlog","","For Learner"
+"7. Payments ","7.1. Thiết lập các gói dịch vụ và ưu đãi","","","Backlog","","For Learner"
+"7. Payments ","7.3. Lịch sử thanh toán của khách hàng","","","Backlog","","For Learner"
+"8. User Engagement","8.4. Xin đánh giá và phản hồi từ người dùng","","","Backlog","","For Learner, For Teacher"
+"8. User Engagement","8.5. Thiết lập thông báo Ưu đãi & Tiếp thị","","","Backlog","","For Learner, For Teacher"
+"8. User Engagement","8.7. Trang bài viết blog","","","Backlog","",""
+"8. User Engagement","","","","Backlog","",""
+"10. Teacher-side","","","","","",""
+"10. Teacher-side","","","","","",""
