@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WISPACE — Sprint Kanban Board</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2d3148;
+    --accent: #a855f7;
+    --accent2: #8b5cf6;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --purple: #c084fc;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --tag-bg: #1e293b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+  .header-logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .header-sep { color: var(--border); font-size: 20px; }
+  .header-title { font-size: 14px; color: var(--muted); }
+
+  .sprint-tabs {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+  }
+  .sprint-tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sprint-tab:hover { border-color: var(--accent); color: var(--text); }
+  .sprint-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .sprint-header {
+    padding: 16px 24px 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .sprint-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .sprint-date {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .sprint-progress-wrap {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .progress-bar {
+    width: 120px;
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .kanban-wrap {
+    padding: 8px 24px 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    min-height: calc(100vh - 160px);
+  }
+
+  @media (max-width: 1100px) {
+    .kanban-wrap { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .kanban-wrap { grid-template-columns: 1fr; }
+    .header { padding: 10px 14px; }
+    .sprint-tabs { margin-left: 0; width: 100%; }
+  }
+
+  .column {
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+  }
+
+  .col-header {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .col-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .col-title { font-size: 13px; font-weight: 600; flex: 1; }
+  .col-count {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  .col-body {
+    padding: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s;
+    position: relative;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .card-id {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: monospace;
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .tag.feature { color: var(--accent2); border-color: rgba(139,92,246,0.3); }
+  .tag.research { color: var(--yellow); border-color: rgba(245,158,11,0.3); }
+  .tag.doc { color: var(--purple); border-color: rgba(192,132,252,0.3); }
+  .tag.ux { color: #fb923c; border-color: rgba(251,146,60,0.3); }
+  .tag.infra { color: var(--green); border-color: rgba(34,197,94,0.3); }
+
+  .assignee {
+    margin-left: auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .a-minh { background: rgba(168,85,247,0.15); color: var(--purple); }
+  .a-dev1 { background: rgba(139,92,246,0.15); color: var(--accent2); }
+  .a-dev2 { background: rgba(34,197,94,0.15); color: var(--green); }
+  .a-growth { background: rgba(245,158,11,0.15); color: var(--yellow); }
+  .a-all { background: rgba(91,92,242,0.15); color: var(--accent); }
+
+  .card-deadline {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .deadline-warn { color: var(--yellow); }
+  .deadline-ok { color: var(--green); }
+
+  .add-card-btn {
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+  }
+  .add-card-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(168,85,247,0.05);
+  }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 680px;
+    margin: auto;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .modal-id { font-size: 11px; color: var(--muted); font-family: monospace; }
+  .modal-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .modal-close:hover { background: var(--surface2); color: var(--text); }
+
+  .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .field-input, .field-textarea, .field-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 13px;
+    padding: 8px 10px;
+    width: 100%;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .field-input:focus, .field-textarea:focus, .field-select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .field-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+  .field-select option { background: var(--surface2); }
+
+  .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .modal-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .btn {
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  .legend {
+    padding: 8px 24px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .add-form { display: none; flex-direction: column; gap: 6px; }
+  .add-form.open { display: flex; }
+  .add-form input, .add-form select {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 12px;
+    padding: 6px 8px;
+    font-family: inherit;
+  }
+  .add-form input:focus, .add-form select:focus { outline: none; }
+  .add-form-btns { display: flex; gap: 6px; }
+  .btn-xs { padding: 4px 10px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; }
+  .btn-xs-primary { background: var(--accent); color: #fff; }
+  .btn-xs-ghost { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">WISPACE</div>
+  <div class="header-sep">|</div>
+  <div class="header-title">Sprint Kanban — WISPACE MVP Fundraising Roadmap</div>
+  <div class="sprint-tabs">
+    <button class="sprint-tab active" onclick="switchSprint(0)">Sprint 1 · Tháng 5</button>
+    <button class="sprint-tab" onclick="switchSprint(1)">Sprint 2 · Tháng 6</button>
+  </div>
+</div>
+
+<div class="sprint-header">
+  <div class="sprint-name" id="sprintName">Sprint 1 — Build MVP & Fundraising Proof</div>
+  <div class="sprint-date" id="sprintDate">01/05 – 31/05/2026</div>
+  <div class="sprint-progress-wrap">
+    <span id="progressLabel">0 / 0 done</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> Product</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div> Research</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div> Doc</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fb923c"></div> UX</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Growth/Funding</div>
+  <div class="legend-item" style="margin-left:auto">
+    <span>👤 Minh</span>&nbsp;
+    <span>💻 Dev</span>&nbsp;
+    <span>📈 Growth</span>&nbsp;
+    <span>🧠 AI</span>
+  </div>
+</div>
+
+<div class="kanban-wrap" id="kanbanBoard"></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <span class="modal-id" id="modalId"></span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <div class="field-label">Tên Ticket</div>
+        <input class="field-input" id="mTitle" placeholder="Tiêu đề ticket...">
+      </div>
+      <div class="modal-row">
+        <div class="field-group">
+          <div class="field-label">Phụ trách</div>
+          <select class="field-select" id="mAssignee">
+            <option value="minh">Minh (PM)</option>
+            <option value="dev">Dev</option>
+            <option value="growth">Growth</option>
+            <option value="ai">AI</option>
+            <option value="all">Cả team</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Loại</div>
+          <select class="field-select" id="mType">
+            <option value="feature">Product</option>
+            <option value="research">Research</option>
+            <option value="doc">Doc</option>
+            <option value="ux">UX</option>
+            <option value="infra">Infra</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="field-group">
+          <div class="field-label">Deadline</div>
+          <input class="field-input" type="date" id="mDeadline">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Trạng thái</div>
+          <select class="field-select" id="mStatus">
+            <option value="backlog">📋 Backlog</option>
+            <option value="todo">⏳ To Do</option>
+            <option value="inprogress">🔄 In Progress</option>
+            <option value="done">✅ Done</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Output mong đợi</div>
+        <input class="field-input" id="mOutput" placeholder="Kết quả cụ thể khi ticket này xong...">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Mô tả / Hướng dẫn</div>
+        <textarea class="field-textarea" id="mDesc" rows="5" placeholder="Mô tả chi tiết công việc, context..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" id="deleteBtn" onclick="deleteCurrentCard()">Xóa</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Hủy</button>
+      <button class="btn btn-primary" onclick="saveCard()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SPRINTS = [
+  {
+    name: "Sprint 1 — Build MVP & Fundraising Proof",
+    date: "01/05 – 31/05/2026",
+    goal: "Hoàn thiện UI/UX Core, Rule-based Roadmap, AI Micro-Task Generator, funding teasers"
+  },
+  {
+    name: "Sprint 2 — Polish MVP & Retention Trigger",
+    date: "01/06 – 30/06/2026",
+    goal: "Zero latency feedback, gamified dashboard, proactive retention, investor momentum"
+  }
+];
+
+const STORAGE_KEY = 'wispace_kanban_v1';
+
+const DEFAULT_CARDS = {
+  0: [
+    {
+      id: 'S1-01', title: 'Define MVP fundraising UX flow & screen map', type: 'ux',
+      assignee: 'minh', deadline: '2026-05-05', status: 'done',
+      output: 'Bản đồ 7 màn hình và luồng onboarding/funding đã được xác nhận',
+      desc: 'Xác định rõ 3 giai đoạn: Onboarding & Diagnostic, Core Value Loop, Retention Trigger, và mapping 7 màn hình MVP.'
+    },
+    {
+      id: 'S1-02', title: 'Build Goal Setting screen', type: 'feature',
+      assignee: 'dev', deadline: '2026-05-10', status: 'inprogress',
+      output: 'UI tối giản cho Current Band + Target Band, ready for user input',
+      desc: 'Thiết kế và triển khai màn hình 1 cho user dễ chốt mục tiêu ngay đầu flow.'
+    },
+    {
+      id: 'S1-03', title: 'Build Baseline Task screen + notification opt-in', type: 'feature',
+      assignee: 'dev', deadline: '2026-05-14', status: 'todo',
+      output: 'Màn hình 2 mời user viết thử task hoặc chọn nhắc qua Zalo/Facebook',
+      desc: 'User được đề xuất “Viết 1 task” hoặc bật nhắc, tối ưu giảm ma sát và tạo commitment.'
+    },
+    {
+      id: 'S1-04', title: 'Build Activation Point / Submit + New Active User tracking', type: 'infra',
+      assignee: 'ai', deadline: '2026-05-15', status: 'todo',
+      output: 'Submit flow ghi nhận New Active User và kích hoạt Aha Moment đầu tiên',
+      desc: 'Khi user bấm Submit, hệ thống lưu hành vi + kích hoạt state “New Active User”.'
+    },
+    {
+      id: 'S1-05', title: 'Develop Rule-based Roadmap engine', type: 'feature',
+      assignee: 'ai', deadline: '2026-05-18', status: 'todo',
+      output: 'Engine hiển thị skill tree với trạm đầu tiên là weakness chính',
+      desc: 'Xây dựng luật chọn điểm yếu lớn nhất, trạm tiếp theo, và cập nhật hằng ngày.'
+    },
+    {
+      id: 'S1-06', title: 'Build AI Micro-Task Generator MVP (<3s)', type: 'feature',
+      assignee: 'ai', deadline: '2026-05-22', status: 'todo',
+      output: 'AI tạo micro-task phản hồi nhanh, gợi ý sửa lỗi lặp từ của user',
+      desc: 'Tối ưu response < 3s, tạo bài trắc nghiệm 4 đáp án để sửa đúng lỗi vừa phát hiện.'
+    },
+    {
+      id: 'S1-07', title: 'Design Zero Latency Feedback screen', type: 'ux',
+      assignee: 'minh', deadline: '2026-05-25', status: 'todo',
+      output: 'Màn hình 4 chia đôi: highlight lỗi + nhận xét AI theo tiêu chí',
+      desc: 'Chia đôi màn hình hoặc trượt, hiển thị line-by-line annotator và comment của AI.'
+    },
+    {
+      id: 'S1-08', title: 'Build Roadmap screen & skill tree UI', type: 'feature',
+      assignee: 'dev', deadline: '2026-05-27', status: 'todo',
+      output: 'Màn hình 5 hiển thị roadmap Skill Tree và trạm dừng tiếp theo',
+      desc: 'Hiển thị lộ trình, trạm đầu tiên là weakness lớn nhất, chuyển tiếp rõ ràng cho user.'
+    },
+    {
+      id: 'S1-09', title: 'Setup funding teaser routine + “cafe giữ ấm”', type: 'growth',
+      assignee: 'growth', deadline: '2026-05-12', status: 'todo',
+      output: 'Lịch cà phê, gửi progress notes, nhá hàng triết lý sản phẩm cho quỹ',
+      desc: 'Giữ ấm quan hệ quỹ bằng cập nhật ngắn, “điểm nóng sản phẩm”, và demo mini.'
+    },
+    {
+      id: 'S1-10', title: 'Prepare investor product narrative & progress note', type: 'doc',
+      assignee: 'minh', deadline: '2026-05-20', status: 'todo',
+      output: 'Tài liệu ngắn gọn giải thích MVP, triết lý, và tiến độ đầu tiên',
+      desc: 'Viết memo cho quỹ: giá trị WISPACE, traffic 5k/tháng, paid và product hook.'
+    },
+    {
+      id: 'S1-11', title: 'Collect current product metrics for funding story', type: 'research',
+      assignee: 'growth', deadline: '2026-05-16', status: 'todo',
+      output: 'Số liệu traffic, paid users, conversion, engagement để chứng minh traction',
+      desc: 'Thu thập dữ liệu: 5.000 new traffic mỗi tháng, paid users, điểm mạnh hiện tại của product.'
+    }
+  ],
+  1: [
+    {
+      id: 'S2-01', title: 'Polish Zero Latency Feedback & accuracy', type: 'feature',
+      assignee: 'ai', deadline: '2026-06-10', status: 'todo',
+      output: 'Feedback trả về dưới 60s, phản hồi rõ ràng, stable cho user',
+      desc: 'Tối ưu pipeline AI để feedback line-by-line nhanh hơn, giảm latency và giữ đúng tiêu chí.'
+    },
+    {
+      id: 'S2-02', title: 'Implement Micro-Task Execution flow', type: 'feature',
+      assignee: 'dev', deadline: '2026-06-12', status: 'todo',
+      output: 'Màn hình 6 mở quiz 4 đáp án khi user chọn task, hỗ trợ hint nếu idle 15s',
+      desc: 'Xây dựng trải nghiệm micro-task interactive và chatbot gợi ý khi ngập ngừng.'
+    },
+    {
+      id: 'S2-03', title: 'Gamified Dashboard & Next Step progress', type: 'ux',
+      assignee: 'minh', deadline: '2026-06-15', status: 'todo',
+      output: 'Màn hình 7 với hiệu ứng chiến thắng + thanh tiến trình cập nhật daily',
+      desc: 'Hiệu ứng dopamine, tăng điểm weak list khi user hoàn thành task, cập nhật trạm kế tiếp.'
+    },
+    {
+      id: 'S2-04', title: 'Build proactive retention trigger system', type: 'feature',
+      assignee: 'ai', deadline: '2026-06-18', status: 'todo',
+      output: 'Background trigger gửi thông báo Zalo/App đúng giờ online user',
+      desc: 'Triển khai luồng push messaging: “Hôm nay có bài giúp hoàn thiện Coherence 5 phút”.'
+    },
+    {
+      id: 'S2-05', title: 'Tune Rule-based roadmap with new feedback loop', type: 'research',
+      assignee: 'ai', deadline: '2026-06-12', status: 'todo',
+      output: 'Luật roadmap cập nhật trạng thái sau mỗi micro-task và tối ưu next stop',
+      desc: 'Phân tích kết quả user, cập nhật trạm tiếp theo dựa trên lỗi lặp và hiệu suất sửa lỗi.'
+    },
+    {
+      id: 'S2-06', title: 'Run MVP playtest with 5 paid users', type: 'research',
+      assignee: 'growth', deadline: '2026-06-20', status: 'todo',
+      output: 'Feedback trực tiếp từ paid users về onboarding, feedback speed, và retention triggers',
+      desc: 'Thu thập insight để chỉnh UX, thông điệp funding, và đo hiệu quả “Aha Moment”.'
+    },
+    {
+      id: 'S2-07', title: 'Update funding story with MVP live demo results', type: 'doc',
+      assignee: 'minh', deadline: '2026-06-22', status: 'todo',
+      output: 'Tài liệu investor update gồm demo metrics và retention proof',
+      desc: 'Cập nhật slide/storyboard cho quỹ với số liệu early traction và thử nghiệm retention.'
+    },
+    {
+      id: 'S2-08', title: 'Demo WISPACE MVP for funds', type: 'growth',
+      assignee: 'growth', deadline: '2026-06-25', status: 'todo',
+      output: 'Buổi demo giới thiệu sản phẩm, flow onboarding, feedback loop, và roadmap next step',
+      desc: 'Chuẩn bị demo ngắn, nhấn mạnh Aha Moment, zero latency feedback, và retention trigger.'
+    },
+    {
+      id: 'S2-09', title: 'Measure current product status: AI grading + practice engine', type: 'research',
+      assignee: 'growth', deadline: '2026-06-14', status: 'todo',
+      output: 'Documentation of current core product capabilities and gaps vs MVP fundraising story',
+      desc: 'Ghi lại những gì WISPACE đã có: AI grading, writing practice, generated improvement tasks.'
+    },
+    {
+      id: 'S2-10', title: 'Refine chat hint copy & retention messaging', type: 'ux',
+      assignee: 'minh', deadline: '2026-06-17', status: 'todo',
+      output: 'Kịch bản chatbot gợi ý và trigger message rõ ràng, hấp dẫn',
+      desc: 'Soạn tin nhắn xung động: “Vào chiến luôn nhé!” cho user vừa tắc nẽo 15s.'
+    }
+  ]
+};
+
+let currentSprint = 0;
+let editingCardId = null;
+let cards = {};
+
+function loadCards() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try { cards = JSON.parse(saved); return; } catch(e) {}
+  }
+  cards = JSON.parse(JSON.stringify(DEFAULT_CARDS));
+}
+
+function saveCards() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+}
+
+const COLUMNS = [
+  { key: 'backlog',    label: '📋 Backlog',     color: '#64748b' },
+  { key: 'todo',       label: '⏳ To Do',       color: '#f59e0b' },
+  { key: 'inprogress', label: '🔄 In Progress', color: '#8b5cf6' },
+  { key: 'done',       label: '✅ Done',        color: '#22c55e' }
+];
+
+const TYPE_LABELS = {
+  feature: 'Product', research: 'Research', doc: 'Doc', ux: 'UX', infra: 'Infra'
+};
+const ASSIGNEE_LABELS = {
+  minh: 'M', dev: 'D', growth: 'G', ai: 'AI', all: 'ALL'
+};
+const ASSIGNEE_CLASSES = {
+  minh: 'a-minh', dev: 'a-dev1', growth: 'a-growth', ai: 'a-dev2', all: 'a-all'
+};
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}`;
+}
+
+function isOverdue(d) {
+  if (!d) return false;
+  return new Date(d) < new Date();
+}
+
+function renderBoard() {
+  const sprintCards = cards[currentSprint] || [];
+  const board = document.getElementById('kanbanBoard');
+  board.innerHTML = '';
+
+  COLUMNS.forEach(col => {
+    const colCards = sprintCards.filter(c => c.status === col.key);
+    const colEl = document.createElement('div');
+    colEl.className = 'column';
+    colEl.innerHTML = `
+      <div class="col-header">
+        <div class="col-dot" style="background:${col.color}"></div>
+        <div class="col-title">${col.label}</div>
+        <div class="col-count">${colCards.length}</div>
+      </div>
+      <div class="col-body" id="col-${col.key}">
+        ${colCards.map(card => renderCard(card)).join('')}
+        <div>
+          <div class="add-form" id="addForm-${col.key}">
+            <input type="text" placeholder="Tên ticket..." id="addInput-${col.key}">
+            <select id="addType-${col.key}">
+              <option value="feature">Product</option>
+              <option value="research">Research</option>
+              <option value="doc">Doc</option>
+              <option value="ux">UX</option>
+              <option value="infra">Infra</option>
+            </select>
+            <div class="add-form-btns">
+              <button class="btn-xs btn-xs-primary" onclick="confirmAdd('${col.key}')">Thêm</button>
+              <button class="btn-xs btn-xs-ghost" onclick="cancelAdd('${col.key}')">Hủy</button>
+            </div>
+          </div>
+          <button class="add-card-btn" id="addBtn-${col.key}" onclick="showAddForm('${col.key}')">+ Thêm ticket</button>
+        </div>
+      </div>
+    `;
+    board.appendChild(colEl);
+  });
+
+  updateProgress();
+}
+
+function renderCard(card) {
+  const overdueClass = card.status !== 'done' && isOverdue(card.deadline) ? 'deadline-warn' : 'deadline-ok';
+  return `
+    <div class="card" onclick="openModal('${card.id}')">
+      <div class="card-id">${card.id}</div>
+      <div class="card-title">${escapeHtml(card.title)}</div>
+      <div class="card-meta">
+        <span class="tag ${card.type}">${TYPE_LABELS[card.type] || card.type}</span>
+        <div class="assignee ${ASSIGNEE_CLASSES[card.assignee] || 'a-minh'}">${ASSIGNEE_LABELS[card.assignee] || '?'}</div>
+      </div>
+      ${card.deadline ? `<div class="card-deadline ${overdueClass}">📅 ${formatDate(card.deadline)}</div>` : ''}
+    </div>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function updateProgress() {
+  const sprintCards = cards[currentSprint] || [];
+  const done = sprintCards.filter(c => c.status === 'done').length;
+  const total = sprintCards.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('progressLabel').textContent = `${done} / ${total} done`;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function switchSprint(idx) {
+  currentSprint = idx;
+  document.querySelectorAll('.sprint-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  const s = SPRINTS[idx];
+  document.getElementById('sprintName').textContent = s.name;
+  document.getElementById('sprintDate').textContent = s.date;
+  renderBoard();
+}
+
+function showAddForm(colKey) {
+  document.getElementById('addForm-' + colKey).classList.add('open');
+  document.getElementById('addBtn-' + colKey).style.display = 'none';
+  document.getElementById('addInput-' + colKey).focus();
+}
+
+function cancelAdd(colKey) {
+  document.getElementById('addForm-' + colKey).classList.remove('open');
+  document.getElementById('addBtn-' + colKey).style.display = '';
+  document.getElementById('addInput-' + colKey).value = '';
+}
+
+function confirmAdd(colKey) {
+  const title = document.getElementById('addInput-' + colKey).value.trim();
+  const type = document.getElementById('addType-' + colKey).value;
+  if (!title) return;
+
+  if (!cards[currentSprint]) cards[currentSprint] = [];
+  const newId = 'S' + (currentSprint + 1) + '-' + String(cards[currentSprint].length + 1).padStart(2, '0');
+  cards[currentSprint].push({
+    id: newId, title, type,
+    assignee: 'minh', deadline: '', status: colKey,
+    output: '', desc: ''
+  });
+  saveCards();
+  renderBoard();
+}
+
+function openModal(cardId) {
+  const sprintCards = cards[currentSprint] || [];
+  const card = sprintCards.find(c => c.id === cardId);
+  if (!card) return;
+
+  editingCardId = cardId;
+
+  document.getElementById('modalId').textContent = card.id;
+  document.getElementById('mTitle').value = card.title;
+  document.getElementById('mAssignee').value = card.assignee;
+  document.getElementById('mType').value = card.type;
+  document.getElementById('mDeadline').value = card.deadline || '';
+  document.getElementById('mStatus').value = card.status;
+  document.getElementById('mOutput').value = card.output || '';
+  document.getElementById('mDesc').value = card.desc || '';
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  editingCardId = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function saveCard() {
+  if (!editingCardId) return;
+  const sprintCards = cards[currentSprint] || [];
+  const idx = sprintCards.findIndex(c => c.id === editingCardId);
+  if (idx === -1) return;
+
+  sprintCards[idx] = {
+    ...sprintCards[idx],
+    title: document.getElementById('mTitle').value,
+    assignee: document.getElementById('mAssignee').value,
+    type: document.getElementById('mType').value,
+    deadline: document.getElementById('mDeadline').value,
+    status: document.getElementById('mStatus').value,
+    output: document.getElementById('mOutput').value,
+    desc: document.getElementById('mDesc').value
+  };
+
+  saveCards();
+  closeModal();
+  renderBoard();
+}
+
+function deleteCurrentCard() {
+  if (!editingCardId) return;
+  if (!confirm('Xóa ticket ' + editingCardId + '?')) return;
+  cards[currentSprint] = (cards[currentSprint] || []).filter(c => c.id !== editingCardId);
+  saveCards();
+  closeModal();
+  renderBoard();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+loadCards();
+renderBoard();
+</script>
+</body>
+</html>
