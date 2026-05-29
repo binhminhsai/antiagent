@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CASDOO — 3 Portfolio Options</title>
+<style>
+:root {
+  --blue-50:#E6F1FB;--blue-100:#B5D4F4;--blue-400:#378ADD;--blue-600:#185FA5;--blue-800:#0C447C;
+  --teal-50:#E1F5EE;--teal-100:#9FE1CB;--teal-400:#1D9E75;--teal-600:#0F6E56;--teal-800:#085041;
+  --purple-50:#EEEDFE;--purple-100:#CECBF6;--purple-400:#7F77DD;--purple-600:#534AB7;--purple-800:#3C3489;
+  --amber-50:#FAEEDA;--amber-100:#FAC775;--amber-600:#854F0B;--amber-800:#633806;
+  --red-50:#FCEBEB;--red-100:#F7C1C1;--red-600:#A32D2D;
+  --gray-50:#F1EFE8;--gray-100:#D3D1C7;--gray-400:#888780;--gray-600:#5F5E5A;--gray-800:#444441;
+  --green-50:#EAF3DE;--green-400:#639922;--green-800:#27500A;
+  --text:#1a1a18;--text2:#5F5E5A;--text3:#888780;
+  --bg:#fff;--bg2:#F8F7F3;--bg3:#F1EFE8;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.16);
+  --r:8px;--rl:12px;--rxl:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg2);color:var(--text);font-size:13px;line-height:1.6;}
+.page{max-width:980px;margin:0 auto;padding:36px 20px 80px;}
+
+/* Header */
+.dh{margin-bottom:32px;padding-bottom:20px;border-bottom:1.5px solid var(--border2);}
+.dh .label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+.dh h1{font-size:24px;font-weight:600;letter-spacing:-.3px;margin-bottom:5px;}
+.dh .sub{font-size:14px;color:var(--text2);margin-bottom:12px;}
+.dh .meta{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--text3);}
+.dh .meta strong{color:var(--text2);}
+
+/* Strategy selector tabs */
+.strategy-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px;}
+.stab{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--rl);padding:14px 16px;cursor:pointer;transition:all .15s;position:relative;}
+.stab:hover{border-color:var(--gray-400);}
+.stab.active-a{border:2px solid var(--blue-600);background:var(--blue-50);}
+.stab.active-b{border:2px solid var(--teal-600);background:var(--teal-50);}
+.stab.active-c{border:2px solid var(--purple-600);background:var(--purple-50);}
+.stab-num{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:5px;}
+.stab-title{font-size:14px;font-weight:600;margin-bottom:3px;}
+.stab-sub{font-size:11px;color:var(--text2);line-height:1.4;}
+.stab-logic{font-size:10px;margin-top:8px;padding:4px 8px;border-radius:20px;display:inline-block;font-weight:500;}
+.la-a{background:var(--blue-50);color:var(--blue-800);}
+.la-b{background:var(--teal-50);color:var(--teal-800);}
+.la-c{background:var(--purple-50);color:var(--purple-800);}
+
+/* Portfolio content */
+.portfolio-block{display:none;}
+.portfolio-block.show{display:block;}
+
+/* Section header */
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:0.5px solid var(--border2);}
+.sec-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.sec-hd h2{font-size:16px;font-weight:600;}
+.sec-hd .sc{font-size:11px;color:var(--text3);font-weight:400;margin-left:4px;}
+
+/* Callout */
+.callout{padding:10px 14px;border-radius:0 var(--r) var(--r) 0;font-size:12px;margin-bottom:16px;line-height:1.5;}
+.cl-blue{background:var(--blue-50);border-left:3px solid var(--blue-400);color:var(--blue-800);}
+.cl-teal{background:var(--teal-50);border-left:3px solid var(--teal-400);color:var(--teal-800);}
+.cl-purple{background:var(--purple-50);border-left:3px solid var(--purple-400);color:var(--purple-800);}
+.cl-amber{background:var(--amber-50);border-left:3px solid var(--amber-100);color:var(--amber-800);}
+
+/* Channel tabs */
+.channel-tabs{display:flex;gap:8px;margin-bottom:16px;}
+.ctab{padding:6px 16px;border-radius:20px;border:0.5px solid var(--border2);font-size:12px;font-weight:500;cursor:pointer;background:var(--bg);color:var(--text2);}
+.ctab.active{background:var(--text);color:#fff;border-color:var(--text);}
+
+/* Portfolio table */
+.ptable-wrap{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:20px;}
+.ptable{width:100%;border-collapse:collapse;}
+.ptable thead th{padding:9px 12px;background:var(--bg3);border-bottom:0.5px solid var(--border2);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);text-align:left;}
+.ptable thead th:not(:first-child){text-align:center;width:13%;}
+.ptable tbody td{padding:10px 12px;border-bottom:0.5px solid var(--border);vertical-align:top;font-size:12px;color:var(--text2);}
+.ptable tbody tr:last-child td{border-bottom:none;}
+.ptable tbody td:not(:first-child){text-align:center;}
+.tier-name{font-weight:600;font-size:13px;color:var(--text);margin-bottom:2px;}
+.tier-tag{font-size:10px;padding:2px 7px;border-radius:20px;display:inline-block;margin-top:3px;font-weight:500;}
+.tt-free{background:var(--gray-50);color:var(--gray-800);}
+.tt-entry{background:var(--blue-50);color:var(--blue-800);}
+.tt-core{background:var(--teal-50);color:var(--teal-800);}
+.tt-flag{background:var(--purple-50);color:var(--purple-800);}
+.tt-ent{background:var(--amber-50);color:var(--amber-800);}
+.price{font-size:14px;font-weight:600;color:var(--text);}
+.price-sub{font-size:10px;color:var(--text3);margin-top:1px;}
+.p-free{color:var(--teal-400);font-size:13px;font-weight:600;}
+.p-custom{font-size:12px;font-weight:500;color:var(--text3);}
+.feat-list{list-style:none;text-align:left;}
+.feat-list li{font-size:11px;color:var(--text2);padding:2px 0;display:flex;gap:5px;align-items:flex-start;}
+.feat-list li::before{content:'·';color:var(--text3);flex-shrink:0;}
+.feat-list li.bold{color:var(--text);font-weight:500;}
+.feat-list li.bold::before{content:'✦';color:var(--teal-400);font-size:9px;margin-top:2px;}
+.check{color:var(--teal-400);font-size:14px;}
+.dash{color:var(--gray-100);font-size:14px;}
+.partial{color:var(--amber-600);font-size:11px;font-weight:500;}
+.row-hl td{background:var(--blue-50);}
+.row-hl-t td{background:var(--teal-50);}
+.row-hl-p td{background:var(--purple-50);}
+
+/* Comparison summary */
+.compare-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
+.cg-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px;}
+.cg-title{font-size:12px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.cg-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.icon-p{background:var(--teal-50);color:var(--teal-800);}
+.icon-u{background:var(--blue-50);color:var(--blue-800);}
+.score-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px;}
+.score-label{color:var(--text2);min-width:110px;}
+.score-bar{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.score-fill{height:100%;border-radius:3px;}
+.sf-high{background:var(--teal-400);}
+.sf-med{background:var(--amber-100);}
+.sf-low{background:var(--red-100);}
+.score-val{font-size:10px;font-weight:600;min-width:24px;text-align:right;}
+.sv-high{color:var(--teal-600);}
+.sv-med{color:var(--amber-600);}
+.sv-low{color:var(--red-600);}
+
+/* Pro con */
+.pro-con-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.pc-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:12px;}
+.pc-title{font-size:11px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.pc-list li{font-size:11px;color:var(--text2);display:flex;gap:6px;align-items:flex-start;}
+.pc-pro::before{content:'+';color:var(--teal-400);font-weight:700;flex-shrink:0;}
+.pc-con::before{content:'–';color:var(--red-600);font-weight:700;flex-shrink:0;}
+
+/* Decision helper */
+.decision-table{width:100%;border-collapse:collapse;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:24px;}
+.decision-table th{padding:9px 12px;background:var(--bg3);border-bottom:0.5px solid var(--border2);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);text-align:left;}
+.decision-table td{padding:9px 12px;border-bottom:0.5px solid var(--border);font-size:12px;vertical-align:middle;}
+.decision-table tr:last-child td{border-bottom:none;}
+.winner-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.wb-a{background:var(--blue-50);color:var(--blue-800);}
+.wb-b{background:var(--teal-50);color:var(--teal-800);}
+.wb-c{background:var(--purple-50);color:var(--purple-800);}
+
+/* Divider */
+.divider{height:0.5px;background:var(--border);margin:20px 0;}
+
+/* Notes */
+.fn{font-size:10px;color:var(--text3);margin-top:32px;padding-top:12px;border-bottom-top:0.5px solid var(--border);}
+
+/* Strategy comparison final table */
+.final-rec{background:var(--teal-50);border:1.5px solid var(--teal-400);border-radius:var(--rl);padding:14px 18px;margin-bottom:20px;}
+.fr-title{font-size:14px;font-weight:600;color:var(--teal-800);margin-bottom:6px;}
+.fr-text{font-size:12px;color:var(--teal-800);line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- Header -->
+<div class="dh">
+  <div class="label">Product Strategy · Internal · Draft v1.0</div>
+  <h1>CASDOO — 3 Portfolio Options</h1>
+  <div class="sub">3 cách đóng gói khác nhau cho cùng 4 modules · Phân tích cho Partner và End User · Để ra quyết định</div>
+  <div class="meta">
+    <span><strong>4 modules:</strong> M1 Bank Sync · M2 GDT Invoice Pull · M3 Payout · M4 E-Invoice Issuance</span>
+    <span><strong>2 segments:</strong> Odoo Partners (24–27) · End Users (CFO / kế toán trưởng)</span>
+    <span><strong>Benchmark:</strong> WISPACE portfolio model</span>
+  </div>
+</div>
+
+<!-- Strategy tabs -->
+<div class="strategy-tabs">
+  <div class="stab active-a" onclick="show('a')">
+    <div class="stab-num">Option A</div>
+    <div class="stab-title">Feature Ladder</div>
+    <div class="stab-sub">Bán theo tính năng, khách tự chọn module → bundle → suite</div>
+    <div class="stab-logic la-a">Logic: "Tôi cần tính năng X"</div>
+  </div>
+  <div class="stab" onclick="show('b')">
+    <div class="stab-num">Option B</div>
+    <div class="stab-title">Pain Solver</div>
+    <div class="stab-sub">Đóng gói theo vấn đề (G1/G2), không phải tính năng</div>
+    <div class="stab-logic la-b">Logic: "Tôi đau bài toán X"</div>
+  </div>
+  <div class="stab" onclick="show('c')">
+    <div class="stab-num">Option C</div>
+    <div class="stab-title">Maturity Journey</div>
+    <div class="stab-sub">Khách tiến qua các giai đoạn trưởng thành tài chính</div>
+    <div class="stab-logic la-c">Logic: "Tôi đang ở giai đoạn X"</div>
+  </div>
+</div>
+
+<!-- ================= OPTION A ================= -->
+<div class="portfolio-block show" id="block-a">
+  <div class="callout cl-blue">
+    <strong>Chiến lược A — Feature Ladder:</strong> Khách mua theo tính năng cụ thể họ cần. Entry point thấp (mua 1 module), path tự nhiên lên bundle → full suite. Phù hợp khi partner/customer đã biết rõ họ thiếu gì (bank sync hoặc e-invoice). Dễ giải thích, dễ quote, dễ so sánh với đối thủ.
+  </div>
+
+  <div class="channel-tabs">
+    <div class="ctab active" onclick="switchChannel('a','partner')">👥 Kênh Partner (Wholesale)</div>
+    <div class="ctab" onclick="switchChannel('a','user')">🏢 Kênh End User (Direct)</div>
+  </div>
+
+  <!-- Partner view -->
+  <div id="a-partner" class="ptable-wrap">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th style="width:24%">Sản phẩm / Tier</th>
+          <th>Mô tả</th>
+          <th>Tính năng chính</th>
+          <th>Mô hình giá Partner</th>
+          <th>Giá list</th>
+          <th>Giá wholesale (−30%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tier-name">Dev Sandbox</div><span class="tier-tag tt-free">Miễn phí</span></td>
+          <td>Môi trường test đầy đủ tính năng cho partner tích hợp & demo khách</td>
+          <td><ul class="feat-list"><li>Tất cả 4 modules</li><li>100 test events/ngày</li><li>Không có production key</li></ul></td>
+          <td>Miễn phí vĩnh viễn — 1 sandbox/partner</td>
+          <td class="p-free">Free</td>
+          <td class="p-free">Free</td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">M1 — Bank Sync</div><span class="tier-tag tt-entry">Module lẻ</span></td>
+          <td>Đồng bộ sao kê NH tự động vào Odoo journal</td>
+          <td><ul class="feat-list"><li>Pull sao kê 30 phút/lần</li><li>MB, VietinBank, OCB +10 NH</li><li class="bold">API access</li></ul></td>
+          <td>Per-key annual license · Mua lẻ hoặc batch</td>
+          <td><div class="price">990K–9.9M</div><div class="price-sub">Starter → Business/năm</div></td>
+          <td><div class="price">693K–6.93M</div><div class="price-sub">−30% wholesale</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">M2 — GDT Connector</div><span class="tier-tag tt-entry">Module lẻ</span></td>
+          <td>Kéo HĐ đầu vào từ cổng thuế GDT → Vendor Bill Odoo</td>
+          <td><ul class="feat-list"><li>Auto-match Vendor Bill</li><li>Cảnh báo sót HĐ</li><li>1K–20K HĐ/năm</li></ul></td>
+          <td>Per-key annual license</td>
+          <td><div class="price">690K–7.49M</div><div class="price-sub">Starter → Business/năm</div></td>
+          <td><div class="price">483K–5.24M</div><div class="price-sub">−30% wholesale</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">M3 — Payout</div><span class="tier-tag tt-entry">Module lẻ</span></td>
+          <td>Khởi lệnh chi từ Odoo AP, phê duyệt 1-click</td>
+          <td><ul class="feat-list"><li>Approval workflow</li><li>Bulk payment</li><li>600–12K lệnh/năm</li></ul></td>
+          <td>Per-key annual license</td>
+          <td><div class="price">890K–9.99M</div><div class="price-sub">Starter → Business/năm</div></td>
+          <td><div class="price">623K–6.99M</div><div class="price-sub">−30% wholesale</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">M4 — E-Invoice</div><span class="tier-tag tt-entry">Module lẻ</span></td>
+          <td>Phát hành HĐ điện tử qua TVAN trực tiếp từ Odoo</td>
+          <td><ul class="feat-list"><li>TVAN kết nối trực tiếp GDT</li><li>HSM chữ ký số (từ Pro)</li><li>500–10K HĐ/năm all-in</li></ul></td>
+          <td>Per-key annual license</td>
+          <td><div class="price">690K–4.99M</div><div class="price-sub">Starter → Business/năm</div></td>
+          <td><div class="price">483K–3.49M</div><div class="price-sub">−30% wholesale</div></td>
+        </tr>
+        <tr class="row-hl">
+          <td><div class="tier-name">Bundle A — Sync</div><span class="tier-tag tt-core">Bundle ⭐</span></td>
+          <td>M1 + M2 — Tự động hoá đồng bộ toàn bộ dữ liệu tài chính đầu vào</td>
+          <td><ul class="feat-list"><li class="bold">Bank sync + GDT pull cùng 1 key</li><li>Tiết kiệm 15–17% vs mua lẻ</li><li>Sweet spot SME đang audit</li></ul></td>
+          <td>Per-key annual · Volume discount từ batch ≥5</td>
+          <td><div class="price">1.39M–14.5M</div><div class="price-sub">Starter → Business/năm</div></td>
+          <td><div class="price">973K–10.15M</div><div class="price-sub">−30% wholesale</div></td>
+        </tr>
+        <tr class="row-hl-t">
+          <td><div class="tier-name">Bundle B — Execute</div><span class="tier-tag tt-core">Bundle ⭐</span></td>
+          <td>M3 + M4 — Tự động hoá thực thi: chi tiền + phát hành HĐ</td>
+          <td><ul class="feat-list"><li class="bold">Payout + E-invoice cùng 1 key</li><li>Tiết kiệm 14–18% vs mua lẻ</li><li>Compliance-ready</li></ul></td>
+          <td>Per-key annual · Volume discount từ batch ≥5</td>
+          <td><div class="price">1.29M–12.9M</div><div class="price-sub">Starter → Business/năm</div></td>
+          <td><div class="price">903K–9.03M</div><div class="price-sub">−30% wholesale</div></td>
+        </tr>
+        <tr class="row-hl-p">
+          <td><div class="tier-name">Full Suite A+B</div><span class="tier-tag tt-flag">Flagship</span></td>
+          <td>M1+M2+M3+M4 — Vietnam Finance Automation Pack. Giải trọn G1+G2</td>
+          <td><ul class="feat-list"><li class="bold">4 modules trong 1 key</li><li>Tiết kiệm 9–11% vs A+B</li><li>SLA + dedicated support</li><li class="bold">Compliance & Audit Pack option</li></ul></td>
+          <td>Per-key annual · Custom cho batch ≥10</td>
+          <td><div class="price">2.39M–24.9M</div><div class="price-sub">Starter → Business/năm</div></td>
+          <td><div class="price">1.67M–17.43M</div><div class="price-sub">−30% wholesale</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">Enterprise OEM</div><span class="tier-tag tt-ent">Custom</span></td>
+          <td>White-label API namespace, partner rebrand dưới tên riêng</td>
+          <td><ul class="feat-list"><li>Custom API domain</li><li>Unlimited events</li><li>SLA 99.9%</li><li>Dedicated onboarding</li></ul></td>
+          <td>Monthly retainer · Negotiated</td>
+          <td class="p-custom">Từ 25M/tháng</td>
+          <td class="p-custom">Custom</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- End User view -->
+  <div id="a-user" class="ptable-wrap" style="display:none">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th style="width:22%">Sản phẩm / Tier</th>
+          <th>Mô tả</th>
+          <th>Lợi ích với kế toán</th>
+          <th>Mô hình giá</th>
+          <th>Giá Direct</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tier-name">Free Trial</div><span class="tier-tag tt-free">Phễu chuyển đổi</span></td>
+          <td>Trải nghiệm thử 30 ngày đầy đủ tính năng Bundle A Starter</td>
+          <td><ul class="feat-list"><li>Xem ngay 360 giao dịch bank sync</li><li>Kéo thử 50 HĐ từ GDT</li><li>Không cần thẻ tín dụng</li></ul></td>
+          <td>Miễn phí 30 ngày · Sau đó convert hoặc expire</td>
+          <td class="p-free">Free 30 ngày</td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">Bank Sync Only</div><span class="tier-tag tt-entry">Entry</span></td>
+          <td>Chỉ đồng bộ sao kê ngân hàng — cho doanh nghiệp chưa cần e-invoice</td>
+          <td><ul class="feat-list"><li>Hết nhập tay sao kê buổi sáng</li><li>Dashboard dòng tiền realtime</li><li>3.000–60.000 GD/năm</li></ul></td>
+          <td>Annual subscription</td>
+          <td><div class="price">990K–9.9M/năm</div><div class="price-sub">82K–825K/tháng</div></td>
+        </tr>
+        <tr class="row-hl">
+          <td><div class="tier-name">Bundle A — Data Sync</div><span class="tier-tag tt-core">Popular ⭐</span></td>
+          <td>Đồng bộ cả sao kê NH lẫn HĐ đầu vào từ GDT</td>
+          <td><ul class="feat-list"><li class="bold">Không bao giờ sót HĐ mua vào</li><li class="bold">Đối chiếu VAT đầu vào tự động</li><li>Sao kê khớp GDT mọi lúc</li></ul></td>
+          <td>Annual subscription · Tiết kiệm vs mua lẻ 15–17%</td>
+          <td><div class="price">1.39M–14.5M/năm</div><div class="price-sub">116K–1.21M/tháng</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">Bundle B — Execute</div><span class="tier-tag tt-core">Action-takers</span></td>
+          <td>Phát hành HĐ điện tử và lập lệnh chi từ Odoo</td>
+          <td><ul class="feat-list"><li class="bold">Không mở thêm phần mềm HĐ</li><li class="bold">Duyệt lệnh chi 1-click</li><li>Compliance TVAN trực tiếp GDT</li></ul></td>
+          <td>Annual subscription</td>
+          <td><div class="price">1.29M–12.9M/năm</div></td>
+        </tr>
+        <tr class="row-hl-p">
+          <td><div class="tier-name">Full Suite A+B</div><span class="tier-tag tt-flag">Flagship</span></td>
+          <td>Giải trọn G1 + G2 — kế toán không phải dùng thêm phần mềm nào khác</td>
+          <td><ul class="feat-list"><li class="bold">Tiết kiệm 7.17M/năm vs mua riêng lẻ</li><li class="bold">1 dashboard cho tất cả</li><li>Compliance & Audit Pack option</li></ul></td>
+          <td>Annual subscription · Cam kết năm được giảm thêm</td>
+          <td><div class="price">2.39M–24.9M/năm</div><div class="price-sub">199K–2.08M/tháng</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">+ Compliance Pack</div><span class="tier-tag tt-ent">Upsell</span></td>
+          <td>Add-on cho Full Suite: audit log, báo cáo đối soát GDT, xuất TT133/200</td>
+          <td><ul class="feat-list"><li>Audit log có annotation</li><li>Báo cáo VAT đối soát cuối kỳ</li><li>Xuất chuẩn TT133/TT200</li></ul></td>
+          <td>+20% giá Full Suite</td>
+          <td><div class="price">+20% của plan</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pro-con-grid">
+    <div class="pc-card"><div class="pc-title" style="color:var(--teal-600)">✦ Ưu điểm Option A</div><ul class="pc-list"><li class="pc-pro">Dễ giải thích — khách hiểu ngay mua gì</li><li class="pc-pro">Barrier to entry thấp nhất (chỉ mua 1 module)</li><li class="pc-pro">Partner dễ quote vào proposal</li><li class="pc-pro">So sánh giá với Viettel/MISA theo từng lớp</li><li class="pc-pro">Upsell path rõ ràng: module → bundle → suite</li></ul></div>
+    <div class="pc-card"><div class="pc-title" style="color:var(--red-600)">✦ Nhược điểm Option A</div><ul class="pc-list"><li class="pc-con">Khách mua 1 module → trải nghiệm không đủ → churn cao</li><li class="pc-con">ACV thấp khi partner chỉ push module lẻ</li><li class="pc-con">Nhiều SKU → catalog phức tạp</li><li class="pc-con">Dễ bị "feature comparison" với đối thủ đơn lẻ</li></ul></div>
+  </div>
+</div>
+
+<!-- ================= OPTION B ================= -->
+<div class="portfolio-block" id="block-b">
+  <div class="callout cl-teal">
+    <strong>Chiến lược B — Pain Solver:</strong> Đóng gói theo bài toán, không phải tính năng. Thay vì nói "Module M1 + M2", nói "Sync Pack — không bao giờ sót dữ liệu tài chính nữa". Khách mua vì họ nhận ra vấn đề của mình, không phải vì họ hiểu kỹ thuật. ACV cao hơn A vì mỗi "pack" solve một pain hoàn chỉnh.
+  </div>
+
+  <div class="channel-tabs">
+    <div class="ctab active" onclick="switchChannel('b','partner')">👥 Kênh Partner (Wholesale)</div>
+    <div class="ctab" onclick="switchChannel('b','user')">🏢 Kênh End User (Direct)</div>
+  </div>
+
+  <div id="b-partner" class="ptable-wrap">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th style="width:22%">Sản phẩm</th>
+          <th>Bài toán giải quyết</th>
+          <th>Bao gồm</th>
+          <th>Mô hình giá Partner</th>
+          <th>Giá list</th>
+          <th>Wholesale (−30%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tier-name">Free Diagnostic</div><span class="tier-tag tt-free">Phễu partner</span></td>
+          <td><strong>"Odoo của bạn đang mất bao nhiêu giờ/tháng vì thiếu automation?"</strong> — công cụ demo cho partner pitch</td>
+          <td><ul class="feat-list"><li>Demo tool: tính ROI tự động</li><li>Test sync 360 GD bank</li><li>Test kéo 50 HĐ GDT</li></ul></td>
+          <td>Miễn phí cho mọi partner đăng ký</td>
+          <td class="p-free">Free</td>
+          <td class="p-free">Free</td>
+        </tr>
+        <tr class="row-hl">
+          <td><div class="tier-name">📥 Sync Pack</div><span class="tier-tag tt-entry">Giải G1 + đầu vào G2</span></td>
+          <td><em>"Không bao giờ nhập tay sao kê, không bao giờ sót hóa đơn mua vào"</em></td>
+          <td><ul class="feat-list"><li class="bold">M1 Bank Sync (3K–60K GD)</li><li class="bold">M2 GDT Invoice Pull (1K–20K HĐ)</li><li>Dashboard dòng tiền</li><li>VAT đầu vào tự đối chiếu</li></ul></td>
+          <td>Annual license key · Batch từ ≥5</td>
+          <td><div class="price">1.39M–14.5M/năm</div></td>
+          <td><div class="price">973K–10.15M/năm</div></td>
+        </tr>
+        <tr class="row-hl-t">
+          <td><div class="tier-name">📤 Action Pack</div><span class="tier-tag tt-core">Giải đầu ra G1+G2</span></td>
+          <td><em>"Duyệt chi và phát hành hóa đơn mà không cần rời Odoo"</em></td>
+          <td><ul class="feat-list"><li class="bold">M3 Payout (600–12K lệnh)</li><li class="bold">M4 E-Invoice TVAN (500–10K HĐ)</li><li>Approval workflow</li><li>Compliance TVAN trực tiếp</li></ul></td>
+          <td>Annual license key</td>
+          <td><div class="price">1.29M–12.9M/năm</div></td>
+          <td><div class="price">903K–9.03M/năm</div></td>
+        </tr>
+        <tr class="row-hl-p">
+          <td><div class="tier-name">🔄 Finance OS Pack</div><span class="tier-tag tt-flag">Flagship — Giải G1+G2 hoàn toàn</span></td>
+          <td><em>"Kế toán chạy tự động — không cần phần mềm nào khác ngoài Odoo"</em></td>
+          <td><ul class="feat-list"><li class="bold">Sync Pack + Action Pack</li><li class="bold">Tiết kiệm 9–11% vs mua riêng</li><li>Compliance & Audit add-on</li><li>SLA + dedicated support</li></ul></td>
+          <td>Annual license key · Flagship deal</td>
+          <td><div class="price">2.39M–24.9M/năm</div></td>
+          <td><div class="price">1.67M–17.43M/năm</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">🏛 Enterprise OEM</div><span class="tier-tag tt-ent">White-label</span></td>
+          <td><em>"Partner muốn rebrand thành sản phẩm của chính họ"</em></td>
+          <td><ul class="feat-list"><li>API namespace riêng</li><li>Custom domain</li><li>Unlimited events</li></ul></td>
+          <td>Monthly retainer</td>
+          <td class="p-custom">Từ 25M/tháng</td>
+          <td class="p-custom">Custom</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="b-user" class="ptable-wrap" style="display:none">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th style="width:22%">Sản phẩm</th>
+          <th>Tôi đang đau bài toán gì?</th>
+          <th>Sau khi dùng</th>
+          <th>Mô hình giá</th>
+          <th>Giá Direct</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tier-name">Free Trial 30 ngày</div><span class="tier-tag tt-free">Trải nghiệm Sync Pack</span></td>
+          <td>"Tôi chưa chắc CASSO có giải được vấn đề của mình không"</td>
+          <td><ul class="feat-list"><li>Bank sync 30 ngày thử</li><li>Kéo HĐ GDT 50 cái thử</li><li>Không cần thẻ</li></ul></td>
+          <td>Free 30 ngày</td>
+          <td class="p-free">Free</td>
+        </tr>
+        <tr class="row-hl">
+          <td><div class="tier-name">📥 Sync Pack</div><span class="tier-tag tt-entry">Starter · Popular</span></td>
+          <td>"Tôi mất 2–3 giờ/tháng nhập tay sao kê và hay bị sót HĐ mua vào khi quyết toán"</td>
+          <td><ul class="feat-list"><li class="bold">Buổi sáng mở Odoo — sao kê đã có đủ</li><li class="bold">Không bao giờ sót HĐ VAT đầu vào</li><li>Đối chiếu GDT tự động</li></ul></td>
+          <td>Annual · Tiết kiệm 15% vs mua lẻ M1+M2</td>
+          <td><div class="price">1.39M–14.5M/năm</div><div class="price-sub">116K–1.21M/tháng</div></td>
+        </tr>
+        <tr class="row-hl-t">
+          <td><div class="tier-name">📤 Action Pack</div><span class="tier-tag tt-core">Compliance-first</span></td>
+          <td>"Tôi phải mở thêm phần mềm HĐ điện tử riêng, và duyệt lệnh chi qua internet banking rất mất thời gian"</td>
+          <td><ul class="feat-list"><li class="bold">Phát HĐ điện tử ngay từ Odoo</li><li class="bold">Duyệt lệnh chi 1-click trong AP</li><li>HĐ qua TVAN — GDT nhận ngay</li></ul></td>
+          <td>Annual</td>
+          <td><div class="price">1.29M–12.9M/năm</div></td>
+        </tr>
+        <tr class="row-hl-p">
+          <td><div class="tier-name">🔄 Finance OS Pack</div><span class="tier-tag tt-flag">Best value</span></td>
+          <td>"Tôi muốn kế toán tự động hoàn toàn — không dùng thêm phần mềm nào khác ngoài Odoo"</td>
+          <td><ul class="feat-list"><li class="bold">Tiết kiệm 7.17M/năm vs mua riêng lẻ từng tool</li><li class="bold">1 nơi quản lý tài chính tự động</li><li>Sẵn sàng kiểm toán bất kỳ lúc nào</li></ul></td>
+          <td>Annual · Cam kết 12 tháng</td>
+          <td><div class="price">2.39M–24.9M/năm</div></td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">+ Audit Shield</div><span class="tier-tag tt-ent">Add-on upsell</span></td>
+          <td>"Tôi sắp bị kiểm toán / cần báo cáo tài chính theo chuẩn TT133/TT200"</td>
+          <td><ul class="feat-list"><li>Audit log đầy đủ</li><li>Báo cáo đối soát GDT</li><li>Xuất file TT133/TT200</li></ul></td>
+          <td>Add-on +20% plan fee</td>
+          <td><div class="price">+20% plan</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pro-con-grid">
+    <div class="pc-card"><div class="pc-title" style="color:var(--teal-600)">✦ Ưu điểm Option B</div><ul class="pc-list"><li class="pc-pro">Pitch rõ theo pain — CFO hiểu ngay không cần giải thích kỹ thuật</li><li class="pc-pro">ACV cao hơn A: khó "mua 1 module" vì pack nhỏ nhất đã là 2 modules</li><li class="pc-pro">Khó bị compare trực tiếp với Viettel hay MISA (họ chỉ solve 1 pain)</li><li class="pc-pro">Phù hợp với demand-gen strategy: content marketing theo pain</li><li class="pc-pro">Partner dễ pitch hơn: "Pack này giải bài toán XYZ của khách bạn"</li></ul></div>
+    <div class="pc-card"><div class="pc-title" style="color:var(--red-600)">✦ Nhược điểm Option B</div><ul class="pc-list"><li class="pc-con">Không có gói riêng lẻ → một số khách chỉ cần 1 module sẽ thấy "đắt hơn cần"</li><li class="pc-con">Naming cần giải thích (Sync Pack, Action Pack không self-explanatory với mọi người)</li><li class="pc-con">Partner quen quote từng module riêng có thể thấy lạ</li></ul></div>
+  </div>
+</div>
+
+<!-- ================= OPTION C ================= -->
+<div class="portfolio-block" id="block-c">
+  <div class="callout cl-purple">
+    <strong>Chiến lược C — Maturity Journey:</strong> Khách tiến qua 4 giai đoạn trưởng thành tài chính. Mỗi giai đoạn unlock thêm automation. Tương tự WISPACE's Free → Starter → Fighter → AI Tutor. Tạo ra "journey" rõ ràng, upsell tự nhiên. Phù hợp khi muốn build long-term customer relationship, không chỉ sell license.
+  </div>
+
+  <div class="channel-tabs">
+    <div class="ctab active" onclick="switchChannel('c','partner')">👥 Kênh Partner (Wholesale)</div>
+    <div class="ctab" onclick="switchChannel('c','user')">🏢 Kênh End User (Direct)</div>
+  </div>
+
+  <div id="c-partner" class="ptable-wrap">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th style="width:22%">Giai đoạn</th>
+          <th>Định nghĩa giai đoạn</th>
+          <th>Tính năng unlock</th>
+          <th>Mô hình giá Partner</th>
+          <th>Giá list</th>
+          <th>Wholesale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tier-name">👁 Observe</div><span class="tier-tag tt-free">Giai đoạn 0</span><div style="font-size:10px;color:var(--text3);margin-top:3px">"Thấy ngay khoảng trống"</div></td>
+          <td>Partner dùng để chẩn đoán gap cho khách trước khi propose</td>
+          <td><ul class="feat-list"><li>ROI calculator tool</li><li>360 GD bank thử 30 ngày</li><li>50 HĐ GDT thử</li><li>Gap report tự động</li></ul></td>
+          <td>Miễn phí vĩnh viễn cho partner</td>
+          <td class="p-free">Free</td>
+          <td class="p-free">Free</td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">🔗 Connect</div><span class="tier-tag tt-entry">Giai đoạn 1</span><div style="font-size:10px;color:var(--text3);margin-top:3px">"Kết nối ngân hàng"</div></td>
+          <td>"Bước đầu tiên: dừng nhập tay sao kê" — entry point thấp nhất</td>
+          <td><ul class="feat-list"><li class="bold">M1 Bank Sync (3K–12K GD)</li><li>Dashboard dòng tiền</li><li>Webhook alert biến động</li></ul></td>
+          <td>Per-key annual</td>
+          <td><div class="price">990K–2.9M/năm</div></td>
+          <td><div class="price">693K–2.03M/năm</div></td>
+        </tr>
+        <tr class="row-hl">
+          <td><div class="tier-name">📊 Streamline</div><span class="tier-tag tt-core">Giai đoạn 2 ⭐</span><div style="font-size:10px;color:var(--text3);margin-top:3px">"Dữ liệu tự chạy"</div></td>
+          <td>"Mọi dữ liệu tài chính vào Odoo tự động — không cần chạm tay" — sweet spot SME</td>
+          <td><ul class="feat-list"><li class="bold">M1 Bank Sync (đầy đủ)</li><li class="bold">M2 GDT Invoice Pull</li><li>VAT tự đối chiếu</li><li>Progress dashboard</li></ul></td>
+          <td>Per-key annual · Upgrade path từ Connect</td>
+          <td><div class="price">1.39M–14.5M/năm</div></td>
+          <td><div class="price">973K–10.15M/năm</div></td>
+        </tr>
+        <tr class="row-hl-t">
+          <td><div class="tier-name">⚡ Execute</div><span class="tier-tag tt-core">Giai đoạn 3</span><div style="font-size:10px;color:var(--text3);margin-top:3px">"Hành động từ Odoo"</div></td>
+          <td>"Không chỉ nhìn — còn thực thi: chi tiền và phát hành HĐ ngay trong Odoo"</td>
+          <td><ul class="feat-list"><li class="bold">Streamline + (M3 Payout)</li><li class="bold">+ (M4 E-Invoice TVAN)</li><li>Approval workflow</li><li>Compliance-ready</li></ul></td>
+          <td>Per-key annual</td>
+          <td><div class="price">2.39M–24.9M/năm</div></td>
+          <td><div class="price">1.67M–17.43M/năm</div></td>
+        </tr>
+        <tr class="row-hl-p">
+          <td><div class="tier-name">🏆 Command</div><span class="tier-tag tt-flag">Giai đoạn 4 — Flagship</span><div style="font-size:10px;color:var(--text3);margin-top:3px">"Tài chính tự vận hành"</div></td>
+          <td>"Kế toán chỉ xác nhận — mọi thứ đã tự chạy. Sẵn sàng kiểm toán bất kỳ lúc nào."</td>
+          <td><ul class="feat-list"><li class="bold">Execute + Audit Shield</li><li>Audit log đầy đủ</li><li>TT133/TT200 report</li><li>SLA 99.9% + dedicated support</li><li>Zalo alert (roadmap)</li></ul></td>
+          <td>Annual · Custom cho Enterprise</td>
+          <td><div class="price">2.87M–29.9M/năm</div><div class="price-sub">Execute + Audit Shield +20%</div></td>
+          <td><div class="price">2.01M–20.93M/năm</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="c-user" class="ptable-wrap" style="display:none">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th style="width:22%">Giai đoạn tôi đang ở</th>
+          <th>Mô tả hành trình</th>
+          <th>Tôi nhận được gì</th>
+          <th>Mô hình giá</th>
+          <th>Giá Direct</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tier-name">👁 Observe — Free</div><span class="tier-tag tt-free">"Tôi chưa biết mình cần gì"</span></td>
+          <td>Xem Odoo của bạn đang "rò rỉ" bao nhiêu thời gian vào các việc thủ công</td>
+          <td><ul class="feat-list"><li>Bank sync thử 30 ngày</li><li>Gap report tự động</li><li>ROI ước tính</li></ul></td>
+          <td>Free 30 ngày</td>
+          <td class="p-free">Free</td>
+        </tr>
+        <tr>
+          <td><div class="tier-name">🔗 Connect</div><span class="tier-tag tt-entry">"Tôi ghét nhập tay sao kê"</span></td>
+          <td>Bước đầu tiên: kết nối ngân hàng. Không cần làm gì thêm.</td>
+          <td><ul class="feat-list"><li class="bold">Sao kê tự vào Odoo mỗi 30 phút</li><li>Dashboard dòng tiền realtime</li></ul></td>
+          <td>Annual · Upgrade bất cứ lúc nào</td>
+          <td><div class="price">990K–2.9M/năm</div></td>
+        </tr>
+        <tr class="row-hl">
+          <td><div class="tier-name">📊 Streamline ⭐</div><span class="tier-tag tt-core">"Tôi muốn dữ liệu tự chạy"</span></td>
+          <td>Mọi dữ liệu tài chính — cả ngân hàng lẫn hóa đơn — tự vào Odoo. Không cần chạm tay.</td>
+          <td><ul class="feat-list"><li class="bold">Bank sync + GDT sync</li><li class="bold">Không bao giờ sót HĐ đầu vào</li><li>VAT đối chiếu tự động</li></ul></td>
+          <td>Annual · Most popular plan</td>
+          <td><div class="price">1.39M–14.5M/năm</div></td>
+        </tr>
+        <tr class="row-hl-t">
+          <td><div class="tier-name">⚡ Execute</div><span class="tier-tag tt-core">"Tôi muốn thực thi từ Odoo"</span></td>
+          <td>Không chỉ nhìn — còn hành động: duyệt chi và phát hóa đơn ngay trong Odoo.</td>
+          <td><ul class="feat-list"><li class="bold">Streamline + Payout + E-Invoice</li><li>Duyệt lệnh chi 1-click</li><li>HĐ điện tử TVAN trực tiếp GDT</li></ul></td>
+          <td>Annual</td>
+          <td><div class="price">2.39M–24.9M/năm</div></td>
+        </tr>
+        <tr class="row-hl-p">
+          <td><div class="tier-name">🏆 Command</div><span class="tier-tag tt-flag">"Tôi cần sẵn sàng kiểm toán"</span></td>
+          <td>Kế toán tự động hoàn toàn. Mọi thứ được ghi lại. Sẵn sàng cho audit bất kỳ lúc nào.</td>
+          <td><ul class="feat-list"><li class="bold">Execute + Audit Shield</li><li class="bold">TT133/TT200 tự xuất</li><li>SLA + dedicated support</li></ul></td>
+          <td>Annual flagship</td>
+          <td><div class="price">2.87M–29.9M/năm</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pro-con-grid">
+    <div class="pc-card"><div class="pc-title" style="color:var(--teal-600)">✦ Ưu điểm Option C</div><ul class="pc-list"><li class="pc-pro">Upsell tự nhiên nhất — khách thấy "giai đoạn tiếp theo" của mình</li><li class="pc-pro">Long-term retention cao nhất vì tạo "hành trình"</li><li class="pc-pro">ACV growth theo thời gian (upgrade từ Connect → Command)</li><li class="pc-pro">Phù hợp để build content marketing: "Bạn đang ở giai đoạn mấy?"</li><li class="pc-pro">Tương tự WISPACE — có model thực tế chứng minh</li></ul></div>
+    <div class="pc-card"><div class="pc-title" style="color:var(--red-600)">✦ Nhược điểm Option C</div><ul class="pc-list"><li class="pc-con">Phức tạp nhất để giải thích cho partner — họ quen sell "tính năng"</li><li class="pc-con">Giai đoạn "Connect" (M1 only) có ACV rất thấp — rủi ro churn trước khi upsell</li><li class="pc-con">Cần đầu tư nhiều vào onboarding & education journey</li><li class="pc-con">Partner có thể bỏ qua giai đoạn — không nhất thiết phải đi theo đúng path</li></ul></div>
+  </div>
+</div>
+
+<!-- Decision matrix -->
+<div style="margin-top:32px;padding-top:24px;border-top:1.5px solid var(--border2);">
+  <div class="sec-hd">
+    <div class="sec-dot" style="background:var(--text)"></div>
+    <h2>Ma trận quyết định <span class="sc">— Chọn Option nào?</span></h2>
+  </div>
+
+  <table class="decision-table">
+    <thead>
+      <tr>
+        <th style="width:26%">Tiêu chí quyết định</th>
+        <th style="width:24%">Option A — Feature Ladder</th>
+        <th style="width:24%">Option B — Pain Solver</th>
+        <th style="width:26%">Option C — Maturity Journey</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Partner dễ sell nhất</strong></td>
+        <td><span class="winner-badge wb-a">Winner</span> — Quen với catalog tính năng</td>
+        <td>Tốt — pitch theo pain</td>
+        <td>Khó nhất — phải educate partner trước</td>
+      </tr>
+      <tr>
+        <td><strong>End User dễ hiểu nhất</strong></td>
+        <td>OK — nhưng phải tự biết mình cần gì</td>
+        <td><span class="winner-badge wb-b">Winner</span> — Nhận ra pain ngay lập tức</td>
+        <td>Tốt — ai cũng biết mình đang ở đâu</td>
+      </tr>
+      <tr>
+        <td><strong>ACV cao nhất (năm 1)</strong></td>
+        <td>Thấp — dễ chỉ mua 1 module</td>
+        <td><span class="winner-badge wb-b">Winner</span> — Pack nhỏ nhất = 2 modules</td>
+        <td>Trung bình — Connect rất thấp</td>
+      </tr>
+      <tr>
+        <td><strong>Long-term retention</strong></td>
+        <td>Trung bình</td>
+        <td>Cao</td>
+        <td><span class="winner-badge wb-c">Winner</span> — Journey tạo lock-in</td>
+      </tr>
+      <tr>
+        <td><strong>Phù hợp validate với 24 partners</strong></td>
+        <td><span class="winner-badge wb-a">Winner</span> — Dễ test pricing từng module</td>
+        <td>Tốt — validate pain hypothesis</td>
+        <td>Khó — cần thời gian observe journey</td>
+      </tr>
+      <tr>
+        <td><strong>Build effort MVP</strong></td>
+        <td><span class="winner-badge wb-a">Thấp nhất</span> — SKU đơn giản</td>
+        <td>Trung bình — cần rename + repackage</td>
+        <td>Cao nhất — cần onboarding flow + journey tracking</td>
+      </tr>
+      <tr>
+        <td><strong>Phù hợp pitch Odoo HK</strong></td>
+        <td>OK</td>
+        <td><span class="winner-badge wb-b">Winner</span> — Pain narrative mạnh hơn</td>
+        <td>Tốt — journey = ecosystem play</td>
+      </tr>
+      <tr>
+        <td><strong>Phòng thủ vs đối thủ</strong></td>
+        <td>Yếu nhất — bị compare trực tiếp</td>
+        <td><span class="winner-badge wb-b">Winner</span> — Không ai solve đủ cả 2 pain</td>
+        <td>Tốt — journey khó replicate</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="final-rec">
+    <div class="fr-title">💡 Đề xuất của PM: Hybrid B+A — Pain Solver làm khung, Feature Ladder làm safety net</div>
+    <div class="fr-text">
+      <strong>Primary portfolio: Option B (Pain Solver)</strong> — Sync Pack, Action Pack, Finance OS Pack làm tên chính thức. Pitch theo pain, không phải tính năng. ACV cao hơn A ngay từ đầu, phòng thủ tốt hơn vs đối thủ.<br><br>
+      <strong>Safety net: Giữ à la carte pricing</strong> (từng module M1/M2/M3/M4) trong Partner Portal cho partner muốn quote linh hoạt — nhưng không push mạnh kênh này. Chỉ dùng như "entry point" khi khách chỉ cần 1 module cụ thể.<br><br>
+      <strong>Defer Option C</strong> (Maturity Journey) — build sau khi có ≥10 case study. Journey narrative rất mạnh nhưng cần data thực tế để educate thị trường. Có thể launch như "CASDOO Finance Maturity Program" trong Q3/Q4.
+    </div>
+  </div>
+</div>
+
+<div class="fn">CASDOO Portfolio Design v1.0 · Tháng 5/2026 · Nội bộ · Benchmark: WISPACE portfolio model · 4 modules: M1 Bank Sync · M2 GDT Connector · M3 Payout · M4 E-Invoice TVAN</div>
+</div>
+
+<script>
+function show(opt) {
+  document.querySelectorAll('.portfolio-block').forEach(b => b.classList.remove('show'));
+  document.getElementById('block-'+opt).classList.add('show');
+  document.querySelectorAll('.stab').forEach(t => {t.classList.remove('active-a','active-b','active-c');});
+  const map = {a:'active-a',b:'active-b',c:'active-c'};
+  event.currentTarget.classList.add(map[opt]);
+}
+function switchChannel(opt, ch) {
+  const block = document.getElementById('block-'+opt);
+  block.querySelectorAll('.ptable-wrap').forEach(w => w.style.display='none');
+  document.getElementById(opt+'-'+ch).style.display='block';
+  block.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
