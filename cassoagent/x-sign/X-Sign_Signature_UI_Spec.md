@@ -17,10 +17,11 @@
 ## 2. Business flow
 
 ### Luồng tổng quan
-1. Người dùng mở tài liệu X-sign và chọn vùng ký trên màn hình.
-2. Hệ thống hiển thị popup xác nhận ký.
+1. Người dùng mở tài liệu X-sign và chọn vùng ký trên màn hình và có thể điều chỉnh kích thước tổng thể của chữ ký.
+2. Nhấn xác nhận ký và xệ thống hiển thị popup tạo chữ ký.
 3. Trong popup, người dùng chọn:
-   - **Chữ ký cá nhân**
+   - **Người dùng tạo chữ ký tay trong khung hình chữ nhật**
+   - **Sau đó nhấn ô Chữ ký cá nhân hoặc**
    - **Chữ ký doanh nghiệp**
 4. Sau khi chọn loại chữ ký, hệ thống chuyển sang màn hình **cấp quyền ký**.
 5. Người dùng sử dụng **CAS ID** để quét QR cấp quyền.
@@ -42,28 +43,16 @@
 ### Chi tiết UI flow
 - Popup xác nhận ký cần có:
   - Tiêu đề rõ ràng: "Xác nhận ký tài liệu".
-  - Mục nội dung: tên tài liệu, người ký, ngày giờ.
+  - Khung trắng viền đen để người dùng vẽ chữ ký tay
   - Nút chọn loại chữ ký: "Ký cá nhân" và "Ký doanh nghiệp".
-  - Lời nhắc về yêu cầu cấp quyền CAS ID.
-- Màn hình cấp quyền CAS ID cần có:
-  - QR code lớn và rõ ràng.
-  - Hướng dẫn ngắn: "Mở app CAS ID, quét mã để cấp quyền cho X-sign".
-  - Trạng thái kết nối: "Chờ xác nhận...", "Đã cấp quyền" hoặc "Thất bại".
-- Sau khi cấp quyền:
-  - Hiển thị progress spinner hoặc trạng thái "Đang tạo chữ ký".
+  - Nút xác nhận "Ký ngay"
   - Khi hoàn tất, hiển thị card chữ ký:
     - Với chữ ký doanh nghiệp: con dấu đỏ + chữ ký tay + tin nhắn xác nhận.
     - Với chữ ký cá nhân: chữ ký tay + tin nhắn xác nhận.
 
 ## 3. Prototype
 
-### Yêu cầu prototype
-- Nên xây dựng prototype bằng **Figma / Claude Design**.
-- Nếu có thể, hãy làm prototype luôn phần:
-  - Popup xác nhận ký.
-  - Màn hình chọn loại chữ ký.
-  - Màn hình cấp quyền CAS ID bằng QR.
-  - Màn hình hiển thị chữ ký đã tạo.
+### Dev tự làm nhanh phần này
 - Nếu không có prototype sẵn, đây là hướng dẫn để dev tự làm:
   - Sử dụng layout card/stepper.
   - Màu sắc: tối giản, chuyên nghiệp, tương tự thương hiệu X-sign.
@@ -72,18 +61,19 @@
 
 ### Gợi ý thiết kế UI
 - Màn hình chính: 
-  - Thanh tiêu đề "Ký tài liệu".
   - Khung tài liệu có vùng chọn ký hiển thị rõ ràng.
 - Popup xác nhận ký:
   - Header màu nhấn.
   - Hai button rõ ràng: "Chữ ký cá nhân" và "Chữ ký doanh nghiệp".
   - Chú thích nhỏ: "Chữ ký doanh nghiệp sẽ tạo thêm con dấu đỏ dựa trên dữ liệu công ty".
-- Màn hình cấp quyền:
-  - QR code trung tâm.
-  - Text `Cấp quyền qua CAS ID` + status.
 - Màn hình kết quả:
-  - Card chữ ký với chữ ký tay bên trái, con dấu đỏ bên phải (nếu doanh nghiệp).
-  - Dòng text hiển thị `Signal message` và `Timestamp`.
+  - Card chữ ký với chữ ký tay bên trái, con dấu đỏ nằm sau chữ ký (nếu doanh nghiệp).
+  - Chữ ký tay luôn ở phía trước đặt z-index cao hơn, đảm bảo chữ ký rõ, không bị con dấu đỏ che mất nét quan trọng.
+  - Con dấu đỏ nằm sau chữ ký đặt z-index thấp hơn, chỉ chồng nhẹ lên phần cuối chữ ký hoặc ở phía phải/sau chữ ký, không đặt con dấu hoàn toàn trên chữ ký.
+  - Tỷ lệ chồng lên con dấu chồng lên chữ ký khoảng 20–30% diện tích phần chữ ký còn lại phải rõ ràng, đặc biệt là nét mềm, nét ký.
+  - Vị trí đề xuất: chữ ký tay: bên trái, nằm ngang, con dấu: hơi lệch sang trái so với chữ ký và xuống lên cao một chút, để tạo cảm giác “nằm sau”, phần lớn vòng tròn con dấu vẫn hiển thị, chỉ có một phần nhỏ bị chữ ký che ở góc phải.
+  - Hiệu ứng thị giác, con dấu đỏ có thể dùng opacity nhẹ hoặc viền rõ để không làm mờ chữ ký, chữ ký tay giữ màu xanh bút bi, con dấu đỏ vẫn giữ độ đậm nhưng không cạnh tranh.
+  - Dòng text hiển thị `Signal message` và `Timestamp`, layout và nội dung giống hình ảnh bên dưới.
 
 ## 4. Acceptance Criteria
 
