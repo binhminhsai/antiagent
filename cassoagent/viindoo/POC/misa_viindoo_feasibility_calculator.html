@@ -1,0 +1,385 @@
+
+<h2 class="sr-only">Công cụ đánh giá khả năng hoàn thành migrate Misa sang Viindoo</h2>
+
+<style>
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+  .section-title { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+  .task-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
+  .task-row:last-child { border-bottom: none; }
+  .task-name { flex: 1; color: var(--color-text-primary); }
+  .task-note { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .task-hrs { min-width: 80px; }
+  .task-hrs input[type=range] { width: 100%; }
+  .task-val { min-width: 44px; text-align: right; font-weight: 500; font-size: 13px; color: var(--color-text-primary); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+  .badge-risk-high { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .badge-risk-med { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-risk-low { background: var(--color-background-success); color: var(--color-text-success); }
+  .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+  .metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; text-align: center; }
+  .metric-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .metric-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .metric-unit { font-size: 11px; color: var(--color-text-tertiary); }
+  .verdict-box { border-radius: var(--border-radius-md); padding: 12px 16px; font-size: 14px; font-weight: 500; margin-top: 12px; display: flex; align-items: center; gap: 10px; }
+  .verdict-green { background: var(--color-background-success); color: var(--color-text-success); border: 0.5px solid var(--color-border-success, var(--color-border-tertiary)); }
+  .verdict-amber { background: var(--color-background-warning); color: var(--color-text-warning); border: 0.5px solid var(--color-border-warning, var(--color-border-tertiary)); }
+  .verdict-red { background: var(--color-background-danger); color: var(--color-text-danger); border: 0.5px solid var(--color-border-danger, var(--color-border-tertiary)); }
+  .bar-wrap { height: 8px; background: var(--color-background-secondary); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+  .bar-fill { height: 100%; border-radius: 999px; transition: width .4s; }
+  .ctrl-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+  .ctrl-label { min-width: 160px; color: var(--color-text-secondary); }
+  .ctrl-input { flex: 1; }
+  .ctrl-val { min-width: 40px; text-align: right; font-weight: 500; }
+  .risk-row { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
+  .risk-row:last-child { border-bottom: none; }
+  .risk-desc { flex: 1; }
+  .risk-title { color: var(--color-text-primary); }
+  .risk-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .phase-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+  .phase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .tab-row { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tab { font-size: 12px; padding: 4px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all .15s; }
+  .tab.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: transparent; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+</style>
+
+<div style="padding: 1rem 0 0.5rem;">
+
+<div class="tab-row">
+  <button class="tab active" onclick="switchTab('calc')">Ước lượng thời gian</button>
+  <button class="tab" onclick="switchTab('risk')">Rủi ro & điều chỉnh</button>
+  <button class="tab" onclick="switchTab('guide')">Hướng dẫn quyết định</button>
+</div>
+
+<!-- TAB 1: Calculator -->
+<div id="tab-calc" class="panel active">
+
+  <div class="card">
+    <div class="section-title">Thông số đầu vào</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Số tháng cần migrate</span>
+      <input class="ctrl-input" type="range" min="1" max="6" value="6" step="1" id="sl-months" oninput="calc()">
+      <span class="ctrl-val" id="vl-months">6 tháng</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Số người thực hiện</span>
+      <input class="ctrl-input" type="range" min="1" max="4" value="1" step="1" id="sl-people" oninput="calc()">
+      <span class="ctrl-val" id="vl-people">1 người</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Giờ/ngày có thể dành</span>
+      <input class="ctrl-input" type="range" min="1" max="8" value="3" step="1" id="sl-hrs" oninput="calc()">
+      <span class="ctrl-val" id="vl-hrs">3 giờ/ngày</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Phân rã công việc — giờ/tháng dữ liệu</div>
+
+    <div class="task-row">
+      <div class="task-name">
+        <div>Export & chuẩn bị từ Misa</div>
+        <div class="task-note">Xuất sổ cái, nhật ký, danh mục đối tác/hàng hóa</div>
+      </div>
+      <div class="task-hrs"><input type="range" min="1" max="8" value="2" step="1" id="t1" oninput="calc()"></div>
+      <div class="task-val"><span id="tv1">2</span>h</div>
+    </div>
+
+    <div class="task-row">
+      <div class="task-name">
+        <div>Xử lý & mapping Excel</div>
+        <div class="task-note">Chuẩn hóa định dạng, map tài khoản, xử lý lỗi</div>
+      </div>
+      <div class="task-hrs"><input type="range" min="2" max="16" value="6" step="1" id="t2" oninput="calc()"></div>
+      <div class="task-val"><span id="tv2">6</span>h</div>
+    </div>
+
+    <div class="task-row">
+      <div class="task-name">
+        <div>Import vào Viindoo</div>
+        <div class="task-note">Chạy import, xử lý lỗi batch, kiểm tra số dư</div>
+      </div>
+      <div class="task-hrs"><input type="range" min="1" max="8" value="3" step="1" id="t3" oninput="calc()"></div>
+      <div class="task-val"><span id="tv3">3</span>h</div>
+    </div>
+
+    <div class="task-row">
+      <div class="task-name">
+        <div>Validate & so sánh báo cáo</div>
+        <div class="task-note">So BCTC Viindoo vs Misa, xác nhận khớp số</div>
+      </div>
+      <div class="task-hrs"><input type="range" min="2" max="12" value="4" step="1" id="t4" oninput="calc()"></div>
+      <div class="task-val"><span id="tv4">4</span>h</div>
+    </div>
+
+    <div class="task-row">
+      <div class="task-name">
+        <div>Setup Viindoo (1 lần duy nhất)</div>
+        <div class="task-note">Cấu hình chart of accounts, tax, công ty</div>
+      </div>
+      <div class="task-hrs"><input type="range" min="4" max="24" value="8" step="2" id="t5" oninput="calc()"></div>
+      <div class="task-val"><span id="tv5">8</span>h</div>
+    </div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-label">Tổng giờ cần</div>
+      <div class="metric-val" id="m-totalhrs">-</div>
+      <div class="metric-unit">giờ công</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Số ngày làm việc</div>
+      <div class="metric-val" id="m-days">-</div>
+      <div class="metric-unit">ngày</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Ngày xong ước tính</div>
+      <div class="metric-val" id="m-enddate" style="font-size:15px;">-</div>
+      <div class="metric-unit">deadline: 30/06</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:0;">
+    <div class="section-title">Tiến độ so với deadline 30/06</div>
+    <div class="bar-wrap"><div class="bar-fill" id="progress-bar" style="width:0%;background:#1D9E75;"></div></div>
+    <div id="verdict-box"></div>
+  </div>
+</div>
+
+<!-- TAB 2: Risks -->
+<div id="tab-risk" class="panel">
+  <div class="card">
+    <div class="section-title">Hệ số rủi ro (nhân vào thời gian ước tính)</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Chất lượng data Misa</span>
+      <input class="ctrl-input" type="range" min="1.0" max="2.5" value="1.3" step="0.1" id="r1" oninput="calcRisk()">
+      <span class="ctrl-val" id="rv1">×1.3</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Độ phức tạp mapping TK</span>
+      <input class="ctrl-input" type="range" min="1.0" max="2.0" value="1.2" step="0.1" id="r2" oninput="calcRisk()">
+      <span class="ctrl-val" id="rv2">×1.2</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Kinh nghiệm Viindoo</span>
+      <input class="ctrl-input" type="range" min="1.0" max="2.0" value="1.5" step="0.1" id="r3" oninput="calcRisk()">
+      <span class="ctrl-val" id="rv3">×1.5</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Các rủi ro phổ biến khi migrate kế toán</div>
+    <div class="risk-row">
+      <span class="badge badge-risk-high">Cao</span>
+      <div class="risk-desc">
+        <div class="risk-title">Data Misa không sạch hoặc không đồng nhất</div>
+        <div class="risk-sub">Mã tài khoản khác nhau giữa các tháng, hóa đơn thiếu thông tin đối tác</div>
+      </div>
+    </div>
+    <div class="risk-row">
+      <span class="badge badge-risk-high">Cao</span>
+      <div class="risk-desc">
+        <div class="risk-title">Mapping chart of accounts không 1:1</div>
+        <div class="risk-sub">Misa dùng hệ thống TK riêng, Viindoo dùng chuẩn VAS — cần mapping thủ công</div>
+      </div>
+    </div>
+    <div class="risk-row">
+      <span class="badge badge-risk-med">Trung bình</span>
+      <div class="risk-desc">
+        <div class="risk-title">Số dư đầu kỳ không khớp</div>
+        <div class="risk-sub">Sau import, BCTC chênh lệch do quy tắc ghi nhận khác nhau giữa hai hệ thống</div>
+      </div>
+    </div>
+    <div class="risk-row">
+      <span class="badge badge-risk-med">Trung bình</span>
+      <div class="risk-desc">
+        <div class="risk-title">Template import Viindoo bị lỗi format</div>
+        <div class="risk-sub">Viindoo yêu cầu format nghiêm ngặt, một cột sai kiểu dữ liệu là fail toàn batch</div>
+      </div>
+    </div>
+    <div class="risk-row">
+      <span class="badge badge-risk-low">Thấp</span>
+      <div class="risk-desc">
+        <div class="risk-title">Vấn đề license/cấu hình module Viindoo</div>
+        <div class="risk-sub">Module kế toán cần activate đúng, ảnh hưởng đến tính năng báo cáo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:0;">
+    <div class="section-title">Thời gian sau khi điều chỉnh rủi ro</div>
+    <div class="metric-grid" style="margin-bottom:0;">
+      <div class="metric-card">
+        <div class="metric-label">Hệ số tổng</div>
+        <div class="metric-val" id="r-factor">-</div>
+        <div class="metric-unit">lần</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Giờ thực tế dự kiến</div>
+        <div class="metric-val" id="r-hrs">-</div>
+        <div class="metric-unit">giờ công</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Ngày thực tế</div>
+        <div class="metric-val" id="r-days">-</div>
+        <div class="metric-unit">ngày làm việc</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: Decision guide -->
+<div id="tab-guide" class="panel">
+  <div class="card">
+    <div class="section-title">Framework quyết định — 3 kịch bản</div>
+
+    <div style="padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary);">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#1D9E75;flex-shrink:0;"></div>
+        <span style="font-size:13px;font-weight:500;color:var(--color-text-primary);">Kịch bản A — Kịp (thực hiện ngay)</span>
+      </div>
+      <div style="font-size:12px;color:var(--color-text-secondary);padding-left:18px;line-height:1.6;">
+        Điều kiện: Tổng ngày cần (có rủi ro) ≤ ngày còn lại trước 30/06.<br>
+        Hành động: Kick-off ngay, assign người, lập lịch tuần. Chốt QUY TRÌNH THỬ 1 trước (chỉ tháng 1), validate OK rồi mới làm tiếp.
+      </div>
+    </div>
+
+    <div style="padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary);">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#BA7517;flex-shrink:0;"></div>
+        <span style="font-size:13px;font-weight:500;color:var(--color-text-primary);">Kịch bản B — Rủi ro (cần trade-off)</span>
+      </div>
+      <div style="font-size:12px;color:var(--color-text-secondary);padding-left:18px;line-height:1.6;">
+        Điều kiện: Thời gian ước tính gần bằng thời gian còn lại (±20%).<br>
+        Hành động: Cắt scope — chỉ migrate Quý 1 (Jan–Mar), đủ để lập báo cáo so sánh. Hoặc tăng người. Hoặc lùi deadline sang 15/07.
+      </div>
+    </div>
+
+    <div style="padding: 10px 0;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#A32D2D;flex-shrink:0;"></div>
+        <span style="font-size:13px;font-weight:500;color:var(--color-text-primary);">Kịch bản C — Không kịp (pivot kế hoạch)</span>
+      </div>
+      <div style="font-size:12px;color:var(--color-text-secondary);padding-left:18px;line-height:1.6;">
+        Điều kiện: Thời gian cần > thời gian còn lại + 20%.<br>
+        Hành động: Đề xuất lại với anh Điệp — thay vì migrate 6 tháng, làm Quy trình thử 1 với tháng 1 duy nhất, đủ để đánh giá chất lượng Viindoo. Dời mốc full-migrate sang Q3.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Câu hỏi cần hỏi anh Điệp trước khi cam kết</div>
+    <div style="font-size:13px; line-height:1.9; color:var(--color-text-primary);">
+      1. Báo cáo so sánh này dùng để làm gì? (Ra quyết định migrate chính thức hay chỉ demo?)<br>
+      2. Nếu số liệu chênh lệch nhỏ (&lt;1%) thì có chấp nhận được không?<br>
+      3. Ai là người thực hiện? Kế toán viên có thể dành bao nhiêu giờ/ngày?<br>
+      4. Có được phép lùi deadline hay phải xong trước 30/06?<br>
+      5. Nếu không kịp 6 tháng, migrate 1 tháng thử nghiệm có đủ thuyết phục không?
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:0;">
+    <div class="section-title">Quy trình thử được đề xuất (giảm rủi ro nhất)</div>
+    <div style="font-size:12px;line-height:1.7;color:var(--color-text-secondary);">
+      <strong style="color:var(--color-text-primary);font-weight:500;">Tuần 1:</strong> Setup Viindoo + migrate tháng 1 (only) + validate → Go/No-go<br>
+      <strong style="color:var(--color-text-primary);font-weight:500;">Tuần 2–3:</strong> Nếu OK → migrate tháng 2–3 (Quý 1) → Báo cáo Q1 so sánh<br>
+      <strong style="color:var(--color-text-primary);font-weight:500;">Tuần 4+:</strong> Tùy kết quả Q1 → quyết định có migrate tiếp tháng 4–6 không
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const DEADLINE = new Date('2025-06-30');
+const TODAY = new Date('2025-05-27');
+const WORK_DAYS_LEFT = Math.floor((DEADLINE - TODAY) / (1000 * 60 * 60 * 24) * 5/7);
+
+let baseHrs = 0;
+
+function g(id) { return document.getElementById(id); }
+
+function calc() {
+  const months = +g('sl-months').value;
+  const people = +g('sl-people').value;
+  const hrs = +g('sl-hrs').value;
+  const t1 = +g('t1').value, t2 = +g('t2').value, t3 = +g('t3').value, t4 = +g('t4').value, t5 = +g('t5').value;
+
+  g('vl-months').textContent = months + ' tháng';
+  g('vl-people').textContent = people + ' người';
+  g('vl-hrs').textContent = hrs + ' giờ/ngày';
+  g('tv1').textContent = t1; g('tv2').textContent = t2; g('tv3').textContent = t3;
+  g('tv4').textContent = t4; g('tv5').textContent = t5;
+
+  const perMonth = t1 + t2 + t3 + t4;
+  const total = (perMonth * months) + t5;
+  baseHrs = total;
+
+  const dailyCapacity = hrs * people;
+  const daysNeeded = Math.ceil(total / dailyCapacity);
+
+  const endDate = new Date(TODAY);
+  let added = 0;
+  while (added < daysNeeded) {
+    endDate.setDate(endDate.getDate() + 1);
+    if (endDate.getDay() !== 0 && endDate.getDay() !== 6) added++;
+  }
+
+  g('m-totalhrs').textContent = total;
+  g('m-days').textContent = daysNeeded;
+
+  const dd = endDate.getDate().toString().padStart(2,'0');
+  const mm = (endDate.getMonth()+1).toString().padStart(2,'0');
+  g('m-enddate').textContent = dd + '/' + mm;
+
+  const pct = Math.min(100, Math.round((WORK_DAYS_LEFT / daysNeeded) * 100));
+  const bar = g('progress-bar');
+  bar.style.width = Math.min(100, pct) + '%';
+
+  let color, cls, msg;
+  if (daysNeeded <= WORK_DAYS_LEFT * 0.8) {
+    color = '#1D9E75'; cls = 'verdict-green';
+    msg = '<i class="ti ti-circle-check" aria-hidden="true"></i> Khả năng cao là kịp — bắt đầu ngay với tháng 1 thử nghiệm.';
+  } else if (daysNeeded <= WORK_DAYS_LEFT * 1.2) {
+    color = '#BA7517'; cls = 'verdict-amber';
+    msg = '<i class="ti ti-alert-triangle" aria-hidden="true"></i> Rủi ro trung bình — cần cắt scope hoặc tăng nguồn lực.';
+  } else {
+    color = '#A32D2D'; cls = 'verdict-red';
+    msg = '<i class="ti ti-circle-x" aria-hidden="true"></i> Rất khó kịp deadline 30/06 — nên pivot sang migrate 1 tháng thử.';
+  }
+  bar.style.background = color;
+  g('verdict-box').innerHTML = `<div class="verdict-box ${cls}">${msg}</div>`;
+
+  calcRisk();
+}
+
+function calcRisk() {
+  const r1 = +g('r1').value, r2 = +g('r2').value, r3 = +g('r3').value;
+  g('rv1').textContent = '×' + r1.toFixed(1);
+  g('rv2').textContent = '×' + r2.toFixed(1);
+  g('rv3').textContent = '×' + r3.toFixed(1);
+
+  const factor = r1 * r2 * r3;
+  const adjHrs = Math.round(baseHrs * factor);
+  const people = +g('sl-people').value;
+  const hrs = +g('sl-hrs').value;
+  const adjDays = Math.ceil(adjHrs / (hrs * people));
+
+  g('r-factor').textContent = factor.toFixed(2);
+  g('r-hrs').textContent = adjHrs;
+  g('r-days').textContent = adjDays;
+}
+
+function switchTab(name) {
+  ['calc','risk','guide'].forEach(t => {
+    g('tab-'+t).classList.toggle('active', t === name);
+  });
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', ['calc','risk','guide'][i] === name);
+  });
+}
+
+calc();
+</script>
